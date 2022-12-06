@@ -1,0 +1,211 @@
+div.mypage-wrapper{
+    min-height: 100ch;
+    max-width: 1230px;
+    padding: 15px;
+    div.myinfo-change{
+        background: #1a2732;
+        padding:30px 50px;
+        &.Withdrawal{
+            margin-top: 30px;
+        }
+        h5.title{
+            color:#fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        p.sub-title{
+            font-size: 16px;
+            color:#94a5b5;
+            margin-top: 30px;
+        }
+        ul{
+            list-style: none;
+            padding-left: 0;
+            margin-top: 30px;
+            li{
+                color:#94a5b5;
+                font-size: 14px;
+            }
+        }
+        div.form-box-wrap{
+            div.fild{
+                margin:0 auto;
+                box-sizing: border-box;
+                div.title-box{
+                    min-height: 50px;
+                    background-color: #3e6c96;
+                    padding-left: 20px;
+                    border-bottom: 1px solid #4d789e;
+                    display:flex;
+                    align-items: center;
+                    span{
+                        color:#fff;
+                        font-size: 14px;
+                    }
+                }
+
+                &:first-child div.content-box{
+                    border-top:1px solid #2c3842;
+                }
+
+                div.content-box{
+                    display: flex;
+                    align-items: center;
+                    border-bottom:1px solid #2c3842;
+                    padding: 10px;
+                    &.number{
+                        flex-wrap:wrap;
+                        padding: 0;
+                        div{
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            padding: 10px;
+                            flex-wrap: wrap;
+                            &:first-child{
+                                border-bottom:1px solid #2c3842;
+                            }
+                            select{
+                                font-size: 13px;
+                                height: 35px;
+                                border: none;
+                                background: #394a5a;
+                                color: #94a5b5;
+                                outline: none;
+                                cursor: pointer;
+                                font-size: 14px;
+                                padding:5px;
+                                border-radius:5px;
+                                margin-right: 10px;
+                            }
+                            .mat-form-field{
+                                max-width: 160px;
+                            }
+                            button{
+                                 min-height: 35px;
+                                 border-radius: 5px;
+                                 border: solid 2px #14dbcf;
+                                 color:#14dbcf;
+                                 background-color: #15212c;
+                                 margin-left: 10px;
+                                 font-size: 14px;
+                                 padding:0 10px;
+                                 margin-bottom: 6px;
+                            }
+                        }
+                    }
+                    span{
+                        color:#95a6b5;
+                        font-size: 14px;
+                        margin-right: 10px;
+                        b{
+                            color:#14dbcf;
+                        }
+                    }
+                    .mat-form-field{
+                        max-width: 200px;
+                    }
+                    p{
+                        margin-bottom: 0;
+                        padding-left: 10px;
+                        font-size: 12px;
+                        color:#14dbcf;
+                        &.defult{
+                            color:#4d5d6b;
+                        }
+                    }
+                    textarea{
+                        background: #394a5a;
+                        border:none;
+                        outline: none;
+                        border-radius:5px;
+                        height: 150px;
+                        min-height: 150px;
+                        max-height: 250px;
+                        color:#94a5b5;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+        div.btn-home{
+            margin-top: 30px;
+            text-align: center;
+            button{
+                border-radius: 5px;
+                border: solid 2px #14dbcf;
+                background-color: #14dbcf;
+                color: #fff;
+                font-size: 16px;
+                padding:14px 10px;
+                font-weight: bold;
+                width: 220px;
+                word-break: break-all;
+                transition: all 0.3s ease;
+                &.remove{
+                    border:none;
+                    background-color: #2d516f;
+                    color:#fff;
+                }
+                &:hover{
+                    background-color:#0fcec2;
+                }
+            }
+        }
+    }
+}
+
+
+@media (max-width: 576px) {
+    div.mypage-wrapper{
+        padding: 0;
+        div.myinfo-change{
+            padding: 30px 15px;
+            ul{
+                li{
+                    font-size: 13px;
+                }
+            }
+            div.form-box-wrap{
+
+                div.fild{
+                    div.title-box{
+                        span{
+                            font-size: 12px;
+                        }
+                    }
+                    div.content-box{
+                        flex-wrap: wrap;
+                        &.number{
+                            div{
+                                width: 100%;
+                                span{
+                                    margin-bottom: 10px;
+                                }
+                                .mat-form-field{
+                                    max-width: 100%;
+                                }
+                                button{
+                                    margin-top: 10px;
+                                    margin-left: 0;
+                                }
+                            }
+                        }
+                        span{
+                            font-size: 13px;
+                        }
+                        p{
+                            padding-left: 0;
+                            margin-top: 10px;
+                            width: 100%;
+                        }
+                        .mat-form-field{
+                            max-width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

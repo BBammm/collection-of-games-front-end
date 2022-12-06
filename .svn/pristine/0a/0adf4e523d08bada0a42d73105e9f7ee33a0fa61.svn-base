@@ -1,0 +1,205 @@
+::ng-deep{
+    .mat-tab-header{
+        border-color:#34424f;
+    }
+    .mat-tab-group.mat-primary .mat-ink-bar {
+        background-color:#14dbcf;
+    }
+    mat-tab-group{
+        .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-label{
+            opacity: 1;
+            color:#8fa8c0;
+            &.mat-tab-label-active{
+                color: #fff;
+            }
+        }
+    }
+
+    // select-start
+    .mat-select{
+        height: 100%;
+        .mat-select-trigger{
+            height: 100%;
+            .mat-select-arrow-wrapper{
+                transform: inherit;
+                .mat-select-arrow{
+                    color:#94a5b5;
+                }
+            }
+            .mat-select-value{
+                height: 100%;
+                vertical-align: middle;
+                color:#94a5b5;
+                padding: 0 15px;
+                font-size: 14px;
+            }
+        }
+    }
+
+    .game-fairness-modal{
+        .mat-dialog-container{
+            background-color: #212e3a;
+            padding: 15px;
+            article.fairness-wrap{
+                div.modal-header{
+                    padding: 0;
+                    justify-content: center;
+                    border: none;
+                    position: relative;
+                    padding:15px 0;
+                    h1.title{
+                        font-size: 18px;
+                        font-weight: bold;
+                        text-align: center;
+                        color: #fff;
+                        margin-bottom: 0;
+                    }
+                    button.close-btn{
+                        position: absolute;
+                        top:0;
+                        right: 0;
+                        background: none;
+                        border-style: none;
+                        color:#fff;
+                        font-size:18px;
+                        max-height:100%;
+                        i{
+                            vertical-align: top;
+                        }
+                    }
+                }
+
+                mat-tab-group{
+                    div.form-wrap{
+                        padding: 15px;
+                        form{
+                            display: flex;
+                            justify-content: space-between;
+                            mat-form-field{
+                                width: 75%;
+                            }
+                            button{
+                                width: 20%;
+                                background-color: #2d516f;
+                                color: #fff;
+                                border-style: none;
+                                font-size: 13px;
+                                height: 35px;
+                                border-radius: 5px;
+                            }
+                            &.Validation{
+                                flex-wrap: wrap;
+                                mat-form-field{
+                                    width: 100%;
+                                }
+                            }
+                        }
+                        div.list{
+                            margin-top: 10px;
+                            p{
+                                margin-bottom: 5px;
+                                color:#94a5b5;
+                                font-size: 13px;
+                                span.point{
+                                    color:#00fff0;
+                                }
+                                &.code{
+                                    width: 98%;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                }
+                            }
+                            &.mining {
+                                .result-table {
+                                    display: -webkit-flex;
+                                    display: flex;
+                                    -webkit-flex-flow: column wrap;
+                                    flex-flow: column wrap;
+                                    justify-content:space-between;
+                                    color: #fff;
+
+                                    .tr {
+                                      flex: auto;
+
+                                      display: -webkit-flex;
+                                      display: flex;
+                                      -webkit-flex-flow: row wrap;
+                                      flex-flow: row wrap;
+                                      justify-content:space-between;
+                                      border-bottom: 1px solid #bdbcbc
+                                    }
+
+                                    .td {
+                                        flex: auto;
+                                        text-align: center;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+                div.link-box{
+                    height: 35px;
+                    padding: 0 15px;
+                    a{
+                        display:inline-block;
+                        width: 50%;
+                        height: 100%;
+                        text-align: center;
+                        line-height: 35px;
+                        font-size: 13px;
+                        text-decoration: none;
+                        background-color:#1a2732;
+                        color:#94a5b5;
+                        border-right:1px solid #91a2b35c;
+                        &:last-child{
+                            border:none;
+                        }
+                    }
+                }
+                div.btn-home{
+                    padding: 15px;
+                    text-align: right;
+                    button{
+                        background-color: #2d516f;
+                        color: #fff;
+                        border-style: none;
+                        border-radius: 5px;
+                        font-size: 13px;
+                        padding: 5px 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    // Small devices (landscape phones, 576px and up)
+    @media (max-width: 576px) {
+        .game-fairness-modal{
+            min-width: 90vw;
+            .mat-dialog-container{
+                // div.qna-modal{
+                //     div.mat-tab-body-wrapper{
+                //         padding: 15px 0;
+                //     }
+                // }
+            }
+        }
+    }
+
+    @media (min-width: 577px) {
+        .game-fairness-modal{
+            min-width: 450px;
+            max-width: 450px !important;
+        }
+    }
+
+}

@@ -1,0 +1,225 @@
+.game-container.ladder {
+    .ladder-animation{position:relative;width:100%;margin:0 auto;padding:50px 15px; box-sizing: border-box;
+    /*background-image: url(../images/wall400x245.png);*/}
+    .ladder-animation .start-left,
+    .ladder-animation .start-right,
+    .ladder-animation .result-odd,
+    .ladder-animation .result-even{
+        overflow:hidden;
+        position:absolute;
+        width:45px;
+        height:45px;
+        border:5px solid #061727;
+        box-sizing: content-box;
+        border-radius:100%;
+        background-color:#476279;
+        font-family:sans-serif;
+        font-weight: bold;
+        font-size:24px;
+        line-height:45px;
+        color:#fff;
+        -webkit-transition:all .2s ease-out 0s;
+        transition:all .2s ease-out 0s;
+        text-align:center;
+        margin-left: 32px;
+        margin-right: 32px;
+        z-index: 10;
+    }
+    .ladder-animation .start-left{top:0;left:0;}
+    .ladder-animation .start-right{top:0;right:0;}
+    .ladder-animation .result-odd{bottom:0;left:0;}
+    .ladder-animation .result-even{right:0;bottom:0;}
+    .ladder-animation ol{
+        position:relative;
+        list-style:none;
+        height:145px;
+        margin:0;
+        padding:30px 48px;
+        box-sizing: border-box;
+        // margin-left: 40px; margin-right: 40px;
+    }
+    /* border-right:10px solid #d7ccc8;border-left:10px solid #d7ccc8; */
+    .ladder-animation ol li{display:none;position:relative;}
+    /* background-color:#d7ccc8; */
+    .ladder-animation ol li:last-child{margin-bottom:0;}
+    .ladder-animation ol:before{
+        content:'비정상적인 접근입니다.';
+        position:absolute;
+        top:50%;
+        left:0;
+        width:100%;
+        height:80px;
+        margin-top:-40px;
+        font-family:sans-serif;
+        font-weight: bold;
+        font-size:15px;
+        line-height:80px;
+        color:#333;
+        text-align:center;
+        white-space:nowrap;
+    }
+    /*
+     common
+    */
+    .ladder-animation ol:before{content:'';top:0;width:10px;margin-top:0;background-color:transparent;}
+    .ladder-animation ol li{display:block;width:100%;height:10px;margin-bottom:15px;}
+    .ladder-animation ol li:before,
+    .ladder-animation ol li:after{content:'';position:absolute;background-color:#fff;}
+    .ladder-animation[data-start='1'] ol:before,
+    .ladder-animation[data-start='2'] ol:before{background-color:#fff;}
+    .ladder-animation ol li:before{top:0;height:10px;}
+    .ladder-animation ol li:after{top:0;width:10px;}
+
+    /* 좌3짝 (L3E)*/
+    .ladder-animation[data-depth='3'][data-start='1'] .start-left{animation:start-left-anim 100ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='1'] .result-even{animation:result-even-anim 200ms 2300ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='1'] ol:before{left:40px;animation:start-vertical 200ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='1'] ol li:nth-child(1):before{left:0;animation:horizon 300ms 200ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='1'] ol li:nth-child(1):after{right:-10px;animation:vertical 200ms 500ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='1'] ol li:nth-child(2):before{right:0;animation:horizon 300ms 700ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='1'] ol li:nth-child(2):after{left:-10px;animation:vertical 200ms 1000ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='1'] ol li:nth-child(3):before{left:0;animation:horizon 300ms 1200ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='1'] ol li:nth-child(3):after{right:-10px;animation:long-end-vertial 800ms 1500ms forwards ease-out;}
+    /* 우3홀 (R3O) */
+    .ladder-animation[data-depth='3'][data-start='2'] .start-right{animation:start-right-anim 100ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='2'] .result-odd{animation:result-odd-anim 200ms 2300ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='2'] ol:before{right:40px;left:auto;animation:start-vertical 200ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='2'] ol li:nth-child(1):before{right:0;animation:horizon 300ms 200ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='2'] ol li:nth-child(1):after{left:-10px;animation:vertical 200ms 500ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='2'] ol li:nth-child(2):before{left:0;animation:horizon 300ms 700ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='2'] ol li:nth-child(2):after{right:-10px;animation:vertical 200ms 1000ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='2'] ol li:nth-child(3):before{right:0;animation:horizon 300ms 1200ms forwards ease-out;}
+    .ladder-animation[data-depth='3'][data-start='2'] ol li:nth-child(3):after{left:-10px;animation:long-end-vertial 800ms 1500ms forwards ease-out;}
+
+    /*  좌4홀 (L4O)) */
+    .ladder-animation[data-depth='4'][data-start='1'] .start-left{animation:start-left-anim 100ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='1'] .result-odd{animation:result-odd-anim 200ms 2300ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='1'] ol:before{left:40px;animation:start-vertical 200ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='1'] ol li:nth-child(1):before{left:0;animation:horizon 300ms 200ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='1'] ol li:nth-child(1):after{right:-10px;animation:vertical 200ms 500ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='1'] ol li:nth-child(2):before{right:0;animation:horizon 300ms 700ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='1'] ol li:nth-child(2):after{left:-10px;animation:vertical 200ms 1000ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='1'] ol li:nth-child(3):before{left:0;animation:horizon 300ms 1200ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='1'] ol li:nth-child(3):after{right:-10px;animation:vertical 200ms 1500ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='1'] ol li:nth-child(4):before{right:0;animation:horizon 300ms 1800ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='1'] ol li:nth-child(4):after{left:-10px;animation:vertical 200ms 2100ms forwards ease-out;}
+    /*  우4짝 (R4E)) */
+    .ladder-animation[data-depth='4'][data-start='2'] .start-right{animation:start-right-anim 100ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='2'] .result-even{animation:result-even-anim 200ms 2300ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='2'] ol:before{right:40px;left:auto;animation:start-vertical 200ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='2'] ol li:nth-child(1):before{right:0;animation:horizon 300ms 200ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='2'] ol li:nth-child(1):after{left:-10px;animation:vertical 200ms 500ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='2'] ol li:nth-child(2):before{left:0;animation:horizon 300ms 700ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='2'] ol li:nth-child(2):after{right:-10px;animation:vertical 200ms 1000ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='2'] ol li:nth-child(3):before{right:0;animation:horizon 300ms 1200ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='2'] ol li:nth-child(3):after{left:-10px;animation:vertical 200ms 1500ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='2'] ol li:nth-child(4):before{left:0;animation:horizon 300ms 1800ms forwards ease-out;}
+    .ladder-animation[data-depth='4'][data-start='2'] ol li:nth-child(4):after{right:-10px;animation:vertical 200ms 2100ms forwards ease-out;}
+
+    /* 기본정보창 */
+    #infoPop{
+        box-sizing: border-box;
+        /*display: none;  테스트용 임시 설정 */
+        position:absolute;
+        z-index:10;
+        top:45%;
+        left:0;
+        width:100%;
+        padding:20px;
+        border-radius:5px;
+        background-color: #04111d;
+        font-size:13px;
+        line-height:1.5em;
+        -webkit-transform:translate(0,-50%);
+        transform:translate(0,-50%);
+        text-align:center;
+    }
+    #infoPop .time-line{
+        font-weight:bold;
+        color:#708496;
+    }
+    #infoPop .result-line{
+        color:#708496;
+        span.point{
+            color:#ffba00;
+        }
+    }
+    #infoPop .ment-line{
+        display:block;
+        overflow:hidden;
+        position:relative;
+        width:100%;
+        max-width:300px;
+        height:10px;
+        margin:20px auto;
+        border-radius:3px;
+        background-color:#888;
+        font-size:0;
+    }
+    #infoPop .ment-line.time-alert span{
+        background-color:#f44336;
+        background-image: linear-gradient(to bottom, #f44336 37%, #ee8553 69%);
+    }
+
+    #infoPop .ment-line span{
+        display:block;
+        overflow:hidden;
+        position:relative;
+        width: 100%;
+        height:30px;
+        border-radius:3px;
+        background-color:rgb(43,194,83);
+        background-image:linear-gradient(to bottom,rgb(43,194,83) 37%,rgb(84,240,84) 69%);
+        box-shadow:inset 0 2px 9px  rgba(255,255,255,.3), inset 0 -2px 6px rgba(0,0,0,.4);
+    }
+    #infoPop .ment-line span:after{
+        content:'';
+        overflow:hidden;
+        position:absolute;
+        z-index:1;
+        top:0;
+        right:0;
+        bottom:0;
+        left:0;
+        border-top-left-radius:20px;
+        border-top-right-radius:8px;
+        border-bottom-right-radius:8px;
+        border-bottom-left-radius:20px;
+        background-image:linear-gradient(-45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%,transparent);background-size:30px 30px;animation:move 2s linear infinite;
+    }
+    }
+@keyframes start-vertical{
+	from{height:0;}
+	to{height:40px;}
+}
+@keyframes vertical{
+	from{height:0;}
+	to{height:35px;}
+}
+
+@keyframes long-end-vertial{
+    from{height:0;}
+    to{height:70px;}
+}
+
+@keyframes horizon{
+	from{width:0;}
+	to{width:100%;}
+}
+
+@keyframes result-odd-anim{
+	from{color:#333;}
+	to{background-color:#702fdc;color:#fff;}
+}
+@keyframes result-even-anim{
+	from{color:#333;}
+	to{background-color:#702fdc;color:#fff;}
+}
+@keyframes start-left-anim{
+	from{color:#333;}
+	to{background-color:#ffba00;color:#fff;}
+}
+@keyframes start-right-anim{
+	from{color:#333;}
+	to{background-color:#ffba00;color:#fff;}
+}

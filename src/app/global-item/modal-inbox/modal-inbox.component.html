@@ -1,0 +1,59 @@
+<div class="inbox-modal container">
+    <div class="modal-header">
+        <h2 class="title">
+            {{ 'message.title' | translate }}
+        </h2>
+        <button type="button" name="button" class="close-btn" mat-dialog-close>
+            <img src="/assets/images/common/close-btn.png" alt="">
+        </button>
+    </div>
+    <div class="content-wrap" infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
+        [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
+        <mat-accordion>
+            <ng-container *ngFor="let item of messageList">
+                <mat-expansion-panel (opened)="openPanel(item.id)">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <p class="note-title">
+                                {{item.content}}
+                            </p>
+                        </mat-panel-title>
+                        <ng-container *ngIf="item.is_read">
+                            <mat-panel-description>
+                                <span>
+                                    <i class="fa fa-check"></i>
+                                    {{ 'message.check' | translate }}
+                                </span>
+                            </mat-panel-description>
+                        </ng-container>
+                        <ng-container *ngIf="!item.is_read">
+                            <mat-panel-description>
+                                <span>
+                                    <!-- <i class="fa fa-check"></i> -->
+                                    {{ 'message.not-check' | translate }}
+                                </span>
+                            </mat-panel-description>
+                        </ng-container>
+                        <div class="date w-100">
+                            {{item.created_at}}
+                        </div>
+                    </mat-expansion-panel-header>
+                    <p>{{item.content}}</p>
+                </mat-expansion-panel>
+            </ng-container>
+        </mat-accordion>
+        <ng-container *ngIf="messageList.length === 0">
+            <div class="no-list">
+                <p>
+                    <i class="fa fa-envelope-open"></i>
+                    {{ 'message.no-list' | translate }}
+                </p>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="isPending">
+            <div class="spinner">
+                <mat-spinner [diameter]="50"></mat-spinner>
+            </div>
+        </ng-container>
+    </div>
+</div>

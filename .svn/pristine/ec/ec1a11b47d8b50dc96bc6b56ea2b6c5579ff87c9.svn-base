@@ -1,0 +1,75 @@
+import { NgModule } from '@angular/core';
+import { CommonModule, DecimalPipe } from '@angular/common';
+import { ModalLoginComponent } from './modal-login/modal-login.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { TranslateModule } from '@ngx-translate/core';
+import { BetContainerComponent } from './bet-container/bet-container.component';
+
+import { MomentPipesModule } from 'ng-moment-pipes';
+import { CLib } from '../services/common.lib';
+import { FlipModule } from 'ngx-flip';
+import { ModalFindComponent } from './modal-find/modal-find.component';
+import { ModalQnaComponent } from './modal-qna/modal-qna.component';
+import { BlockScreenComponent } from './block-screen/block-screen.component';
+import { BbsService } from '../services/bbs.service';
+import { ModalInboxComponent } from './modal-inbox/modal-inbox.component';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+
+@NgModule({
+    declarations: [
+        ModalLoginComponent,
+        BetContainerComponent,
+        ModalFindComponent,
+        ModalQnaComponent,
+        BlockScreenComponent,
+        ModalInboxComponent,
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        FlipModule,
+        InfiniteScrollModule,
+
+        // Material
+        MatDialogModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
+        MatTabsModule,
+        MatSelectModule,
+        MatProgressSpinnerModule,
+        MomentPipesModule,
+        MatExpansionModule,
+        TranslateModule.forChild(),
+    ],
+    entryComponents: [
+        ModalLoginComponent,
+        ModalFindComponent,
+        ModalQnaComponent,
+        ModalInboxComponent
+    ],
+    exports: [
+        BetContainerComponent,
+        BlockScreenComponent,
+    ],
+    providers: [
+        DecimalPipe,
+        CLib,
+        BbsService
+    ]
+})
+export class GlobalItemModule { }

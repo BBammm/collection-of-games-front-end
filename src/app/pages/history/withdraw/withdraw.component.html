@@ -1,0 +1,126 @@
+<div class="trade-content">
+    <div class="history-box">
+        <h2 class="title">
+            {{ 'history.tab-withdraw' | translate}}
+        </h2>
+        <div class="table-home">
+            <table class="table table-striped table-borderless">
+                <colgroup>
+                    <col width="10%" class="mobile-none">
+                    <col width="*">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center mobile-none">{{ 'history.withdraw.title-no' | translate}}</th>
+                        <th scope="col" class="text-left mobile-none">{{ 'history.withdraw.title-address' | translate}}</th>
+                        <th scope="col" class="mobile-none">{{ 'history.withdraw.title-apply-amount' | translate}}</th>
+                        <th scope="col" class="mobile-none">{{ 'history.withdraw.title-unit-price' | translate}}</th>
+                        <th scope="col" class="mobile-none">{{ 'history.withdraw.title-transaction-amount' | translate}}</th>
+                        <th scope="col" class="mobile-none">{{ 'history.withdraw.title-fee' | translate}}</th>
+                        <th scope="col" class="mobile-none">{{ 'history.withdraw.title-net-amount' | translate}}</th>
+                        <th scope="col" class="mobile-none">{{ 'history.withdraw.title-status' | translate}}</th>
+                        <th scope="col" class="text-center mobile-none">{{ 'history.withdraw.title-date' | translate}}</th>
+                        <th scope="col" class="text-center mobile-block">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of withdrawList; let i = index;">
+                        <td class="text-center mobile-none">
+                            {{ startNo - i}}
+                        </td>
+                        <td class="mobile-none text-left">
+                            <p class="ellipsis" (click)="copyToClipboard(item.address)">{{item.address}}</p>
+                        </td>
+                        <td class="mobile-none">
+                            {{item.pay_amt | number}} TGM
+                        </td>
+                        <td class="mobile-none">
+                            {{ item.unit_price }} TGM
+                        </td>
+                        <td class="mobile-none">
+                            {{item.s_total_amt}} {{item.symbol}}
+                        </td>
+                        <td class="mobile-none">
+                            {{item.s_commission}} {{item.symbol}}
+                        </td>
+                        <td class="mobile-none">
+                            {{item.s_pay_amt}} {{item.symbol}}
+                        </td>
+                        <td class="mobile-none">
+                            {{ 'history.withdraw.status.' + item.status | translate}}
+                        </td>
+                        <td class="text-center mobile-none">
+                            {{item.created_at | momentLocal : 'YYYY-MM-DD HH:mm'}}
+                        </td>
+                        <td class="mobile-block">
+                            <mat-accordion>
+                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                               (closed)="panelOpenState = false">
+                                <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    No.{{ startNo - i}} / {{ 'history.withdraw.title-status' | translate}} : {{ 'history.withdraw.status.' + item.status | translate}}
+                                </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                    <div class="game-info">
+                                        <span>{{ 'history.withdraw.title-address' | translate}} : </span>
+                                        <p class="ellipsis" (click)="copyToClipboard(item.address)">{{item.address}}</p>
+                                    </div>
+                                    <div class="game-info">
+                                        <span>{{ 'history.withdraw.title-apply-amount' | translate}} : </span>
+                                        {{item.pay_amt | number}} TGM
+                                    </div>
+                                    <div class="game-info">
+                                        <span>{{ 'history.withdraw.title-unit-price' | translate}} : </span>
+                                        {{ item.unit_price }} TGM
+                                    </div>
+                                    <div class="game-info">
+                                        <span>{{ 'history.withdraw.title-transaction-amount' | translate}}< : </span>
+                                        {{item.s_total_amt}} {{item.symbol}}
+                                    </div>
+                                    <div class="game-info">
+                                        <span>{{ 'history.withdraw.title-fee' | translate}} : </span>
+                                        {{item.s_commission}} {{item.symbol}}
+                                    </div>
+                                    <div class="game-info">
+                                        <span>{{ 'history.withdraw.title-net-amount' | translate}} : </span>
+                                        {{item.s_pay_amt}} {{item.symbol}}
+                                    </div>
+                                    <div class="game-info data">
+                                        <span>
+                                            {{ 'history.withdraw.title-date' | translate}} :
+                                        </span>
+                                        {{item.created_at | momentLocal : 'YYYY-MM-DD HH:mm'}}
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </td>
+                    </tr>
+                    <ng-container *ngIf="isPending">
+                        <tr class="no-display">
+                            <td colspan="9" class="mobile-none"><mat-progress-bar mode="indeterminate"></mat-progress-bar></td>
+                            <td class="mobile-block"><mat-progress-bar mode="indeterminate"></mat-progress-bar></td>
+                        </tr>
+                    </ng-container>
+                    <ng-container *ngIf="withdrawList.length === 0 && !isPending">
+                        <tr class="no-display">
+                            <td colspan="9" class="mobile-none">
+                                {{ 'bbs.no_list' | translate}}
+                            </td>
+                            <td class="mobile-block">
+                                {{ 'bbs.no_list' | translate}}
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+            <ng-container *ngIf="!isPending">
+                <app-pagenator
+                    (currentPageChanged)="pageChanged($event)"
+                    [currentPage]="pagination.currentPage"
+                    [pageCount]="pagination.pageCount"
+                    [collectionSize]="pagination.collectionSize">
+                </app-pagenator>
+            </ng-container>
+        </div>
+    </div>
+</div>

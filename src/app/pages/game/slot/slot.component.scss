@@ -1,0 +1,737 @@
+::ng-deep{
+    .mat-tab-header{
+        border-color:#34424f;
+    }
+    .mat-tab-group.mat-primary .mat-ink-bar {
+        background-color:#14dbcf;
+    }
+    .mat-slide-toggle-thumb{
+        width: 12px !important;
+        height: 12px !important;
+        position: inherit;
+        // top: 50%;
+        // transform:translateY(-50%);
+        background-color:#697b8c !important;
+        top: 30%;
+        left: 3px;
+    }
+
+    .mat-slide-toggle-bar{
+        border:1px solid #697b8c;
+        height: 20px !important;
+        border-radius: 10px !important;
+        order: 2;
+    }
+
+    .mat-slide-toggle.mat-checked .mat-slide-toggle-bar{
+        background-color:transparent;
+        border:1px solid #14dbcf;
+    }
+
+    .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb{
+        background-color: #14dbcf !important;
+    }
+
+    .mat-slide-toggle-content{
+        margin-right: 5px;
+        font-size: 14px;
+        color:#95a6b5;
+        font-family: 'Open Sans', 'Noto Sans KR', sans-serif;
+    }
+
+    .mat-slide-toggle.mat-checked .mat-slide-toggle-content{
+        color: #14dbcf;
+    }
+    mat-tab-group{
+        .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-label{
+            opacity: 1;
+            color:#8fa8c0;
+            &.mat-tab-label-active{
+                color: #fff;
+            }
+        }
+    }
+    div.game-container.slot{
+        max-width: 1230px;
+        padding: 60px 15px;
+        div.game-wrap{
+            display: flex;
+            div.game-left{
+                padding: 30px;
+                background-color: #15212c;
+                width: 35%;
+                order: 1;
+                div.user-balance{
+                    display:flex;
+                    align-items:center;
+                    justify-content: space-between;
+                    p.title{
+                        display: inline-block;
+                        margin-bottom: 0;
+                        color:#95a6b5;
+                        font-size: 13px;
+                        img{
+                            margin-right: 5px;
+                        }
+                        span.point{
+                            margin-left: 10px;
+                            font-size: 13px;
+                            color:#fff;
+                            font-weight: bold;
+                        }
+                    }
+                    button.guide-btn{
+                        border:none;
+                        background: none;
+                        color: #586d7f;
+                        font-size: 20px;
+                        &:hover{
+                            color: #14dbcf;
+                        }
+                    }
+                }
+                div.game-controll-pannel{
+                    margin: 30px 0 20px 0;
+                    ul.btn-level{
+                        list-style: none;
+                        padding: 0;
+                        display:flex;
+                        margin-bottom: 0;
+                        justify-content: space-between;
+                        li{
+                            width: 32.333333%;
+                            border-radius:5px;
+                            box-shadow: inset 0px -4px 0 0 rgba(0, 0, 0, 0.19);
+                            background-color: #3b4d5b;
+                            background-repeat:no-repeat;
+                            background-position:-8px 8px;
+                            padding: 10px;
+                            position: relative;
+                            cursor: pointer;
+                            p.game-level{
+                                margin-bottom: 0;
+                                text-align: center;
+                                font-size: 18px;
+                                color:#89a0b1;
+                                font-family: 'Russo One', 'Noto Sans KR', sans-serif;
+                                &.on{
+                                    color: #53e996;
+                                }
+                            }
+                        }
+                    }
+                }
+                div.bet-calculator{
+                    p.title{
+                        font-size: 14px;
+                        color:#95a6b5;
+                        margin-bottom: 10px;
+                    }
+                }
+                div.bet-total{
+                    margin-top:15px;
+                    p.title{
+                        font-size: 14px;
+                        color:#95a6b5;
+                        margin-bottom: 10px;
+                    }
+                }
+                div.betting-btn{
+                    margin-top: 10px;
+                    margin-bottom: 30px;
+                    button{
+                        background: #14dbcf;
+                        border-radius:5px;
+                        color:#fff;
+                        width: 100%;
+                        border-style: none;
+                        height: 60px;
+                        font-weight: bold;
+                        transition: all 0.3s ease;
+                        &:hover{
+                            background-color:#0fcec2;
+                        }
+                        &.restart{
+                            background:#53e996;
+                        }
+                    }
+                }
+                div.code-wrap{
+                    margin-top: 25px;
+                    div.code-box{
+                        p.title{
+                            font-size: 14px;
+                            color:#95a6b5;
+                            margin-bottom: 5px;
+                        }
+                        div.field{
+                            display:flex;
+                            mat-form-field{
+                                width: 85%;
+                                .mat-form-field-wrapper{
+                                    .mat-form-field-outline{
+                                        border-radius: 5px 0 0 5px;
+                                    }
+                                }
+                            }
+                            button{
+                                width: 15%;
+                                height: 35px;
+                                border-style: none;
+                                background: #223342;
+                                border-radius:0 5px 5px 0;
+                            }
+                        }
+                    }
+                }
+            }
+            div.game-right{
+                padding: 30px;
+                background-color: #1a2732;
+                width: 65%;
+                display:flex;
+                flex-direction: column;
+                div.game-round-text{
+                    position: relative;
+                    p.title{
+                        font-size: 22px;
+                        font-weight: bold;
+                        margin-bottom: 15px;
+                        color:#91a2b2;
+                        span{
+                            color:#fff;
+                        }
+                    }
+                }
+                div.slot-container{
+                    width: 100%;
+                    margin: 0 auto;
+                    // max-width: 575px;
+                    max-width: 670px;
+                    display: flex;
+                    flex: 1 1 auto;
+                    align-items: center;
+                    div.slot-pannel{
+                        width: 100%;
+                        ul.slot-line{
+                            list-style: none;
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 0;
+                            padding: 15px;
+                            background-color: #394957;
+                            position: relative;
+                            &:nth-child(1){
+                                border-top-left-radius: 5px;
+                                border-top-right-radius: 5px;
+                            }
+                            &:nth-child(3){
+                                border-bottom-left-radius: 5px;
+                                border-bottom-right-radius: 5px;
+                            }
+                            &.last {
+                              .door:last-child {
+                                  display: none;
+                              }
+                            }
+                            div.card-wrap{
+                                display:flex;
+                                flex: 1 1 auto;
+                                justify-content: space-between;
+                                position: relative;
+                                div.result-box{
+                                    position: absolute;
+                                    width: 100%;
+                                    height: 100%;
+                                    background-image: url('/assets/games/slot/images/result.png');
+                                    background-position: center;
+                                    background-size: cover;
+                                    z-index: 1;
+                                    border-radius: 5px;
+                                    display:inherit;
+                                    justify-content: center;
+                                    align-items: center;
+                                    span{
+                                        font-size: 24px;
+                                        color:#fff;
+                                        font-family: "Russo One", "Noto Sans KR", sans-serif;
+                                    }
+                                }
+                                li.door{
+                                    width:100px;
+                                    height: 100px;
+                                    overflow: hidden;
+                                    border-radius: 5px;
+                                    background-color: #fff;
+                                    div.card{
+                                        width: 100%;
+                                        height: 100%;
+                                        // transition: transform 1s ease-in-out;
+                                        border:none;
+                                    }
+                                }
+                            }
+
+                            div.line-select{
+                                display:inline-block;
+                                // border:1px solid #fff;
+                                width: 100px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                cursor: pointer;
+                                span{
+                                    font-size: 40px;
+                                    font-weight: bold;
+                                    margin-right:8px;
+                                    font-family: "Russo One", "Noto Sans KR", sans-serif;
+                                    color: #6c8296;
+                                }
+                                svg{
+                                    width: 22px;
+                                    fill: #6c8296;
+                                }
+                            }
+                            &.select{
+                                background-color:#627281;
+                                transition: all 0.3s ease;
+                                div.line-select{
+                                    span{
+                                        color: #ffd800;
+                                    }
+                                    svg{
+                                        fill: #ffd800;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        div.history-wrap{
+            background-color: #2b3c4c;
+            margin-top:30px;
+            div.verification-btn{
+                text-align: right;
+                background-color: #212e3a;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+                button{
+                    font-size: 13px;
+                    border-style: none;
+                    outline: none;
+                    background: none;
+                    color:#95a6b5;
+                    padding: 6px 15px;
+                    border-radius: 15px;
+                    background-color: #273643;
+                    i{
+                        color:#626f7c;
+                        font-size: 19px;
+                        vertical-align: bottom;
+                        margin-right: 5px;
+                    }
+                    &:hover{
+                        color:#fff;
+                        i{
+                            color:#14dbcf;
+                        }
+                    }
+                }
+            }
+            mat-tab-group{
+                div.history-box{
+                    padding: 30px 50px;
+                    background-color: #2b3c4c;
+                    h2.title{
+                        color:#fff;
+                        font-size: 18px;
+                        text-align: center;
+                        margin-bottom: 30px;
+                        font-weight: bold;
+                    }
+                    div.table-home{
+                        table{
+                            table-layout: fixed;
+                            .mobile-block{
+                                display: none;
+                            }
+                            thead{
+                                 background-color: #3e6c96;
+                                 tr{
+                                     th{
+                                         color:#fff;
+                                         font-size: 14px;
+                                         text-align: center;
+                                         font-weight: normal;
+                                     }
+                                 }
+                            }
+                            tbody{
+                                tr{
+                                    background-color: #3c5062;
+                                    td{
+                                        text-align: center;
+                                        color:#94a5b5;
+                                        font-size: 14px;
+                                        p{
+                                            text-overflow: ellipsis;
+                                            margin-bottom: 0;
+                                            overflow: hidden;
+                                            display: inline-block;
+                                            cursor: pointer;
+                                            width: 80%;
+                                            height: 20px;
+                                            white-space: nowrap;
+                                        }
+                                    }
+                                    &.no-display{
+                                        td{
+                                            text-align: center;
+                                        }
+                                    }
+                                    &:nth-child(odd){
+                                        background-color: #2b3c4c;
+                                    }
+                                }
+                            }
+                        }
+                        nav{
+                            ul{
+                                text-align: center;
+                                justify-content: center;
+                                margin-bottom: 0;
+                                li{
+                                    a.page-link{
+                                        color:#627281;
+                                        background: none;
+                                        border:none;
+                                        font-size: 12px;
+                                        font-weight: bold;
+                                        i{
+                                            font-size: 10px;
+                                        }
+                                    }
+                                    &.active{
+                                        a{
+                                            color:#95a6b5;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        div.more-btn{
+                            text-align: center;
+                            button{
+                                border-style: none;
+                                background: #2d516f;
+                                border-radius: 5px;
+                                color: #fff;
+                                font-size: 13px;
+                                padding: 5px 15px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 1140px) {
+
+        div.game-container.slot{
+            div.game-wrap{
+                div.game-right{
+                    div.slot-container{
+                        div.slot-pannel{
+                            ul.slot-line{
+                                div.card-wrap{
+                                    li.door{
+                                        width: 70px;
+                                        height: 70px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (min-width: 1141px) and (max-width: 1224px) {
+
+        div.game-container.slot{
+            div.game-wrap{
+                div.game-right{
+                    div.slot-container{
+                        div.slot-pannel{
+                            ul.slot-line{
+                                div.card-wrap{
+                                    li.door{
+                                        width: 80px;
+                                        height: 80px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 1024px) {
+
+        div.game-container.slot{
+            div.game-wrap{
+                div.game-left{
+                    width:50%;
+                }
+                div.game-right{
+                    width:50%;
+                    div.slot-container{
+                        div.slot-pannel{
+                            ul.slot-line{
+                                div.card-wrap{
+                                    li.door{
+                                        width: 50px;
+                                        height: 50px;
+                                    }
+                                }
+                                div.line-select{
+                                    width: 30px;
+                                    margin-right: 10px;
+                                    span{
+                                        font-size: 20px;
+                                    }
+                                    svg{
+                                        width: 12px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    @media (max-width: 800px) {
+
+        div.game-container.slot{
+            div.game-wrap{
+                div.game-right{
+                    div.slot-container{
+                        div.slot-pannel{
+                            ul.slot-line{
+                                div.card-wrap{
+                                    li.door{
+                                        width: 45px;
+                                        height: 45px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 1025px) and (max-width: 1225px){
+
+        div.game-container.slot{
+            div.game-wrap{
+                div.game-left{
+                    width:43%;
+                }
+                div.game-right{
+                    width:57%;
+                }
+            }
+        }
+    }
+
+    // mobile or tablets
+    @media (max-width: 992px) {}
+
+
+    @media (max-width: 768px) {
+        div.game-container.slot{
+            padding: 15px;
+            div.game-wrap{
+                flex-wrap: wrap;
+                div.game-left{
+                    width:100%;
+                    padding: 15px;
+                    order:1;
+                    div.game-history-wrap{
+                        padding: 10px;
+                    }
+                }
+                div.game-right{
+                    width:100%;
+                    padding: 15px;
+                    div.slot-container{
+                        div.slot-pannel{
+                            ul.slot-line{
+                                div.card-wrap{
+                                    li.door{
+                                        width: 70px;
+                                        height: 70px;
+                                    }
+                                }
+                                div.line-select{
+                                    width: 80px;
+                                    span{
+                                        font-size: 30px;
+                                    }
+                                    svg{
+                                        width: 20px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            div.history-wrap{
+                mat-tab-group{
+                    div.history-box{
+                        padding: 20px 15px;
+                        div.table-home{
+                            table{
+                                .mobile-none{
+                                    display:none;
+                                }
+                                .mobile-block{
+                                    display: block;
+                                    mat-accordion{
+                                        mat-expansion-panel{
+                                            border-radius: 0 !important;
+                                            background: none;
+                                            &:not([class*=mat-elevation-z]){
+                                                box-shadow: none;
+                                            }
+                                            mat-expansion-panel-header{
+                                                padding: 0;
+                                                &:hover{
+                                                    background: none;
+                                                }
+                                                mat-panel-title{
+                                                    color:#94a5b5;
+                                                    font-size: 14px;
+                                                }
+                                                span.mat-expansion-indicator{
+                                                    padding-right: 5px;
+                                                    &::after{
+                                                        color:#94a5b5;
+                                                    }
+                                                }
+                                            }
+                                            div.mat-expansion-panel-body{
+                                                padding: 0;
+                                                div.game-info{
+                                                    display: flex;
+                                                    margin-bottom:5px;
+                                                    color:#94a5b5;
+                                                    font-size: 14px;
+                                                    span{
+                                                        // width: 20%;
+                                                        color:#94a5b5;
+                                                        text-align: left;
+                                                        margin-right: 5px;
+                                                    }
+                                                    p{
+                                                        color:#53e996;
+                                                        text-align: left;
+                                                    }
+                                                    &.data{
+                                                        text-align: right;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 568px) {
+        div.game-container.slot{
+            div.game-wrap{
+                div.game-left{
+                }
+                div.game-right{
+                    div.slot-container{
+                        div.slot-pannel{
+                            ul.slot-line{
+                                div.card-wrap{
+                                    li.door{
+                                        width: 50px;
+                                        height: 50px;
+                                    }
+                                }
+                                div.line-select{
+                                    width: 50px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    // Small devices (landscape phones, 576px and up)
+    @media (max-width: 499px) {
+        div.game-container.slot{
+            div.game-wrap{
+                div.game-left{
+                }
+                div.game-right{
+                    div.slot-container{
+                        div.slot-pannel{
+                            ul.slot-line{
+                                div.card-wrap{
+                                    li.door{
+                                        width: 45px;
+                                        height: 45px;
+                                    }
+                                }
+                                div.line-select{
+                                    width: 35px;
+                                    margin-right: 5px;
+                                    span{
+                                        font-size: 20px;
+                                    }
+                                    svg{
+                                        width: 12px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,639 @@
+::ng-deep{
+
+    .mat-tab-header{
+        border-color:#34424f;
+    }
+
+    .mat-tab-group.mat-primary .mat-ink-bar {
+        background-color:#14dbcf;
+    }
+    mat-tab-group{
+        .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-label{
+            opacity: 1;
+            color:#8fa8c0;
+            &.mat-tab-label-active{
+                color: #fff;
+            }
+        }
+    }
+
+    div.game-container.dice{
+        max-width: 1230px;
+        padding: 60px 15px;
+        div.game-wrap{
+            display: flex;
+            div.game-left{
+                padding: 30px;
+                background-color: #15212c;
+                width: 35%;
+                order:1;
+                div.user-balance{
+                    display:flex;
+                    align-items:center;
+                    span.title{
+                        display: inline-block;
+                        color:#95a6b5;
+                        font-size: 13px;
+                        img{
+                            margin-right: 5px;
+                        }
+                    }
+                    p.point{
+                        margin-bottom: 0;
+                        margin-left: 10px;
+                        font-size: 13px;
+                        color:#fff;
+                        font-weight: bold;
+                    }
+                }
+                div.choice-btn-group{
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 30px 0 10px 0;
+                    position: relative;
+                    z-index: 1;
+                    div.choice-img{
+                        width: 19%;
+                        text-align: center;
+                        cursor: pointer;
+                        border-radius: 5px;
+                        box-shadow: inset 0px -4px 0 0 rgba(0, 0, 0, 0.19);
+                        background-color: #3b4d5b;
+                        padding: 15px;
+                        mat-icon{
+                            width: 35px;
+                            height: 35px;
+                            svg{
+                                fill:#91a2b0;
+                            }
+                        }
+                        &.on{
+                            mat-icon{
+                                svg{
+                                    fill:#53e996;
+                                }
+                            }
+                        }
+                    }
+                }
+                div.choice-pannel{
+                    border-radius: 5px;
+                    background-color: #0c1620;
+                    min-height: 130px;
+                    word-break: break-word;
+                    position: relative;
+                    margin-bottom: 20px;
+                    div.box-choice{
+                        width: 100%;
+                        height: 100%;
+                        overflow: hidden;
+                        left: 0;
+                        top: 0;
+                        padding: 10px 20px 15px;
+                        z-index: 1;
+                        position: relative;
+                        &.active{
+                            z-index: 2;
+                        }
+                        div.box-choice-inner{
+                            span.choice-desc{
+                                font-size: 12px;
+                                color:#95a6b5;
+                            }
+                            div.choice-close{
+                                text-align: right;
+                                cursor: pointer;
+                                color:#91a2b0;
+                            }
+                        }
+                        ul.choice-items{
+                            margin-top: 10px;
+                            margin-bottom: 0;
+                            list-style: none;
+                            padding: 0;
+                            display:flex;
+                            justify-content: space-between;
+                            flex-wrap: wrap;
+                            li{
+                                // border:1px solid #fff;
+                                padding: 6px 0;
+                                text-align: center;
+                                border-radius: 5px;
+                                background-color: #3b4d5b;
+                                position: relative;
+                                overflow: hidden;
+                                cursor: pointer;
+                                margin-bottom: 5px;
+                                div.info-box{
+                                    p{
+                                        color:#fff;
+                                        font-size: 16px;
+                                        font-weight: bold;
+                                        margin-bottom: 5px;
+                                        position: relative;
+                                        span{
+                                            font-size: 14px;
+                                            color:#95a6b5;
+                                            font-weight: normal;
+                                            padding-left: 5px;
+                                        }
+                                        img{
+                                            width: 18px;
+                                        }
+                                        strong{
+                                            padding-left: 5px;
+                                            font-size: 15px;
+                                        }
+                                    }
+                                }
+                                &.large-btn{
+                                    width: 49%;
+                                }
+                                &.middle-btn{
+                                    width: 32.33333333%;
+                                }
+                                &.small-btn{
+                                    width: 19%;
+                                }
+                                &:hover{
+                                    div.info-box{
+                                        span{
+                                            color:#fff;
+                                        }
+                                    }
+                                }
+                                &:before{
+                                    content:'';
+                                    position: absolute;
+                                    width: 100%;
+                                    height: 8px;
+                                    bottom: 0;
+                                    left: 0;
+                                    box-shadow: inset 0px -4px 0 0 rgba(0, 0, 0, 0.19);
+                                }
+                                &.yellow:before{
+                                    background-color: #ffba00;
+                                }
+                                &.green:before{
+                                    background-color: #6cdf2d;
+                                }
+                                &.red:before{
+                                    background-color: #f84f4f;
+                                }
+                                &.blue:before{
+                                    background-color: #3c83ee;
+                                }
+                                &.purple:before{
+                                    background-color: #702fdc;
+                                }
+                                &.pink:before{
+                                    background-color: #f95add;
+                                }
+                                &.orange:before{
+                                    background-color: #f6821b;
+                                }
+                                &:hover:before{
+                                    height: 100%;
+                                    transition: all 0.5s ease;
+                                }
+                                &.on{
+                                    div.info-box{
+                                        span{
+                                            color:#fff;
+                                        }
+                                    }
+                                    &:before{
+                                        height: 100%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                div.bet-calculator{
+                    p.title{
+                        font-size: 14px;
+                        color:#95a6b5;
+                        margin-bottom: 10px;
+                    }
+                }
+                div.betting-btn{
+                    margin-top: 20px;
+                    margin-bottom: 30px;
+                    button{
+                        background: #14dbcf;
+                        border-radius:5px;
+                        color:#fff;
+                        width: 100%;
+                        border-style: none;
+                        height: 60px;
+                        font-weight: bold;
+                        transition: all 0.3s ease;
+                        &.restart{
+                            background:#53e996;
+                        }
+                        &:hover{
+                            background-color:#0fcec2;
+                        }
+                    }
+                }
+            }
+            div.game-right{
+                padding: 30px;
+                background-color: #1a2732;
+                width: 65%;
+                display:flex;
+                flex-direction: column;
+                div.game-round-text{
+                    position: relative;
+                    p.title{
+                        font-size: 22px;
+                        font-weight: bold;
+                        margin-bottom: 15px;
+                        color:#91a2b2;
+                        span{
+                            color:#fff;
+                        }
+                    }
+                }
+                div.play-pannel{
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    flex: 1 1 auto;
+                    min-height: 300px;
+                    div.play-inner-pannel{
+                        // margin: 10px 10px;
+                        width: 100%;
+                        height: 100%;
+                        div.result-display {
+                            height: 100%;
+                            width: 100%;
+                            background-color: #04111d;
+                            border-radius: 12px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            min-height: 250px;
+                            div.time-line {
+                                text-align:center;
+                                font-weight: bold;
+                                color: #708496;
+                                font-size: 13px;
+                            }
+                            div.ment-line{
+                                display: block;
+                                overflow: hidden;
+                                position: relative;
+                                width: 90%;
+                                max-width: 300px;
+                                height: 10px;
+                                margin: 20px auto;
+                                border-radius: 3px;
+                                background-color: #888;
+                                font-size: 0;
+                                span{
+                                    display:block;
+                                    overflow:hidden;
+                                    position:relative;
+                                    height:10px;
+                                    border-radius:3px;
+                                    background-color:rgb(43,194,83);background-image:linear-gradient(to bottom,rgb(43,194,83) 37%,rgb(84,240,84) 69%);
+                                    box-shadow:inset 0 2px 9px  rgba(255,255,255,.3),inset 0 -2px 6px rgba(0,0,0,.4);
+                                    -webkit-transition: width 1s;
+                                    transition: width 1s;
+                                    &:after{
+                                        overflow:hidden;content:'';
+                                        position:absolute;
+                                        z-index:1;
+                                        top:0;
+                                        right:0;bottom:0;
+                                        left:0;border-top-left-radius:20px;
+                                        border-top-right-radius:8px;
+                                        border-bottom-right-radius:8px;
+                                        border-bottom-left-radius:20px;
+                                        background-image:linear-gradient(-45deg,rgba(255,255,255,.2) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.2) 50%,rgba(255,255,255,.2) 75%,transparent 75%,transparent);
+                                        background-size:30px 30px;
+                                        animation:move 2s linear infinite;
+                                    }
+                                }
+                            }
+                        }
+                        div.dicegameplayer {
+                            width: 100%;
+                            height: 100%;
+                            margin: auto auto;
+                            app-dicegameplayer {
+                                margin: auto;
+                                display: flex;
+                                justify-content: center;
+                                align-items:center;
+                                height: 100%;
+                                canvas{
+                                    // border:1px solid #fff;
+                                    // filter: opacity(0.5), drop-shadow(0 0 0 red);
+                                }
+                            }
+                        }
+                        div.result-line {
+                            text-align:center;
+                            font-weight: bold;
+                            color: #708496;
+                            font-size: 13px;
+                            span.point{
+                                color:#ffba00;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        div.history-wrap{
+            background-color: #2b3c4c;
+            margin-top:30px;
+            div.verification-btn{
+                text-align: right;
+                background-color: #212e3a;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+                button{
+                    font-size: 13px;
+                    border-style: none;
+                    outline: none;
+                    background: none;
+                    color:#95a6b5;
+                    padding: 6px 15px;
+                    border-radius: 15px;
+                    background-color: #273643;
+                    i{
+                        color:#626f7c;
+                        font-size: 19px;
+                        vertical-align: bottom;
+                        margin-right: 5px;
+                    }
+                    &:hover{
+                        color:#fff;
+                        i{
+                            color:#14dbcf;
+                        }
+                    }
+                }
+            }
+            mat-tab-group{
+                div.history-box{
+                    padding: 30px 50px;
+                    background-color: #2b3c4c;
+                    h2.title{
+                        color:#fff;
+                        font-size: 18px;
+                        text-align: center;
+                        margin-bottom: 30px;
+                        font-weight: bold;
+                    }
+                    div.table-home{
+                        table{
+                            .mobile-block{
+                                display: none;
+                            }
+                            table-layout: fixed;
+                            thead{
+                                 background-color: #3e6c96;
+                                 tr{
+                                     th{
+                                         color:#fff;
+                                         font-size: 14px;
+                                         text-align: center;
+                                         font-weight: normal;
+                                     }
+                                 }
+                            }
+                            tbody{
+                                tr{
+                                    background-color: #3c5062;
+                                    td{
+                                        text-align: center;
+                                        color:#94a5b5;
+                                        font-size: 14px;
+                                        p{
+                                            text-overflow: ellipsis;
+                                            margin-bottom: 0;
+                                            overflow: hidden;
+                                            display: inline-block;
+                                            cursor: pointer;
+                                            width: 80%;
+                                            height: 20px;
+                                            white-space: nowrap;
+                                        }
+                                    }
+                                    &.no-display{
+                                        td{
+                                            text-align: center;
+                                        }
+                                    }
+                                    &:nth-child(odd){
+                                        background-color: #2b3c4c;
+                                    }
+                                }
+                            }
+                        }
+                        nav{
+                            ul{
+                                text-align: center;
+                                justify-content: center;
+                                margin-bottom: 0;
+                                li{
+                                    a.page-link{
+                                        color:#627281;
+                                        background: none;
+                                        border:none;
+                                        font-size: 12px;
+                                        font-weight: bold;
+                                        i{
+                                            font-size: 10px;
+                                        }
+                                    }
+                                    &.active{
+                                        a{
+                                            color:#95a6b5;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        div.more-btn{
+                            text-align: center;
+                            button{
+                                border-style: none;
+                                background: #2d516f;
+                                border-radius: 5px;
+                                color: #fff;
+                                font-size: 13px;
+                                padding: 5px 15px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    // Large devices (desktops, 992px and up)
+    @media (min-width: 769px) and (max-width: 1024px) {
+
+        div.game-container.dice{
+            div.game-wrap{
+                div.game-left{
+                    width:50%;
+                }
+                div.game-right{
+                    width:50%;
+                    div.opend-card-list{
+                        flex-wrap: wrap;
+                        div.card-history{
+                            width: 18.666666666666666666666%;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    @media (min-width: 1025px) and (max-width: 1225px) {
+
+
+    }
+
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 1025px) and (max-width: 1225px){
+
+        div.game-container.dice{
+            div.game-wrap{
+                div.game-left{
+                    width:43%;
+                }
+                div.game-right{
+                    width:57%;
+                }
+            }
+        }
+    }
+
+    // mobile or tablets
+    @media (max-width: 992px) {}
+
+
+    @media (max-width: 768px) {
+        div.game-container.dice{
+            padding: 15px;
+            div.game-wrap{
+                flex-wrap: wrap;
+                div.game-left{
+                    width:100%;
+                    padding: 15px;
+                    order:1;
+                }
+                div.game-right{
+                    width:100%;
+                    padding: 15px;
+                }
+            }
+            div.bonus-game-info{
+                padding: 15px;
+            }
+            div.history-wrap{
+                mat-tab-group{
+                    div.history-box{
+                        padding: 20px 15px;
+                        div.table-home{
+                            table{
+                                .mobile-none{
+                                    display:none;
+                                }
+                                .mobile-block{
+                                    display: block;
+                                    mat-accordion{
+                                        mat-expansion-panel{
+                                            border-radius: 0 !important;
+                                            background: none;
+                                            &:not([class*=mat-elevation-z]){
+                                                box-shadow: none;
+                                            }
+                                            mat-expansion-panel-header{
+                                                padding: 0;
+                                                &:hover{
+                                                    background: none;
+                                                }
+                                                mat-panel-title{
+                                                    color:#94a5b5;
+                                                    font-size: 14px;
+                                                }
+                                                span.mat-expansion-indicator{
+                                                    padding-right: 5px;
+                                                    &::after{
+                                                        color:#94a5b5;
+                                                    }
+                                                }
+                                            }
+                                            div.mat-expansion-panel-body{
+                                                padding: 0;
+                                                div.game-info{
+                                                    display: flex;
+                                                    margin-bottom:5px;
+                                                    color:#94a5b5;
+                                                    font-size: 14px;
+                                                    span{
+                                                        // width: 20%;
+                                                        color:#94a5b5;
+                                                        text-align: left;
+                                                        margin-right: 5px;
+                                                    }
+                                                    p{
+                                                        color:#53e996;
+                                                        text-align: left;
+                                                    }
+                                                    &.data{
+                                                        text-align: right;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    // Medium devices (tablets, 768px and up)
+    @media (min-width: 577px) and (max-width: 992px) {
+
+
+    }
+
+
+    // Small devices (landscape phones, 576px and up)
+    @media (max-width: 635px) {
+
+    }
+    // Small devices (landscape phones, 576px and up)
+    @media (max-width: 576px) {
+
+    }
+
+    @media (max-width: 499px) {
+
+    }
+
+}

@@ -1,0 +1,74 @@
+<article class="fairness-wrap">
+    <div class="modal-header">
+        <h1 class="title">{{ data.title | uppercase }} {{ 'fairness.veri-title' | translate }}</h1>
+        <button type="button" name="button" (click)="close()" class="close-btn">
+            <img src="/assets/images/common/close-btn.png" alt="">
+        </button>
+    </div>
+    <mat-tab-group  animationDuration="0ms" mat-align-tabs="center">
+        <mat-tab label="{{ 'fairness.result-title' | translate }}">
+            <div class="form-wrap">
+                <form class="form-wrap Validation">
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="{{ 'fairness.game-hash' | translate }}" name="hash" [(ngModel)]="gameHash">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="{{ 'fairness.game-salt' | translate }}" name="salt" [(ngModel)]="gameSalt">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-select name="level" id="level" [(ngModel)]="gameLevel">
+                            <mat-option value="E">{{ 'games.mining.level.E' | translate }}</mat-option>
+                            <mat-option value="N">{{ 'games.mining.level.N' | translate }}</mat-option>
+                            <mat-option value="H">{{ 'games.mining.level.H' | translate }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button (click)="getResult()">{{ 'fairness.check' | translate }}</button>
+                </form>
+                <div class="list mining">
+                    <div class="result-table">
+                        <ng-container *ngIf="gameLevel === 'N'">
+                            <div class="tr" *ngFor=" let result of gameResult;  let i=index">
+                                <div class="td">{{ 'games.list.step' | translate }} {{ i + 1}}</div>
+                                <div class="td">{{result[0]}}</div>
+                                <div class="td">{{result[1]}}</div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="gameLevel === 'E' || gameLevel === 'H'">
+                            <div class="tr" *ngFor=" let result of gameResult;  let i=index">
+                                <div class="td">{{ 'games.list.step' | translate }} {{ i + 1}}</div>
+                                <div class="td">{{result[0]}}</div>
+                                <div class="td">{{result[1]}}</div>
+                                <div class="td">{{result[2]}}</div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'fairness.vali-title' | translate }}">
+            <div class="form-wrap">
+                <form class="form-wrap Validation">
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="{{ 'fairness.prev-hash' | translate }}" name="prev-hash" [(ngModel)]="prevHash">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="{{ 'fairness.cur-salt' | translate }}" name="salt" [(ngModel)]="currentSalt">
+                    </mat-form-field>
+
+                    <button (click)="validCheck()">{{ 'fairness.validation' | translate }}</button>
+                </form>
+                <div class="list">
+                    <p class="code">
+                        {{ 'fairness.result-hash' | translate }} :
+                        <span class="point" (click)="copyToClipboard(currentHash)">{{currentHash}}</span>
+                    </p>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+    <div class="link-box">
+        <a href="https://jsfiddle.net/JacksonChang/b3efgt2u/embedded/result" target="_blank">{{ 'fairness.externally' | translate }}</a>
+        <a href="https://jsfiddle.net/JacksonChang/b3efgt2u/" target="_blank">{{ 'fairness.view-code' | translate }}</a>
+    </div>
+
+</article>

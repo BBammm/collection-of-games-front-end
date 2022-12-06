@@ -1,0 +1,129 @@
+<div class="guide-modal-wrap">
+    <ng-conatiner *ngIf="data.title === 'dice'">
+        <div class="modal-header">
+            <h1 class="title">Dice 이용방법</h1>
+            <button mat-icon-button mat-dialog-close class="close-btn">
+                <img src="/assets/images/common/close-btn.png" alt="">
+            </button>
+        </div>
+        <div class="modal-body">
+            <p class="main-description">
+                베팅시간 60초 안에 다섯가지 게임중 한개에 베팅하고 랜덤으로 오픈되는 주사위를 기준으로 하여 맞추는 게임 입니다.
+            </p>
+            <div class="text-box">
+                <ul class="sub-description dice">
+                    <li>
+                        <mat-icon svgIcon="c-number"></mat-icon>
+                        <span>
+                            - "숫자 선택" 2개의 주사위의 합을 예측하여 선택
+                        </span>
+                    </li>
+                    <li>
+                        <mat-icon svgIcon="c-dice"></mat-icon>
+                        <span>
+                            - "주사위 선택" 2개의 주사위에서 나올것같은 숫자 하나를 예측하여 선택
+                        </span>
+                    </li>
+                    <li>
+                        <mat-icon svgIcon="c-double"></mat-icon>
+                        <span>
+                            - "더블 선택" 2개의 주사위가 동일하게 나올 숫자를 예측하여 선택,
+                            특정숫자와는 상관없이 같은 숫자가 나오는것을 선택
+                        </span>
+                    </li>
+                    <li>
+                        <mat-icon svgIcon="c-lowhigh"></mat-icon>
+                        <span>
+                            - "로우 하이" 2개의 주사위의 합이 7을 기준으로 “로우, 7, 하이” 중 하나를 예측하여 선택.
+                        </span>
+                    </li>
+                    <li>
+                        <mat-icon svgIcon="c-oddeven"></mat-icon>
+                        <span>
+                            - "홀짝 선택" 2개의 주사위의 합이 홀수인지 짝수인지 예측하여 선택.
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ng-conatiner>
+    <ng-conatiner *ngIf="data.title === 'fifty'">
+        <div class="modal-header">
+            <h1 class="title">Fifty 이용방법</h1>
+            <button mat-icon-button mat-dialog-close class="close-btn">
+                <img src="/assets/images/common/close-btn.png" alt="">
+            </button>
+        </div>
+        <div class="modal-body">
+            <p class="main-description">
+                베팅시간 22초 안에 BLUE/RED/GREEN/YELLOW 에 베팅하고 핀이 앞에 멈춘 색상을 맞추는 게임 입니다.
+            </p>
+            <div class="text-box">
+                <ul class="sub-description">
+                    <li>
+                        <em class="color-item blue"></em>
+                        <span>
+                            - 베팅금액 x2 의 배당금을 받습니다.
+                        </span>
+                    </li>
+                    <li>
+                        <em class="color-item red"></em>
+                        <span>
+                            - 베팅금액 x3 의 배당금을 받습니다.
+                        </span>
+                    </li>
+                    <li>
+                        <em class="color-item green"></em>
+                        <span>
+                            - 베팅금액 x5 의 배당금을 받습니다.
+                        </span>
+                    </li>
+                    <li>
+                        <em class="color-item yellow"></em>
+                        <span>
+                            - 베팅금액 x50 의 배당금을 받습니다.
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ng-conatiner>
+    <ng-conatiner *ngIf="data.title === 'fourteen'">
+        <div class="modal-header">
+            <h1 class="title">Fourteen 이용방법</h1>
+            <button mat-icon-button mat-dialog-close class="close-btn">
+                <img src="/assets/images/common/close-btn.png" alt="">
+            </button>
+        </div>
+        <div class="modal-body">
+            <p class="main-description">
+                베팅시간 22초 안에 RED/GREEN/BLUE 에 베팅하고 핀 앞에 멈춘 색상을 맞추는 게임 입니다.
+            </p>
+            <div class="text-box">
+                <ul class="sub-description">
+                    <li>
+                        <em class="color-item red"></em>
+                        <span>
+                            - 베팅금액 x2 의 배당금을 받습니다.
+                        </span>
+                    </li>
+                    <li>
+                        <em class="color-item blue"></em>
+                        <span>
+                            - 베팅금액 x2 의 배당금을 받습니다.
+                        </span>
+                    </li>
+                    <li>
+                        <em class="color-item green"></em>
+                        <span>
+                            - 베팅금액 x14 의 배당금을 받습니다.
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </ng-conatiner>
+    <ng-conatiner *ngIf="data.title === 'mining'">
+        <h1>mining</h1>
+    </ng-conatiner>
+</div>

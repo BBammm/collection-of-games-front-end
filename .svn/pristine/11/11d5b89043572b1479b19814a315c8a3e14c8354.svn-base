@@ -1,0 +1,219 @@
+
+::ng-deep{
+    .mat-tab-header{
+        border-color:#34424f;
+    }
+
+    .mat-tab-group.mat-primary .mat-ink-bar {
+        background-color:#14dbcf;
+    }
+
+    .sign-modal-container{
+        min-width:350px;
+        .mat-dialog-container{
+            padding: 0;
+            div.sign-modal{
+                max-width: 700px;
+                background: #212e3a;
+                position: relative;
+                padding: 0;
+                min-width: 350px;
+                div.modal-header{
+                    position: absolute;
+                    width: 100%;
+                    top: 0;
+                    left: 0;
+                    margin:0;
+                    padding: 0 20px;
+                    text-align: right;
+                    border:none;
+                    z-index: 1;
+                    button{
+                        color:#fff;
+                    }
+                }
+                div.modal-body{
+                    padding: 0;
+                    display:flex;
+                    min-height: 400px;
+                    div.modal-content{
+                        border:none;
+                        background: none;
+                        border-radius:0;
+                        padding: 40px 20px;
+                        min-width: 350px;
+                        max-width: 350px;
+                        mat-tab-group{
+                            .mat-tab-list{
+                                width: 100%;
+                            }
+                            .mat-tab-header-pagination{
+                                display:none;
+                            }
+                            .mat-tab-label{
+                                opacity: 1;
+                                color:#8fa8c0;
+                                width: 50%;
+                                &.mat-tab-label-active{
+                                    color: #fff;
+                                }
+                            }
+                            form{
+                                padding-top: 30px;
+                                div.field{
+                                    &.certification-field{
+                                        display: flex;
+                                        align-items: end;
+                                        justify-content: space-between;
+                                        margin-bottom: 5px;
+                                        .select{
+                                            width: 20%;
+                                            .mat-form-field-flex{
+                                                height: 35px;
+                                                padding: 0;
+                                                .mat-form-field-label-wrapper{
+                                                    padding: 0;
+                                                    top: 0;
+                                                    .mat-select-value{
+                                                        border:1px solid tomato;
+                                                    }
+                                                }
+                                            }
+                                            .mat-select{
+                                                height: 100%;
+                                                .mat-select-trigger{
+                                                    height: 100%;
+                                                    .mat-select-arrow-wrapper{
+                                                        transform: inherit;
+                                                        .mat-select-arrow{
+                                                            color:#14dbcf;
+                                                        }
+                                                    }
+                                                    .mat-select-value{
+                                                        height: 100%;
+                                                        vertical-align: middle;
+                                                        color:#14dbcf;
+                                                        text-align: center;
+                                                    }
+                                                }
+                                            }
+                                            .mat-form-field-underline{
+                                                bottom:0;
+                                                display: none;
+                                                .mat-form-field-ripple{
+                                                    background-color:#14dbcf;
+                                                }
+                                            }
+                                        }
+                                        .input2{
+                                            width: 55%;
+                                        }
+                                        button{
+                                            width: 20%;
+                                            background: #14dbcf;
+                                            border-style: none;
+                                            border-radius:5px;
+                                            font-size: 13px;
+                                            min-height: 35px;
+                                            margin-bottom: 5px;
+                                            word-break: break-all;
+                                        }
+                                    }
+                                    p.error{
+                                        margin-bottom:0;
+                                        font-size: 12px;
+                                        color:#fff;
+                                        display:none;
+                                    }
+                                }
+                            }
+                            div.btn-home{
+                                button{
+                                    width: 100%;
+                                    border-radius: 5px;
+                                    background-color: #14dbcf;
+                                    padding:10px;
+                                    outline: none;
+                                    border-style: none;
+                                    margin-bottom: 10px;
+                                    transition: all 0.3s ease;
+                                    &:hover{
+                                        background-color:#0fcec2;
+                                    }
+                                }
+                                .btn-box {
+                                    display: flex;
+                                    width: 100%;
+                                    align-items: center;
+                                    justify-content: space-between;
+                                }
+                                a{
+                                    display:inline-block;
+                                    // margin-top: 10px;
+                                    color:#8fa8c0;
+                                    font-size: 12px;
+                                    text-decoration: none;
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                    }
+                    div.modal-visual{
+                        background-image: url('/assets/images/common/modal-visual.png');
+                        background-size:100%;
+                        background-repeat: no-repeat;
+                        background-color:#000;
+                        background-position: center;
+                        min-width: 350px;
+                        max-width: 350px;
+                    }
+                }
+                div.modal-footer{
+                    margin-bottom:0;
+                }
+            }
+        }
+    }
+
+    // Small devices (landscape phones, 576px and up)
+    @media (max-width: 576px) {
+
+    }
+
+
+    // Medium devices (tablets, 768px and up)
+    @media (min-width: 577px) and (max-width: 992px) {
+
+
+    }
+
+
+    // Large devices (desktops, 992px and up)
+    @media (max-width: 1024px) {
+
+        .sign-modal-container{
+            .mat-dialog-container{
+                div.sign-modal{
+                    div.modal-body{
+                        div.modal-visual{
+                            display:none;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 993px) and (max-width: 1024px){
+
+
+    }
+
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 1200px) {
+
+    }
+
+}

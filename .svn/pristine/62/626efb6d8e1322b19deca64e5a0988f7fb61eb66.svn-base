@@ -1,0 +1,78 @@
+<div class="chat-box">
+    <div class="chat-box-head">
+        <div class="chat-close">
+            <button type="button" name="button" (click)="chatClose('r')">
+                <img src="/assets/images/common/close-btn.png" alt="">
+            </button>
+        </div>
+
+        <button class="channel-select-btn" type="button" (click)="lanToggle()">
+            <span class="cur-lan">
+                <img [src]="currentLang.url" alt="gb" class="flag">
+                <span>{{currentLang.text}}</span>
+            </span>
+        </button>
+    </div>
+    <div class="chat-body-channel">
+        <section *ngIf="languageToggle">
+            <ul>
+                <li *ngFor="let lan of laguages">
+                    <button type="button" (click)="setCurrentLan(lan)">
+                        <span>
+                            <img [src]="lan.url" alt="gb">
+                            <span>{{lan.text}}</span>
+                        </span>
+                    </button>
+                </li>
+            </ul>
+        </section>
+
+        <div class="chat-lists" *ngIf="!languageToggle">
+
+            <div class="chat-list-layout">
+                <div class="chats" #scrollMe> <!--  [scrollTop]="scrollMe.scrollHeight -->
+                    <div class="chat-list" *ngFor="let message of messages"  [class.me]="message.user.id === authService.user.id">
+                        <span class="name">
+                            <a>{{message.name}}</a>
+                        </span>
+                        <p class="item">
+                            {{message.message}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="chat-footer">
+        <div class="send-box">
+            <textarea maxlength="100" placeholder="Your message here" class="chat-input"
+                [(ngModel)]="inputMessage" (keyup.enter)="sendMsg()">
+            </textarea>
+                <!-- {{ 'chat.typeYourMessage' | translate }} -->
+                <button class="chat-send-btn" type="button" (click)="sendMsg()">
+                    <img src="/assets/images/common/send-icon.png" alt="">
+                    <!-- <span>{{ 'chat.send' | translate }}</span> -->
+                </button>
+            <!-- <div class="chat-status">
+                <div>
+                    <div class="display-online">
+                        <span class="display-online-icon"></span>
+                        <p class="cnt-online"><span>{{ 'chat.online' | translate }}: {{onlineCnt}}</span></p>
+                    </div>
+                </div>
+                <div class="input-controller">
+                    <p class="remain-text-count">
+                         {{ 160 - inputMessage.length}}
+                    </p>
+                    <button class="chat-send-btn" type="button" (click)="sendMsg()">
+                        <span>{{ 'chat.send' | translate }}</span>
+                    </button>
+                </div>
+            </div> -->
+        </div>
+        <!-- <div class="display-online">
+            <span class="display-online-icon"></span>
+            <p class="cnt-online"><span>{{ 'chat.online' | translate }}: {{onlineCnt}}</span></p>
+        </div> -->
+    </div>
+</div>

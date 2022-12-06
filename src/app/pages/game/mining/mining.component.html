@@ -1,0 +1,352 @@
+<div class="game-container container mining">
+    <div class="game-wrap">
+        <div class="game-left btn-section">
+            <div class="user-balance">
+                <p class="title">
+                    <img src="/assets/games/common/images/point.png" alt="">
+                    <!-- {{ 'games.holdAmount' | translate }}-->
+                    <span class="point">
+                        <span appCountUp [endVal]="userInfo.point" [duration]='0.1'></span> TGM
+                    </span>
+                </p>
+                <button type="button" name="button" class="guide-btn" (click)="opneManual('mining')">
+                    <i class="fa fa-question-circle"></i>
+                </button>
+            </div>
+            <div class="bet-container-wrapper">
+                <div class="game-controll-pannel">
+                    <ul class="btn-level">
+                        <li>
+                            <p class="game-level pointer" [ngClass]="{'on': cGameInfo.level === 'E'}"
+                            (click)="setLevel('E')">
+                            {{ 'games.mining.level.E' | translate}}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="game-level pointer" [ngClass]="{'on': cGameInfo.level === 'N'}"
+                                (click)="setLevel('N')">
+                                {{ 'games.mining.level.N' | translate}}
+                            </p>
+                        </li>
+                        <li>
+                            <p class="game-level pointer" [ngClass]="{'on': cGameInfo.level === 'H'}"
+                                (click)="setLevel('H')">
+                                {{ 'games.mining.level.H' | translate}}
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bet-calculator">
+                    <p class="title">{{ 'games.betAmount' | translate }}</p>
+                    <mat-slide-toggle [checked]="fixAmountFlag" (change)="autoMode($event)">Fix</mat-slide-toggle>
+                    <ng-container *ngIf="!isBetInit">
+                        <app-bet-container [point]="userInfo.point" [betted]="betAmount" [direction]="'down'"
+                        (setPoint)="setBetAmount($event)"></app-bet-container>
+                    </ng-container>
+                    <ng-container *ngIf="isBetInit">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </ng-container>
+                </div> <!-- .bet-calculator -->
+                <div class="betting-btn">
+                    <button type="button" name="button" (click)="createGame()">
+                        {{ 'games.bet' | translate}}
+                    </button>
+                </div>
+                <ng-container *ngIf="isProgressing">
+                    <app-block-screen></app-block-screen>
+                </ng-container>
+            </div>
+            <div class="control standings"  *ngIf="cGameInfo.gameId">
+                <div class="label-box stake">
+                    <p class="standing-label">STAKE</p>
+                    <p class="stand-stake value">
+                        {{  cGameInfo.winAmount | number }}
+                    </p>
+                </div>
+                <div class="label-box cash-btn-box">
+                    <button class="cashout" (click)="cashOut()">{{ 'games.mine.cashOut' | translate }}</button>
+                </div>
+            </div>
+        </div>
+        <div class="game-right">
+            <div class="game-round-text">
+                <p class="title">
+                    #
+                    <ng-container *ngIf="nextGameId !== null">
+                        <span appCountUp [endVal]="nextGameId" [duration]='0.1' [useGrouping]="false"></span>
+                    </ng-container>
+                    <ng-container *ngIf="nextGameId === null">
+                        Next
+                    </ng-container>
+                 </p>
+                <app-sound (soundFlag)="soundOnOff($event)"></app-sound>
+            </div>
+            <div class="mining-container">
+                <ul class="mine-choice-pannel container">
+                    <ng-container *ngIf="cGameInfo.level == 'E' || cGameInfo.level == 'H'">
+                        <li *ngFor="let game of gameSteps;let i = index">
+                            <div class="sel-line" [ngClass]="{'on': gameStep === i}">
+                                <span class="game-mine pointer" (mouseenter)="setMinerMotion($event)"
+                                    (mouseleave)="setMinerMotion($event)" (mousedown)="setMinerMotion($event)"
+                                    (mouseup)="setMinerMotion($event, i, 0)"
+                                    [ngClass]="{'fail': game[0] === 0, 'success': game[0] === 1}">
+                                    <mat-icon class="mining-btn-bg b-mining" *ngIf="game[0] === null" svgIcon="b-mining">
+                                    </mat-icon>
+                                    <mat-icon class="mining-btn-bg b-mining-success" *ngIf="game[0] === 1" svgIcon="b-mining-success">
+                                    </mat-icon>
+                                    <mat-icon class="mining-btn-bg b-mining-fail" *ngIf="game[0] === 0" svgIcon="b-mining-fail"></mat-icon>
+                                    <span class="game-icons miner"></span>
+                                    <span class="dividend-rate">X {{displayDividendRate[i]}}</span>
+                                </span>
+                                <span class="game-mine pointer" (mouseenter)="setMinerMotion($event)"
+                                    (mouseleave)="setMinerMotion($event)" (mousedown)="setMinerMotion($event)"
+                                    (mouseup)="setMinerMotion($event, i, 1)"
+                                    [ngClass]="{'fail': game[1] === 0, 'success': game[1] === 1}">
+                                    <mat-icon class="mining-btn-bg b-mining" *ngIf="game[1] === null" svgIcon="b-mining"></mat-icon>
+                                    <mat-icon class="mining-btn-bg b-mining-success" *ngIf="game[1] === 1" svgIcon="b-mining-success"></mat-icon>
+                                    <mat-icon class="mining-btn-bg b-mining-fail" *ngIf="game[1] === 0" svgIcon="b-mining-fail"></mat-icon>
+                                    <span class="game-icons miner"></span>
+                                    <span class="dividend-rate">X {{displayDividendRate[i]}}</span>
+                                </span>
+                                <span class="game-mine pointer" (mouseenter)="setMinerMotion($event)"
+                                    (mouseleave)="setMinerMotion($event)" (mousedown)="setMinerMotion($event)"
+                                    (mouseup)="setMinerMotion($event, i, 2)"
+                                    [ngClass]="{'fail': game[2] === 0, 'success': game[2] === 1}">
+                                    <mat-icon class="mining-btn-bg b-mining" *ngIf="game[2] === null" svgIcon="b-mining"></mat-icon>
+                                    <mat-icon class="mining-btn-bg b-mining-success" *ngIf="game[2] === 1" svgIcon="b-mining-success"></mat-icon>
+                                    <mat-icon class="mining-btn-bg b-mining-fail" *ngIf="game[2] === 0" svgIcon="b-mining-fail"></mat-icon>
+                                    <span class="game-icons miner"></span>
+                                    <span class="dividend-rate">X {{displayDividendRate[i]}}</span>
+                                </span>
+                                <div class="game-icons arrow left"></div>
+                                <div class="game-icons arrow right"></div>
+                            </div>
+                        </li>
+                    </ng-container>
+                    <ng-container *ngIf="cGameInfo.level == 'N'">
+                        <li *ngFor="let game of gameSteps;let i = index">
+                            <div class="sel-line medium-sel-line" [ngClass]="{'on': gameStep === i}">
+                                <span class="game-mine pointer" (mouseenter)="setMinerMotion($event)"
+                                    (mouseleave)="setMinerMotion($event)" (mousedown)="setMinerMotion($event)"
+                                    (mouseup)="setMinerMotion($event, i, 0)"
+                                    [ngClass]="{'fail': game[0] === 0, 'success': game[0] === 1}">
+                                    <mat-icon class="mining-btn-bg b-mining" *ngIf="game[0] === null" svgIcon="b-mining-n"></mat-icon>
+                                    <mat-icon class="mining-btn-bg b-mining-success" *ngIf="game[0] === 1" svgIcon="b-mining-success"></mat-icon>
+                                    <mat-icon class="mining-btn-bg b-mining-fail" *ngIf="game[0] === 0" svgIcon="b-mining-fail"></mat-icon>
+                                    <span class="game-icons miner"></span>
+                                    <span class="dividend-rate">X {{displayDividendRate[i]}}</span>
+                                </span>
+                                <span class="game-mine pointer" (mouseenter)="setMinerMotion($event)"
+                                    (mouseleave)="setMinerMotion($event)" (mousedown)="setMinerMotion($event)"
+                                    (mouseup)="setMinerMotion($event, i, 1)"
+                                    [ngClass]="{'fail': game[1] === 0, 'success': game[1] === 1}">
+                                    <mat-icon class="mining-btn-bg b-mining" *ngIf="game[1] === null" svgIcon="b-mining-n"></mat-icon>
+                                    <mat-icon class="mining-btn-bg b-mining-success" *ngIf="game[1] === 1" svgIcon="b-mining-success"></mat-icon>
+                                    <mat-icon class="mining-btn-bg b-mining-fail" *ngIf="game[1] === 0" svgIcon="b-mining-fail"></mat-icon>
+                                    <span class="game-icons miner"></span>
+                                    <span class="dividend-rate">X {{displayDividendRate[i]}}</span>
+                                </span>
+                                <div class="game-icons arrow left"></div>
+                                <div class="game-icons arrow right"></div>
+                            </div>
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="history-wrap">
+        <!-- 검증 Modal창 -->
+        <div class="verification-btn">
+            <button (click)="proveModal('mining')">
+                <i class="fa fa-check-circle"></i>
+                {{ 'games.verify' | translate}}
+            </button>
+        </div>
+        <mat-tab-group mat-align-tabs="center" animationDuration="0ms" >
+            <mat-tab label="{{ 'games.list.recent' | translate}}">
+                <div class="history-box">
+                    <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="5%" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="mobile-none">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.level' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_hash' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_salt' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                    <th scope="col" class="mobile-block">{{ 'games.list.recent_info' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td class="mobile-none">
+                                            {{ data.id }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{ 'games.mining.level.' + data.level | translate}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                        </td>
+                                        <td class="mobile-none">
+                                            <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                        </td>
+                                        <td class="mobile-block">
+                                            <mat-accordion>
+                                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                                               (closed)="panelOpenState = false">
+                                                <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    #{{ data.id }} / {{ 'games.mining.level.' + data.level | translate}}
+                                                </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_hash' | translate}} : </span>
+                                                        <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_salt' | translate}} : </span>
+                                                        <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                    </div>
+                                                    <div class="game-info data">
+                                                        <span>
+                                                            {{ 'games.list.title_date' | translate}} :
+                                                        </span>
+                                                        {{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                                    </div>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td class="mobile-block">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="more-btn">
+                            <button (click)="openHistoryModal('mining', 0)">{{ 'button.more' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="{{ 'games.list.my' | translate}}">
+                <div class="history-box">
+                    <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="mobile-none">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.level' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.step' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                    <th scope="col" class="mobile-block">{{ 'games.list.my_info' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td class="mobile-none">
+                                            {{ data.id }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{ 'games.mining.level.' + data.level | translate}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.step + 1}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.bet_amount | number}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{'games.result.' + data.result  | translate}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.win_amount | number}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                        </td>
+                                        <td class="mobile-block">
+                                            <mat-accordion>
+                                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                                               (closed)="panelOpenState = false">
+                                                <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    #{{ data.id }} / {{'games.result.' + data.result  | translate}}
+                                                </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                    <div class="game-info">
+                                                        <span>Level : </span>
+                                                        {{ 'games.mining.level.' + data.level | translate}}
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>Step : </span>
+                                                        {{data.step + 1}}
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_bet_amount' | translate}} : </span>
+                                                        {{data.bet_amount | number}}
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>Win {{ 'games.list.title_win_amount' | translate}} : </span>
+                                                        {{data.win_amount | number}}
+                                                    </div>
+                                                    <div class="game-info data">
+                                                        <span>
+                                                            {{ 'games.list.title_date' | translate}} :
+                                                        </span>
+                                                        {{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                                    </div>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="7" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td class="mobile-block">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="more-btn">
+                            <button (click)="openHistoryModal('mining', 1)">{{ 'button.more' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

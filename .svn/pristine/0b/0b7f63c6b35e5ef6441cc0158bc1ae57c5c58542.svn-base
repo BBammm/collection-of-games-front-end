@@ -1,0 +1,268 @@
+::ng-deep{
+
+    .mat-tab-header{
+        border-color:#34424f;
+    }
+    .mat-tab-group.mat-primary .mat-ink-bar {
+        background-color:#14dbcf;
+    }
+    mat-tab-group{
+        .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-label{
+            opacity: 1;
+            color:#8fa8c0;
+            // width: 50%;
+            &.mat-tab-label-active{
+                color: #fff;
+            }
+        }
+    }
+    // select-start
+    .mat-select{
+        height: 100%;
+        .mat-select-trigger{
+            height: 100%;
+            .mat-select-arrow-wrapper{
+                transform: inherit;
+                .mat-select-arrow{
+                    color:#94a5b5;
+                }
+            }
+            .mat-select-value{
+                height: 100%;
+                vertical-align: middle;
+                color:#94a5b5;
+                padding: 0 15px;
+                font-size: 14px;
+            }
+        }
+    }
+    .mat-form-field-underline{
+        bottom:0;
+        display: none;
+        .mat-form-field-ripple{
+            background-color:#14dbcf;
+        }
+    }
+
+    .qna-modal-container{
+        .mat-dialog-container{
+            padding: 15px;
+            background: #212e3a;
+            div.qna-modal{
+                padding: 0;
+                div.mat-tab-body-wrapper{
+                    padding: 15px;
+                    p.title{
+                        margin-bottom: 5px;
+                        font-size: 13px;
+                        color: #fff;
+                        &.no-list {
+                            text-align: center;
+                        }
+                    }
+                    form,.form{
+                        min-height: 437px;
+                        div.field{
+                            mat-form-field.select{
+                                .mat-form-field-flex{
+                                    height: 35px;
+                                    padding: 0;
+                                    background: #394a5a;
+                                    border-radius: 5px;
+                                    .mat-form-field-label-wrapper{
+                                        padding: 0;
+                                        top: 0;
+                                    }
+                                }
+                            }
+                            textarea{
+                                background: #394a5a;
+                                outline:none;
+                                border-radius: 5px;
+                                width: 100%;
+                                border-radius:5px;
+                                min-height: 300px;
+                                max-height: 350px;
+                                border-style: none;
+                                padding: 15px;
+                                font-size: 14px;
+                                color:#94a5b5;
+                                &.answer-area{
+                                    min-height: 100px;
+                                }
+                                &::placeholder{
+                                    font-size: 14px;
+                                    color:#5f7487;
+                                }
+                                &::-webkit-scrollbar {
+                                    background-color:transparent;
+                                    width:8px
+                                }
+                                /* background of the scrollbar except button or resizer */
+                                &::-webkit-scrollbar-track {
+                                    background-color:transparent;
+                                }
+                                &::-webkit-scrollbar-track:hover {
+                                    background-color:#0c16208c;
+                                }
+                                /* scrollbar itself */
+                                &::-webkit-scrollbar-thumb {
+                                    background-color: #0c16208c;
+                                    border-radius:8px;
+                                }
+                            }
+                        }
+                        div.btnHome{
+                            text-align: right;
+                            margin-top: 10px;
+                            button{
+                                border-style: none;
+                                outline: none;
+                                font-size: 14px;
+                                background-color: #14dbcf;
+                                border-radius:5px;
+                                padding: 3px 15px;
+                                &.cancle{
+                                    background-color:#2d516f;
+                                    color:#fff;
+                                }
+                            }
+                        }
+                        div.list-wrap{
+                            ul.list{
+                                list-style: none;
+                                padding: 0;
+                                min-height: 400px;
+                                max-height: 400px;
+                                margin-bottom: 0;
+                                overflow-y: scroll;
+                                &::-webkit-scrollbar {
+                                    background-color:transparent;
+                                    width:8px
+                                }
+                                /* background of the scrollbar except button or resizer */
+                                &::-webkit-scrollbar-track {
+                                    background-color:transparent;
+                                }
+                                &::-webkit-scrollbar-track:hover {
+                                    background-color:#0c16208c;
+                                }
+                                /* scrollbar itself */
+                                &::-webkit-scrollbar-thumb {
+                                    background-color: #0c16208c;
+                                    border-radius:8px;
+                                }
+                                li{
+                                    border-radius:5px;
+                                    background: #394a5a;
+                                    margin-bottom: 5px;
+                                    cursor: pointer;
+                                    div.title-box{
+                                        padding: 5px 10px;
+                                        display:flex;
+                                        align-items: flex-end;
+                                        p.title{
+                                            margin-bottom: 0;
+                                            width: 70%;
+                                            font-size:14px;
+                                            align-items: flex-end;
+                                            span{
+                                                text-decoration: none;
+                                                display:block;
+                                                color:#94a5b5;
+                                                overflow: hidden;
+                                                text-overflow: ellipsis;
+                                                word-break: keep-all;
+                                                cursor: pointer;
+                                            }
+                                        }
+                                        p.created{
+                                            margin-bottom: 0;
+                                            width: 30%;
+                                            color:#94a5b5;
+                                            font-size: 13px;
+                                            text-align: right;
+                                        }
+                                    }
+                                    div.answer{
+                                        text-align: right;
+                                        padding:0 5px 10px;
+                                        p{
+                                            font-size: 13px;
+                                            margin-bottom: 0;
+                                            color:#94a5b5;
+                                            span{
+                                                &.ing{
+                                                    color:#8fa8c0;
+                                                }
+                                                &.check{
+                                                    color:#14dbcf;
+                                                    i{
+                                                        color:#14dbcf;
+                                                        margin-right:3px;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Small devices (landscape phones, 576px and up)
+    @media (max-width: 576px) {
+        .qna-modal-container{
+            min-width: 90vw;
+            .mat-dialog-container{
+                div.qna-modal{
+                    div.mat-tab-body-wrapper{
+                        padding: 15px 0;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (min-width: 577px) {
+        .qna-modal-container{
+            min-width: 500px;
+            max-width: 500px !important;
+        }
+    }
+
+
+    // Medium devices (tablets, 768px and up)
+    @media (min-width: 577px) and (max-width: 992px) {
+
+
+    }
+
+
+    // Large devices (desktops, 992px and up)
+    @media (max-width: 768px) {
+
+    }
+
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 993px) and (max-width: 1024px){
+
+
+    }
+
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 1200px) {
+
+    }
+
+}

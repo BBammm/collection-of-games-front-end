@@ -1,0 +1,533 @@
+import { Component, Injector, OnInit, Renderer2, OnDestroy } from '@angular/core';
+import { Game } from '../game';
+import { InterfaceMiningGame } from '../../../interface/games/mining.game';
+import { InterfaceMiningMyGame } from '../../../interface/games/mining.my.game';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { takeUntil } from 'rxjs/operators';
+import { GAME_MINING, GAMES } from '../../../../environments/environment';
+// import { ModalMiningFairnessComponent } from '../../../global-item/modal-mining-fairness/modal-mining-fairness.component';
+
+@Component({
+    selector: 'app-mining',
+    templateUrl: './mining.component.html',
+    styleUrls: ['./mining.component.scss'],
+    animations: [
+        trigger('cardMovetoListTrigger', [
+            state('inactive', style({
+                width: '153px',
+                height: '229px',
+                top: '32px',
+                left: '25px',
+                fontSize: '100pt',
+            })),
+            state('active', style({
+                width: '36px',
+                height: '50px',
+                top: '-100px',
+                left: '280px',
+                fontSize: '20pt',
+            })),
+            transition('inactive => active', animate('500ms ease-in')),
+            // transition('active => inactive', animate('500ms ease-out'))
+        ]),
+        trigger('cardMovetoListFirstchildTrigger', [
+            state('inactive', style({
+                height: '0px',
+            })),
+            state('active', style({
+                height: '61px',
+            })),
+            transition('inactive => active', animate('500ms ease-in'))
+        ])
+    ]
+})
+export class MiningComponent extends Game implements OnDestroy, OnInit {
+    // setBetAmountResult: boolean;
+
+    public cGameInfo = {
+        result: null,
+        gameId: null,
+        level: 'E',
+        betAmount: 0,
+        winAmount: 0,
+        step: null,
+        hash: null,
+        lastHash: null,
+        createdAt: null
+    };
+    // 현재 게임 진행용 {id, userId, level, result, betAmount, step} 완료된 결과를 기준으로 한다.
+    // level = 'E'; // E : easy, N: normal, H: hard
+    public gameStep: number; // 현재 게임 Step을 참조하여 버튼 활성화 여부를 체크한다.(진행할 게임)
+    public gameSteps = []; // {step, order, result}// 현재 게임의 진행단계
+
+    public selTab = 'recents'; // mygame
+
+    private games: InterfaceMiningGame[] = []; // {userId, userName, winAmount, betAmount, incom, level, step, winAmount} // player, Bet, winAmount Step
+    private myGames: InterfaceMiningMyGame[] = [];
+    // {createdAt: null, betAmount: null, winAmount: null, gameId: null, level: null, step: null, hash: null, salt: null, lastHash: null}
+    // 날짜 배팅 수익(수익은 실제 획득한 금액으로 fail 이면  winAmount - betAmount) 단계 해시
+    // salt는 개임 완료시 획득
+
+//    private userHashSalt = { display: false, hash: null, salt: null, prevHash: null, gameId: null };
+
+    private dividendRate: any = { E: [], N: [], H: [] }; // 모든 display rate 저장
+    public displayDividendRate: any = {}; // Level별 display reate 저장
+
+    // serviceInfo = miningGame.serviceInfo;
+    private eventTarget: any;
+
+    public isBetInit = false;
+    public isProgressing: boolean;
+    public nextGameId: number;
+
+    constructor(
+        protected injector: Injector,
+        private render: Renderer2,
+    ) {
+        super(injector);
+        this.titleSvc.setTitle('MINING');
+        this.assetsUrl = { images: './assets/games/mining/images/', sounds: './assets/games/mining/sounds/'};
+        this.setIcons();
+        this.setGameSound();
+    }
+
+    private setIcons(): void {
+        this.iconRegistry
+            .addSvgIcon('b-easy', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'button-easy.svg'))
+            .addSvgIcon('b-medium', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'button-normal.svg'))
+            .addSvgIcon('b-hard', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'button-hard.svg'))
+            .addSvgIcon('b-start', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'button-start.svg'))
+            .addSvgIcon('b-coin1', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'button-coin1.svg'))
+            .addSvgIcon('b-coin2', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'button-coin2.svg'))
+            .addSvgIcon('b-mining', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'coin.svg'))
+            .addSvgIcon('b-mining-n', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'coin.svg'))
+            .addSvgIcon('b-mining-fail', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'fail.svg'))
+            .addSvgIcon('b-mining-success', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'success.svg'))
+            .addSvgIcon('b-mining-withdraw', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'button-withdraw.svg'))
+            ;
+    }
+
+    private setGameSound(): void {
+        this.setDefaultSound();
+        this.addSound('dig', this.assetsUrl.sounds + 'digging.mp3');
+        this.addSound('bomb', this.assetsUrl.sounds + 'bomb.mp3');
+    }
+
+    public ngOnInit(): void {
+        this.ngInit();
+        this.socket.init(GAME_MINING.game, GAME_MINING.socketUrl);
+
+        this.requestOtt();
+        // gameSteps 초기화
+        this.resetStep();
+        /**
+         * 모든 게임참여자 정보
+         * [{betAmount, selVal, gameId, userInfo: {id, name, point}}]
+         */
+        // this.socket.On(GAME_MINING.game, 'players_bet')
+        //     .pipe(takeUntil(this.ngUnsubscribe))
+        //     .subscribe((data: any) => {
+        //         this.addGames(data[0]);
+        //     });
+
+        /*
+        * 게임이 각각 생성될때 마다 노티스
+        */
+        this.socket.On(GAME_MINING.game, 'game_created').pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: any) => {
+            const obj = data[0];
+            this.addGames({id: obj.gameId, level: obj.level, hash: obj.hash, created_at: new Date()});
+            this.setRecentGameList(this.games);
+            // const gameInfo = {gameId: data[0].gameId, hash: data[0].hash, level: data[0].level};
+        });
+
+        this.socket.On(GAME_MINING.game, 'open_salt').pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: any) => {
+            const obj = data[0];
+            for (const game of this.games) {
+                if (game.id === obj.id) {
+                    game.salt = obj.salt;
+                }
+            }
+            // const gameInfo = {gameId: data[0].gameId, hash: data[0].hash, level: data[0].level};
+        });
+
+    } // end of constructor
+
+    public ngOnDestroy(): void {
+        this.ngDestroy();
+    }
+
+    private requestOtt(): void {
+        this.isBetInit = true;
+        // 서버에 접근하여 실제 userinfo를 가져온다.
+        this.http.requestOtt(GAME_MINING.game, (paramObj) => {
+            if (paramObj.error === false) {
+                /*
+                *@param resp : user: {}, playerGames: {}, myGames: {}, ingGAme: {}, gameSteps : []
+                */
+                this.socket.Emit(GAME_MINING.game, 'join', { ott: paramObj.ott }, (err: string, resp: any) => {
+                    if (err) {
+                        console.error('Error when joining the game...', err);
+                        return;
+                    }
+
+                    console.log('mining', resp);
+                    this.dividendRate = resp.dividend;
+                    this.setDisplayDividendRate();
+
+                    const reversed = resp.games.reverse(); // connecDataObj.games 도 동시에 reversㄷ 됨
+                    for (const rev of reversed) {
+                        this.addGames(rev);
+                    }
+
+                    this.setRecentGameList(this.games);
+                    // 외부 연동 (게임 리스트 보내기)
+                    if (!resp.user) { // 회원정보를 수신 못한 경우
+                        return;
+                    }
+                    // If userName is a falsey value the user is not logged in
+                    this.userInfo.id = resp.user.id;
+                    this.userInfo.name = resp.user.name;
+
+                    // this.userInfo.point = resp.user.point;
+                    this.eventSvc.setPoint(resp.user.point);
+
+                    const reversedmyGames = resp.bets.reverse(); // connecDataObj.games 도 동시에 reversㄷ 됨
+                    for (const revMy of reversedmyGames) {
+                        this.addMyGames(revMy);
+                    }
+
+                    this.setMyGameList(this.myGames);
+
+                    if (resp.ingGame) {
+                        this.gameStep = 0;
+                        this.cGameInfo.gameId = resp.ingGame.gameId;
+                        this.cGameInfo.level = resp.ingGame.gameLevel;
+                        this.cGameInfo.betAmount = resp.ingGame.betAmount;
+                        this.cGameInfo.lastHash = resp.ingGame.lastHash;
+                        this.cGameInfo.hash = resp.ingGame.hash;
+                        this.isProgressing = true;
+                    }
+
+                    if (resp.gameSteps) {
+                        for (const gStep of resp.gameSteps) {
+                            // const gStep = resp.gameSteps[i];
+                            // gameSteps = []; // {step, order, result}// 현재 게임의 진행단계
+                            if (gStep.choice) { // 한 번 이라도 선택이 되어 있으면
+                                const spSelVal = gStep.choice.split(':');
+                                const step = parseInt(spSelVal[0], 10);
+                                const order = parseInt(spSelVal[1], 10);
+
+                                this.gameSteps[step][order] = gStep.historyResult;
+
+                                this.cGameInfo.step = step;
+                                this.gameStep = step + 1;
+                            }
+                        }
+                        // this.setDisplayDividendRate();
+                    }
+
+                    const dividendRate = this.dividendRate[this.cGameInfo.level][this.cGameInfo.step];
+                    const winAmount = dividendRate * this.cGameInfo.betAmount;
+                    this.cGameInfo.winAmount = winAmount ? winAmount : 0;
+                    this.nextGameId = this.cGameInfo.gameId;
+                });
+            }
+        }).finally(() => {
+            setTimeout(() => {
+                this.isBetInit = false;
+            }, 1000);
+        });
+    }
+
+    /**
+     * @param obj 초기 로딩
+     * @param Object obj socket 수신 { betAmount, gameId, level, result, step, id, name, winAmount }
+     */
+    private addGames(obj: any): void {
+        obj.userName = obj.name;
+        if (obj.step) {
+            obj.dividendRate = this.dividendRate[obj.level][obj.step];
+            obj.winAmount = obj.result === 1 ? obj.dividendRate * obj.betAmount : 0;
+            obj.displayStep = parseInt(obj.step, 10) + 1;
+        }
+        switch (obj.level) {
+            case 'E':
+                obj.displayLevel = 'Easy';
+                break;
+            case 'N':
+                obj.displayLevel = 'Medium';
+                break;
+            case 'H':
+                obj.displayLevel = 'Hard';
+                break;
+        }
+
+        this.games.unshift(obj);
+        // {id, userName, winAmount, betAmount, incom, level, step, step} // player, Bet, winAmount Step
+
+        if (this.games.length > 10) { // front End의 최근 100게임 통계를 위해 200개를 저장해 둔다.
+            this.games.splice(-1, 1);
+        }
+    }
+
+    /**
+     * @param Object obj {betAmount, createdAt, gameId, gameLevel, hash, result, salt, step, winAmount}
+     */
+    private addMyGames(obj: any): void {
+        obj.dividendRate = this.dividendRate[obj.level][obj.step];
+        obj.win_amount = obj.result === 'S' ? obj.dividendRate * obj.bet_amount : 0;
+        obj.displayStep = parseInt(obj.step, 10) + 1;
+        this.myGames.unshift(obj); // {userId, name, betAmount, incom, level, step, step} // player, Bet, winAmount Step
+
+        if (this.myGames.length > 10) {
+            this.myGames.splice(-1, 1);
+        }
+        this.nextGameId = this.myGames[0].id;
+    }
+
+    public setMinerMotion(e: any, step?: number, order?: number): void {
+        if (e.target.classList && e.target.classList.contains('game-mine')) {
+            this.eventTarget = e.target;
+        }
+        switch (e.type) {
+            case 'mouseover':
+            case 'mouseup':
+            case 'mouseenter':
+                this.render.addClass(this.eventTarget, 'miner-over');
+                this.render.removeClass(this.eventTarget, 'miner-click');
+                break;
+            case 'mousedown':
+                this.render.removeClass(this.eventTarget, 'miner-over');
+                this.render.addClass(this.eventTarget, 'miner-click');
+                break;
+            case 'mouseleave':
+                this.render.removeClass(this.eventTarget, 'miner-over');
+                this.render.removeClass(this.eventTarget, 'miner-click');
+                break;
+        }
+
+        if (e.type === 'mouseup') {
+            if (this.gameStep === step) {
+                this.digging(step, order);
+            }
+        }
+    }
+    /**
+     * @param String main : LH, RB, NO
+     */
+    public createGame(): void {
+        this.cGameInfo.betAmount = this.betAmount;
+        if (this.userInfo.id === 0) {
+            return this.transSystemMessage('games.alert.NO_LOGIN');
+        } else if (this.cGameInfo.gameId !== null) {
+            return this.transSystemMessage('games.alert.IN_PROGRESS');
+        } else if (this.cGameInfo.betAmount < GAMES.minBet) {
+            return this.transSystemMessage('games.alert.minBet', { minBet: GAMES.minBet });
+        } else if (this.cGameInfo.betAmount > GAMES.maxBet) {
+            return this.transSystemMessage('games.alert.maxBet', { maxBet: GAMES.maxBet });
+        } else if (this.cGameInfo.betAmount > this.userInfo.point || this.userInfo.point === 0) {
+            return this.transSystemMessage('games.alert.NOT_ENOUGH_MONEY');
+        } else {
+
+            this.resetStep();
+            this.isProgressing = true;
+
+            const betObject = { betAmount: this.cGameInfo.betAmount, gameLevel: this.cGameInfo.level }; // roundNo 및 userId는 서버측에서 계산
+            this.socket.Emit(GAME_MINING.game, 'createGame', betObject, (err: string, resp: any) => {
+                if (err) {
+                    this.svcMessage(err);
+                } else {
+                    const point = resp.currentPoint - this.cGameInfo.betAmount; // 실제 업체측 데이타와 동기화
+                    this.eventSvc.setPoint(point);
+                    this.cGameInfo.gameId = resp.gameId;
+                    this.cGameInfo.hash = resp.hash;
+                    this.cGameInfo.lastHash = resp.lastHash;
+                    this.cGameInfo.createdAt = resp.createdAt;
+                    this.gameStep = 0;
+
+                    this.playGameSound('start');
+
+                    this.addMyGames({
+                        id: resp.gameId,
+                        level:  betObject.gameLevel,
+                        hash:  resp.hash,
+                        step: 0,
+                        bet_amount: betObject.betAmount,
+                        result: 'R',
+                        win_amount: 0,
+                        created_at: new Date()
+                    });
+                    this.setMyGameList(this.myGames);
+
+                }
+            });
+        }
+    }
+
+    /**
+     * diging
+     */
+    private digging(step: number, order: number): void {
+        const selVal = step + ':' + order;
+        if (this.cGameInfo.gameId) {
+            const betObject = { gameId: this.cGameInfo.gameId, selVal }; // roundNo 및 userId는 서버측에서 계산
+            this.socket.Emit(GAME_MINING.game, 'doBet', betObject, (err: string, resp: any) => { // resp {selVal, betResult}
+                if (err) {
+                    this.svcMessage(err);
+                } else {
+                    const spSelVal = resp.selVal.split(':');
+                    const resStep = parseInt(spSelVal[0], 10);
+                    const resOrder = parseInt(spSelVal[1], 10);
+                    this.eventSvc.setAmount(this.betAmount);
+
+                    // salt는 fail이 난 경우만 수신됨
+                    // myGamesHistory
+                    this.receiveBetResult({
+                        step: resStep,
+                        order: resOrder,
+                        result: resp.betResult,
+                        salt: resp.salt,
+                        resultInfo: resp.resultInfo
+                    });
+
+                }
+            });
+        } else {
+            this.transSystemMessage('games.alert.NOT_START');
+        }
+    }
+
+    /**
+     * @param Object obj {step, order, result};
+     */
+    private receiveBetResult(obj: any): void {
+        this.cGameInfo.result = obj.result;
+        this.cGameInfo.step = obj.step;
+
+        // this.gameSteps[obj.step].order = obj.order;
+        // this.gameSteps[obj.step].result = obj.result;
+        this.gameSteps[obj.step][obj.order] = obj.result;
+        this.gameStep = obj.step + 1;
+
+        if (obj.result === 0) { // 게임 실패시 초기화
+        //    receiveBetResult
+            if (this.myGames[0].id ===  this.cGameInfo.gameId) {
+                this.myGames[0].result = 'F';
+            //    this.myGames[0].salt = obj.salt;
+            }
+            // 게임 초기화
+            this.showAll(obj.resultInfo, [obj.step, obj.order]);
+            this.resetGame();
+            this.playGameSound('bomb');
+        } else {
+            this.playGameSound('dig');
+            const dividendRate = this.dividendRate[this.cGameInfo.level][this.cGameInfo.step];
+            const winAmount = dividendRate * this.cGameInfo.betAmount;
+            this.cGameInfo.winAmount = winAmount ? winAmount : 0;
+
+            if (this.myGames[0].id ===  this.cGameInfo.gameId) {
+                this.myGames[0].step = obj.step;
+            }
+        }
+    }
+
+    // 게임 마지막 단계 (실패하거나 돈을 획득했을때)
+    // 서버로 부터 salt를 획득(결과값도 동시에 획득)후 디스플레이 한다.
+    private showAll(resultInfo: number[][], fail?: number[]): void {
+        for (let i = 0; i < 10; i++) {
+            this.gameSteps[i][0] = resultInfo[i][0] === 1 ? 1 : null;
+            this.gameSteps[i][1] = resultInfo[i][1] === 1 ? 1 : null;
+            this.gameSteps[i][2] = resultInfo[i][2] === 1 ? 1 : null;
+        }
+
+        if (fail) {
+            this.gameSteps[fail[0]][fail[1]] = 0;
+            this.cGameInfo.winAmount = 0;
+        }
+    }
+
+    /**
+     * do cash Out : get cash and stop game
+     */
+    public cashOut(): void {
+        if (this.cGameInfo.gameId !== null && this.gameStep > 0) {
+            this.isProgressing = false;
+            this.socket.Emit(GAME_MINING.game, 'stopBet', this.cGameInfo.gameId, (err: string, resp: any) => {
+                if (err) {
+                    this.svcMessage(err);
+                } else {
+                    this.transSystemMessage('games.alert.GAIN', { money: resp.winAmount + '(X ' + resp.dividendRate + ')' }, null, null, 'success');
+
+                    // this.userInfo.point += resp.winAmount;
+                    this.eventSvc.addPoint(resp.winAmount);
+                    if (this.myGames[0].id ===  this.cGameInfo.gameId) {
+                        this.myGames[0].result = 'S';
+                        this.myGames[0].win_amount = resp.winAmount;
+                        // this.myGames[0].salt = resp.salt;
+                    }
+
+                    this.showAll(resp.resultInfo);
+                    // this.cGameInfo.winAmount = 0;
+                    // 모든 내용을 초기화 시킨다.
+                    this.resetGame();
+                }
+            });
+        } else if (this.cGameInfo.gameId === null) {
+            this.transSystemMessage('games.alert.NOT_START');
+        } else {
+            this.transSystemMessage('games.alert.NO_GAIN_MONEY');
+        }
+    }
+
+    public setLevel(level: string): void {
+        // 난이도는 게임 진행중에는 변경 불가능하므로 먼저 현제 게임이 진행중인지 확인한다.
+        if (this.cGameInfo.gameId !== null) {
+            return this.transSystemMessage('games.alert.NOT_AVAILABLE_CHANGE_LEVEL');
+        } else {
+            this.cGameInfo.level = level;
+            this.resetStep(); // 화면 클리어
+        }
+
+        this.playGameSound('select');
+        this.setDisplayDividendRate();
+    }
+
+    private resetGame(): void {
+        this.isProgressing = false;
+        this.cGameInfo.result = null;
+        this.cGameInfo.gameId = null;
+        this.cGameInfo.step = null;
+        this.cGameInfo.winAmount = 0;
+        this.gameStep = null; // 현재 게임 Step을 참조하여 버튼 활성화 여부를 체크한다.
+    }
+
+    private resetStep(): void {
+        this.gameSteps = [];
+
+        for (let i = 0; i < 10; i++) {
+            // this.gameSteps.push({step: i, order: null, result: null});
+            this.gameSteps.push([null, null, null]);
+        }
+    }
+
+    private setDisplayDividendRate(): void {
+        this.displayDividendRate = this.dividendRate[this.cGameInfo.level];
+    }
+
+    // public hashSaltOnOff(): void {
+    //     this.userHashSalt.display = !this.userHashSalt.display;
+    // }
+    //
+    // public listTab(tab: string): void { // recents, mygame
+    //     this.selTab = tab;
+    // }
+
+    // public popHashSalt(gameId: number, hash: string, salt: string, lastHash: string): void {
+    //     this.userHashSalt.gameId = gameId;
+    //     this.userHashSalt.hash = hash;
+    //     this.userHashSalt.salt = salt;
+    //     this.userHashSalt.prevHash = lastHash;
+    //     this.userHashSalt.display = true;
+    // }
+
+}

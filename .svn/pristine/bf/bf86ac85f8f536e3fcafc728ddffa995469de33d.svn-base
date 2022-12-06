@@ -1,0 +1,45 @@
+<div class="game faded">
+    <ul class="board">
+        <li class="tile" *ngFor="let tile of cGameInfo.gameTiles;let i = index" (click)="doBet(i)"
+            [ngClass]="{'pressed': tile.pressed, 'bomb': tile.bomb, 'reveal': tile.reveal}">
+            <span class="tile-val" *ngIf="tile.won && !tile.reveal">
+                <!-- +{{ tile.won | shortnumber:1 }} -->
+                +{{ tile.won }}
+            </span>
+            <mat-icon class="icon-alert" *ngIf="tile.reveal && tile.pressed">
+                <img src="/assets/games/mine/images/boom-icon.png" alt="">
+            </mat-icon>
+            <mat-icon class="icon-alert1" *ngIf="tile.reveal && !tile.pressed">
+                <img src="/assets/games/mine/images/boom-b1-icon.png" alt="">
+            </mat-icon>
+        </li>
+    </ul>
+    <!-- <div class="game-right">
+        <div class="control standings">
+            <div class="col-left">
+                <p class="standing-label">Next:</p>
+                <p class="stand-next"><span class="next">{{ cGameInfo.next | number }}</span></p>
+            </div>
+            <div class="col-right">
+                <p class="standing-label">Stake:</p>
+                <p class="stand-stake"><span class="stake">{{ cGameInfo.stake | number }}</span></p>
+            </div>
+        </div>
+        <div class="messages">
+            <p *ngIf="cGameInfo.result === 0 || cGameInfo.result === 1">{{'games.mine.answerCode' | translate}}:
+                {{cGameInfo.answer.toString()}}-{{ cGameInfo.salt }}</p>
+            <p class="bomb" *ngIf="cGameInfo.result === 0"
+                [innerHTML]="'games.mine.strFoundedBomb' | translate:{failNum: cGameInfo.failNum}"></p>
+            //fail message
+            <p class="won" *ngIf="cGameInfo.result === 1"
+                [innerHTML]="'games.mine.strCashOut' | translate:{stake: cGameInfo.stake | number}"></p>
+            //success message
+            <p class="find" *ngFor="let hist of cGameInfo.betHist;let i = index"
+                [innerHTML]="'games.mine.strGain' | translate:{hist:hist + 1, won:cGameInfo.gameTiles[hist].won | number}">
+            </p>
+            <p class="first"
+                [innerHTML]="'games.mine.strStart' | translate:{level:cGameInfo.level, betAmount:cGameInfo.betAmount | number, hash: cGameInfo.hash}">
+            </p>
+        </div>
+    </div> -->
+</div>

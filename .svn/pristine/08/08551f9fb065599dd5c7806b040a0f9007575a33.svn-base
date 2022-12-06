@@ -1,0 +1,86 @@
+::ng-deep{
+
+    .game-manual-modal{
+        .mat-dialog-container {
+           background-color: #212e3a;
+           padding: 15px;
+           div.guide-modal-wrap{
+               div.modal-header{
+                   padding: 0;
+                   justify-content: center;
+                   border: none;
+                   position: relative;
+                   padding:15px 0;
+                   border-bottom: 1px solid #34424f;
+                   h1.title{
+                        font-size: 18px;
+                        font-weight: bold;
+                        text-align: center;
+                        color: #fff;
+                        margin-bottom: 0;
+                   }
+                   button.close-btn{
+                       position: absolute;
+                       top:0;
+                       right: 0;
+                       background: none;
+                       border-style: none;
+                       color:#fff;
+                       font-size:18px;
+                       max-height:100%;
+                       i{
+                           vertical-align: top;
+                       }
+                   }
+               }
+               div.modal-body{
+                   p.main-description{
+                       font-size: 14px;
+                       color:#8fa8c0;
+                   }
+                   div.text-box{
+                       background-color: #0c1620;
+                       border-radius: 5px;
+                       padding: 15px;
+                       ul.sub-description{
+                           padding: 0;
+                           list-style: none;
+                           margin-bottom: 0;
+                           li{
+                               margin-bottom: 15px;
+                               color:#94a5b5;
+                               font-size: 13px;
+                               display: flex;
+                               align-items: center;
+                               &:last-child{
+                                   margin-bottom: 0;
+                               }
+                               mat-icon{
+                                   margin-right: 10px;
+                                   svg{
+                                       fill: #91a2b0;
+                                       fill: #53e996;
+                                   }
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+       }
+    }
+
+    // Small devices (landscape phones, 576px and up)
+    @media (max-width: 576px) {
+        .game-manual-modal{
+            min-width: 90vw;
+        }
+    }
+
+    @media (min-width: 577px) {
+        .game-manual-modal{
+            max-width: 550px !important;
+        }
+    }
+
+}

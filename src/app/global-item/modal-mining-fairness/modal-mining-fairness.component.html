@@ -1,0 +1,54 @@
+<h1>{{title | uppercase}}</h1>
+<article>
+    <div>
+        <form>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Game Hash" name="hash" [(ngModel)]="gameHash">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Game Salt" name="salt" [(ngModel)]="gameSalt">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-select name="level" id="level" [(ngModel)]="gameLevel">
+                    <mat-option value="E">Easy</mat-option>
+                    <mat-option value="N">Normal</mat-option>
+                    <mat-option value="H">Hard</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </form>
+        <div>
+            <button type="button" (click)="getResult()" mat-flat-button color="primary">검증</button>
+        </div>
+        <div class="resultTable valid-result">
+            <ng-container *ngIf="gameLevel === 'N'">
+                <div class="tr" *ngFor=" let result of gameResult;  let i=index">
+                    <div class="td">Step {{ i + 1}}</div>
+                    <div class="td">{{result[0]}}</div>
+                    <div class="td">{{result[1]}}</div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="gameLevel === 'E' || gameLevel === 'H'">
+                <div class="tr" *ngFor=" let result of gameResult;  let i=index">
+                    <div class="td">Step {{ i + 1}}</div>
+                    <div class="td">{{result[0]}}</div>
+                    <div class="td">{{result[1]}}</div>
+                    <div class="td">{{result[2]}}</div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div>
+        <form onsubmit="return false;">
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Prev Hash" name="prev-hash" [(ngModel)]="prevHash">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Salt" name="salt" [(ngModel)]="currentSalt">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <input matInput placeholder="Current Hash" name="current-hash" [(ngModel)]="currentHash" readonly>
+            </mat-form-field>
+        </form>
+        <button type="button" (click)="validCheck();" mat-flat-button color="primary">검증</button>
+    </div>
+</article>

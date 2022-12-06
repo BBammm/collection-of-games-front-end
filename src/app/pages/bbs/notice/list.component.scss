@@ -1,0 +1,130 @@
+div.trade-wrap{
+    max-width: 1230px;
+    padding: 30px 15px;
+    height: 100%;
+    // border:1px solid #fff;
+    div.trade-content{
+        // padding: 40px 0;
+        div.history-box{
+            margin-top:30px;
+            padding: 30px 50px;
+            background-color: #2b3c4c;
+            min-height: 705px;
+            h2.title{
+                color:#fff;
+                font-size: 18px;
+                text-align: center;
+                margin-bottom: 30px;
+                font-weight: bold;
+            }
+            div.table-home{
+                .mobile-block{
+                    display:none;
+                }
+                table{
+                    table-layout: fixed;
+                    thead{
+                         background-color: #3e6c96;
+                         tr{
+                             th{
+                                 color:#fff;
+                                 font-size: 14px;
+                                 text-align: left;
+                             }
+                         }
+                    }
+                    tbody{
+                        tr{
+                            cursor: pointer;
+                            background-color: #3c5062;
+                            td{
+                                text-align: left;
+                                color:#94a5b5;
+                                font-size: 14px;
+                                vertical-align: middle;
+                                a{
+                                    // border:1px solid #fff;
+                                    display:inline-block;
+                                    width: 80%;
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                    white-space: nowrap;
+                                    color:#94a5b5;
+                                    text-decoration: none;
+                                }
+                            }
+                            &.no-display{
+                                td{
+                                    text-align: center;
+                                }
+                            }
+                            &:nth-child(odd){
+                                background-color: #2b3c4c;
+                            }
+                        }
+                    }
+                }
+                nav{
+                    ul{
+                        text-align: center;
+                        justify-content: center;
+                        margin-bottom: 0;
+                        li{
+                            a.page-link{
+                                color:#627281;
+                                background: none;
+                                border:none;
+                                font-size: 12px;
+                                font-weight: bold;
+                                i{
+                                    font-size: 10px;
+                                }
+                            }
+                            &.active{
+                                a{
+                                    color:#95a6b5;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            div.btn-home{
+                text-align: center;
+                margin-top: 10px;
+                a{
+                    border-style: none;
+                    background: #2d516f;
+                    border-radius: 5px;
+                    color: #fff;
+                    font-size: 13px;
+                    padding: 5px 15px;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+
+
+@media (max-width: 768px) {
+    div.trade-wrap{
+         div.trade-content{
+              div.history-box{
+                  padding: 30px 15px;
+                  div.table-home{
+                      .mobile-block{
+                          display:table-column-group;
+                      }
+                      p.mobile-block{
+                          display: block;
+                          margin-bottom: 0;
+                      }
+                      .mobile-none{
+                          display:none;
+                      }
+                  }
+              }
+         }
+    }
+}

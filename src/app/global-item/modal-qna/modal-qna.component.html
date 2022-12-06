@@ -1,0 +1,110 @@
+<div class="qna-modal container">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" (selectedTabChange)="onTabChanged($event);">
+        <mat-tab label="{{ 'bbs.qna.tab_write' | translate }}">
+            <form class="questionForm" [formGroup]="bbsFormGroup">
+                <div class="field">
+                    <mat-form-field appearance="fill" class="select">
+                        <mat-select formControlName="category" required>
+                            <mat-option *ngFor="let cat of category" [value]="cat.id">
+                                  {{cat.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="field">
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="{{ 'bbs.title' | translate }}" formControlName="title" required>
+                        <mat-error class="error">{{ 'bbs.qna.title-error' | translate }}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="field">
+                    <textarea name="qna-textarea" maxlength="700" placeholder="{{ 'bbs.qna.content-placeholder' | translate }}" formControlName="content"></textarea>
+                </div>
+                <div class="btnHome">
+                    <button type="button" name="button" class="cancle mr-2" mat-dialog-close>{{ 'button.close' | translate }}</button>
+                    <button type="button" name="button" (click)="submit()" [disabled]="bbsFormGroup.invalid">{{ 'button.save' | translate }}</button>
+                </div>
+            </form>
+        </mat-tab>
+        <mat-tab label="{{ 'bbs.qna.tab_list' | translate }}"><!-- 문의내역 -->
+            <ng-container *ngIf="!isDetail">
+                <form class="question-listForm form">
+                    <!-- 리스트 시작 -->
+                    <div class="list-wrap">
+                        <ul class="list">
+                            <li *ngFor="let article of articles" (click)="viewDetail(article.id)">
+                                <div class="title-box">
+                                    <p class="title">
+                                        <span>{{article.title}}</span>
+                                    </p>
+                                    <p class="created">
+                                        {{article.created_at | moment : 'YY.MM.DD'}}
+                                        <small>{{article.created_at | moment : 'HH:mm'}}</small>
+                                    </p>
+                                </div>
+                                <div class="answer">
+                                    <p *ngIf="article.comment_cnt === 0">
+                                        <span class="ing">{{ 'bbs.qna.status.waiting' | translate }}</span>
+                                    </p>
+                                    <p *ngIf="article.comment_cnt !== 0">
+                                        <span class="check">
+                                            <i class="fa fa-check"></i> {{ 'bbs.qna.status.answerd' | translate }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </li>
+                            <li *ngIf="articles.length === 0">
+                                <div class="title-box ">
+                                    <p class="title no-list">
+                                        {{ 'bbs.qna.no_list' | translate }}
+                                    </p>
+                                </div>
+                                <div class="answer">
+
+                                </div>
+                            </li>
+                            <!-- 상세보기 시작 -->
+
+                            <!-- 상세보기 끝 -->
+                        </ul>
+                    </div>
+                    <!-- 리스트 끝 -->
+
+                    <div class="btnHome">
+                        <button type="button" name="button" class="cancle" mat-dialog-close>{{ 'button.close' | translate }}</button>
+                    </div>
+                </form>
+            </ng-container>
+            <ng-container *ngIf="isDetail">
+                <div class="questionForm form" *ngIf="article">
+                    <div class="field">
+                        <mat-form-field appearance="fill" class="select">
+                            <mat-select [ngModel]="article.bbs_category_id" disabled>
+                                <mat-option *ngFor="let cat of category" [value]="cat.id">
+                                      {{cat.name}}
+                                </mat-option>
+                                <!-- <mat-option value="" selected >거래관련</mat-option>
+                                <mat-option value="">기타 문의사항</mat-option> -->
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="field">
+                        <mat-form-field appearance="outline">
+                            <input matInput [ngModel]="article.title" [readonly]="!isModified">
+                        </mat-form-field>
+                    </div>
+                    <div class="form-group field">
+                        <textarea matInput [ngModel]="article.content" [readonly]="!isModified"></textarea>
+                    </div>
+                    <div class="field" *ngIf="comment">
+                        <textarea matInput [ngModel]="comment.content" readonly class="answer-area"></textarea>
+                    </div>
+                    <div class="btnHome">
+                        <button type="button" name="button" class="btn-sm" (click)="closeDetail()">{{ 'button.close' | translate }}</button>
+                    </div>
+                </div>
+            </ng-container>
+
+        </mat-tab>
+    </mat-tab-group>
+</div>

@@ -1,0 +1,87 @@
+<div class="trade-content">
+    <div class="history-box">
+        <h2 class="title">
+            {{ 'history.tab-history' | translate}}
+        </h2>
+        <div class="table-home">
+            <table class="table table-striped table-borderless">
+                <colgroup>
+                    <col width="20%" class="mobile-none">
+                    <col width="*" class="mobile-none">
+                    <col width="*" class="mobile-none">
+                    <col width="*">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center mobile-none">{{ 'history.history.title-statement' | translate}}</th>
+                        <th scope="col" class="mobile-none">{{ 'history.history.title-amount' | translate}}</th>
+                        <th scope="col" class="mobile-none">{{ 'history.history.title-holding' | translate}}</th>
+                        <th scope="col" class="text-center mobile-none">{{ 'history.history.title-date' | translate}}</th>
+                        <th scope="col" class="text-center mobile-block">Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of history; let i = index">
+                        <td class="text-center mobile-none with-icon">
+                            <img [src]="'/assets/images/common/' + item.icon" alt="">{{item.item}} / {{item.sub_item}}
+                        </td>
+                        <td class="mobile-none">
+                            {{item.point | number}} TGM
+                        </td>
+                        <td class="mobile-none">
+                            {{item.cur_sum | number}} TGM
+                        </td>
+                        <td class="text-center mobile-none">
+                            {{ item.created_at | moment : 'MM.DD HH:mm'}}
+                        </td>
+                        <td class="mobile-block">
+                            <mat-accordion>
+                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                               (closed)="panelOpenState = false">
+                                <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    {{ 'history.history.title-statement' | translate}} : {{item.item}} / {{item.sub_item}}
+                                </mat-panel-title>
+                                </mat-expansion-panel-header>
+                                    <div class="game-info">
+                                        <span>{{ 'history.title-history.amount' | translate}} : </span>
+                                        {{item.point | number}} TGM
+                                    </div>
+                                    <div class="game-info">
+                                        <span>{{ 'history.title-history.holding' | translate}} : </span>
+                                        {{item.cur_sum | number}} TGM
+                                    </div>
+                                    <div class="game-info data">
+                                        <span>
+                                            {{ 'history.title-history.date' | translate}} :
+                                        </span>
+                                        {{ item.created_at | moment : 'MM.DD HH:mm'}}
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+                        </td>
+                    </tr>
+                    <ng-container *ngIf="history.length === 0 && !isPending">
+                        <tr class="no-display">
+                            <td colspan="4" class="mobile-none">{{ 'bbs.no_list' | translate}}</td>
+                            <td class="mobile-block">{{ 'bbs.no_list' | translate}}</td>
+                        </tr>
+                    </ng-container>
+                    <ng-container *ngIf="isPending">
+                        <tr class="no-display">
+                            <td colspan="4" class="mobile-none"><mat-progress-bar mode="indeterminate"></mat-progress-bar></td>
+                            <td class="mobile-block"><mat-progress-bar mode="indeterminate"></mat-progress-bar></td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+            <app-pagenator
+                (currentPageChanged)="pageChanged($event)"
+                [currentPage]="pagination.currentPage"
+                [pageCount]="pagination.pageCount"
+                [collectionSize]="pagination.collectionSize">
+            </app-pagenator>
+        </div>
+    </div>
+
+</div>

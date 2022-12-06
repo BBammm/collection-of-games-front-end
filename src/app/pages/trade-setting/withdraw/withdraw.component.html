@@ -1,0 +1,239 @@
+<div class="trade-content">
+    <div class="liveBox">
+        <h2 class="title">
+            {{ 'dep-wdl.realtime-quote' | translate}}
+        </h2>
+        <div class="live-price-wrap row">
+            <div class="price-box col-lg-3 col-md-3 col-6">
+                <p>
+                    BTC
+                </p>
+                <span>
+                    {{ tgmMarketPrice.BTC.ask.price | number}}
+                    <small>TGM</small>
+                </span>
+            </div>
+            <div class="price-box col-lg-3 col-md-3 col-sm-6 col-6">
+                <p>
+                    ETH
+                </p>
+                <span>
+                    {{ tgmMarketPrice.ETH.ask.price | number}}
+                    <small>TGM</small>
+                </span>
+            </div>
+            <div class="price-box col-lg-3 col-md-3 col-6">
+                <p>
+                    XRP
+                </p>
+                <span>
+                    {{ tgmMarketPrice.XRP.ask.price | number}}
+                    <small>TGM</small>
+                </span>
+            </div>
+            <div class="price-box col-lg-3 col-md-3 col-6">
+                <p>
+                    TRX
+                </p>
+                <span>
+                    {{ tgmMarketPrice.TRX.ask.price | number}}
+                    <small>TGM</small>
+                </span>
+            </div>
+        </div>
+        <div class="link-box-wrap">
+            <div class="link-box">
+                <div class="card responsive-card">
+                    <a href="https://tempobit.com/" target="_blank">
+                        <img src="/assets/images/common/tempobit_logo.png" alt="">
+                    </a>
+                </div>
+                <div class="card responsive-card">
+                    <a href="https://www.bithumb.com/" target="_blank">
+                        <img src="/assets/images/common/Bithumb_logo.png" alt="">
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="https://upbit.com/" target="_blank">
+                        <img src="/assets/images/common/UPbit_logo.png" alt="" class="small">
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="https://www.binance.com/" target="_blank">
+                        <img src="/assets/images/common/binance_logo.png" alt="">
+                    </a>
+                </div>
+                <div class="card">
+                    <a href="https://www.huobi.com/" target="_blank">
+                        <img src="/assets/images/common/Huobi_logo.png" alt="" class="small">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ng-container *ngIf="step === 1">
+        <div class="row trade-step trade-step1">
+            <div class="trade-step-left col-lg-6 col-md-7">
+                <form (ngSubmit)="stepOneSubmit()">
+                    <div class="trade-header">
+                        <h5>{{ 'dep-wdl.withdraw.title-withdraw' | translate}}</h5>
+                    </div>
+                    <div class="trade-body">
+                        <form [formGroup]="stepOneWithdraw">
+                            <div class="row dataWrap">
+                                <div class="formfild">
+                                    <select class="form" name="symbol" formControlName="symbol">
+                                        <option *ngFor="let item of symbolList" [ngValue]="item.value">{{item.title}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row dataWrap">
+                                <div class="formfild">
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="{{ 'dep-wdl.withdraw.withdraw-amount' | translate}}" formControlName="amount" maxlength="200" required>
+                                        <label for="">TGM</label>
+                                        <mat-error *ngIf="stepOneWithdraw.get('amount').hasError('required')" class="error">{{ 'dep-wdl.withdraw.required.amount' | translate}}</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="btn-home">
+                        <button type="submit" name="button">
+                            {{ 'button.next' | translate}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="trade-step-right col-lg-6 col-md-5">
+                <div class="trade-header">
+                    <h5>{{ 'dep-wdl.notice' | translate}}</h5>
+                </div>
+                <div class="trade-body">
+                    <p>
+                        {{ 'dep-wdl.withdraw.notice-1' | translate}}
+                    </p>
+                    <p>
+                        {{ 'dep-wdl.withdraw.notice-2' | translate}}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="step === 2">
+        <div class="row trade-step trade-step2">
+            <div class="trade-step-left col-lg-6 col-md-7">
+                <form method="POST">
+                    <div class="trade-header">
+                        <h5>{{ 'dep-wdl.withdraw.title-withdraw' | translate}}</h5>
+                    </div>
+                    <div class="trade-body">
+                        <div class="row dataWrap">
+                            <div class="formfild fild2">
+                                <mat-form-field appearance="outline" class="mb-2">
+                                    <input matInput placeholder="apply Amount" name="inAmount" maxlength="200" [(ngModel)]="withdrawInfo.inAmount" required readonly>
+                                    <label for="">TGM</label>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline">
+                                    <input matInput placeholder="total amount" name="totalAmount" maxlength="200" [(ngModel)]="withdrawInfo.totalAmount" required readonly>
+                                    <label for="">{{withdrawInfo.symbol}}</label>
+                                </mat-form-field>
+                                <img src="/assets/images/common/arrow.png" alt="" class="arrow">
+                            </div>
+                        </div>
+                        <div class="row dataWrap">
+                            <div class="formfild fild2">
+                                <p class="input-title">{{ 'dep-wdl.withdraw.min-amount' | translate}}</p>
+                                <mat-form-field appearance="outline">
+                                    <input matInput placeholder="{{ 'dep-wdl.withdraw.min-amount' | translate}}" name="min" maxlength="200" [(ngModel)]="withdrawInfo.min" required readonly>
+                                    <label for="">{{withdrawInfo.symbol}}</label>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row dataWrap">
+                            <div class="formfild fild2">
+                                <p class="input-title">{{ 'dep-wdl.withdraw.commission' | translate}}</p>
+                                <mat-form-field appearance="outline">
+                                    <input matInput placeholder="{{ 'dep-wdl.withdraw.commission' | translate}}" name="commission" maxlength="200" [(ngModel)]="withdrawInfo.commission" required readonly>
+                                    <label for="">{{withdrawInfo.symbol}}</label>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row dataWrap">
+                            <div class="formfild fild2">
+                                <p class="input-title">{{ 'dep-wdl.withdraw.transaction-amount' | translate}}</p>
+                                <mat-form-field appearance="outline">
+                                    <input matInput placeholder="{{ 'dep-wdl.withdraw.transaction-amount' | translate}}" name="payAmount" maxlength="200" [(ngModel)]="withdrawInfo.payAmount" required readonly>
+                                    <label for="">{{withdrawInfo.symbol}}</label>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row dataWrap">
+                            <div class="formfild fild2">
+                                <p class="input-title">{{ 'dep-wdl.withdraw.address' | translate}}</p>
+                                <mat-form-field appearance="outline">
+                                    <input matInput placeholder="{{ 'dep-wdl.withdraw.address' | translate}}" name="address" [(ngModel)]="withdrawInfo.address" maxlength="200" required>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row dataWrap" *ngIf="withdrawInfo.symbol === 'XRP'">
+                            <div class="formfild fild2 destination-fild">
+                                <p class="input-title">{{ 'dep-wdl.withdraw.destination-tag' | translate}}</p>
+                                <div class="check-fild">
+                                    <section>
+                                        <mat-checkbox class="destination-check" type="checkbox" name="destination-checkbox" value="1" [(ngModel)]="withdrawInfo.enableTag"></mat-checkbox>
+                                    </section>
+                                    <mat-form-field appearance="outline">
+                                        <input matInput placeholder="{{ 'dep-wdl.withdraw.destination-tag' | translate}}" name="tag" [(ngModel)]="withdrawInfo.tag" maxlength="200" required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row dataWrap" *ngIf="needNum">
+                            <div class="formfild fild2">
+                                <p class="input-title">{{ 'auth.auth-num' | translate}}</p>
+                                <mat-form-field appearance="outline">
+                                    <input matInput placeholder="{{ 'auth.auth-num' | translate}}" name="authNo" [(ngModel)]="withdrawInfo.authNo" maxlength="200" required>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row dataWrap">
+                            <div class="formfild fild2">
+                                <button type="button" name="button" class="send-btn" (click)="getNum()">
+                                    {{ 'auth.get-auth-num' | translate}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-home">
+                        <button type="button" name="button" class="cancle" (click)="stepBack()">
+                            {{ 'button.cancel' | translate}}
+                        </button>
+                        <button type="button" name="button" (click)="withdraw()">
+                            {{ 'dep-wdl.withdraw.btn-withdraw' | translate}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="trade-step-right col-lg-6 col-md-5">
+                <div class="trade-header">
+                    <h5>{{ 'dep-wdl.notice' | translate}}</h5>
+                </div>
+                <div class="trade-body">
+                    <p>
+                        {{ 'dep-wdl.withdraw.notice-1' | translate}}
+                    </p>
+                    <p>
+                        {{ 'dep-wdl.withdraw.notice-2' | translate}}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <div class="history-link">
+        <button type="button" name="button" routerLink="/history/main/withdraw">{{ 'dep-wdl.withdraw.goto-list' | translate}}</button>
+    </div>
+</div>

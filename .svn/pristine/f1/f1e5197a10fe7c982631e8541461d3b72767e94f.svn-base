@@ -1,0 +1,15 @@
+<div class="guide-modal-wrap">
+    <div mat-dialog-title class="dialog-title modal-header">
+        <button mat-icon-button mat-dialog-close>
+            <mat-icon>clear</mat-icon>
+        </button>
+    </div>
+    <div class="modal-body">
+        <ng-conatiner *ngIf="data.title === 'dice'">
+            <h1>dice</h1>
+        </ng-conatiner>
+        <ng-conatiner *ngIf="data.title === 'mining'">
+            <h1>mining</h1>
+        </ng-conatiner>
+    </div>
+</div>

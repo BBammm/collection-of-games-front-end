@@ -1,0 +1,52 @@
+<article class="fairness-wrap">
+    <div class="modal-header">
+        <h1 class="title">{{ data.title | uppercase }} {{ 'fairness.veri-title' | translate }}</h1>
+        <button type="button" name="button" (click)="close()" class="close-btn">
+            <img src="/assets/images/common/close-btn.png" alt="">
+        </button>
+    </div>
+    <mat-tab-group animationDuration="0ms" mat-align-tabs="center">
+        <mat-tab label="{{ 'fairness.result-title' | translate }}">
+            <div class="form-wrap">
+                <form>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="{{ 'fairness.game-hash' | translate }}" name="hash" [(ngModel)]="gameHash" required>
+                    </mat-form-field>
+                    <button (click)="getResult()">{{ 'fairness.check' | translate }}</button>
+                </form>
+                <div class="list">
+                    <p>{{ 'fairness.result-number' | translate }} :
+                        <span class="point">{{resultCode}}</span>
+                    </p>
+                    <p>{{ 'fairness.result-color' | translate }} :
+                        <span class="point">{{resultColor}}</span>
+                    </p>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'fairness.vali-title' | translate }}">
+            <div class="form-wrap">
+                <form class="form-wrap Validation">
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="{{ 'fairness.prev-hash' | translate }}" name="prev_hash" [(ngModel)]="prevHash" required>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="{{ 'fairness.cur-salt' | translate }}" name="salt" [(ngModel)]="currentSalt" required>
+                    </mat-form-field>
+
+                    <button (click)="validCheck()">{{ 'fairness.validation' | translate }}</button>
+                </form>
+                <div class="list">
+                    <p class="code">
+                        {{ 'fairness.result-hash' | translate }} :
+                        <span class="point" (click)="copyToClipboard(currentHash)">{{currentHash}}</span>
+                    </p>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+    <div class="link-box">
+        <a href="https://jsfiddle.net/JacksonChang/h65o1z9v/embedded/result" target="_blank">{{ 'fairness.externally' | translate }}</a>
+        <a href="https://jsfiddle.net/JacksonChang/h65o1z9v/" target="_blank">{{ 'fairness.view-code' | translate }}</a>
+    </div>
+</article>

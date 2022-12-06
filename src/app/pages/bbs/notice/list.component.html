@@ -1,0 +1,54 @@
+<div class="trade-wrap container">
+    <div class="trade-content">
+        <div class="history-box">
+            <h2 class="title">
+                {{ 'bbs.notice' | translate }}
+            </h2>
+            <div class="table-home">
+                <table class="table table-striped table-borderless">
+                    <col width="5%" class="mobile-none" > <!-- no -->
+                    <col width="15%" class="mobile-block"> <!-- no -->
+                    <col width="70%" class="mobile-none"> <!-- title -->
+                    <col width="60%" class="mobile-block"> <!-- title -->
+                    <col width="*"  class="mobile-none"><!-- data -->
+                    <col width="25%" class="mobile-block"><!-- data -->
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">No.</th>
+                            <th scope="col">{{ 'bbs.title' | translate }}</th> <!-- 제목 -->
+                            <th scope="col">{{ 'bbs.writer' | translate }}</th> <!-- 작성자 -->
+                            <th scope="col" class="text-center mobile-none">{{ 'bbs.created_at' | translate }}</th> <!-- 작성일 -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of articles; let i = index" [routerLink]="'/notice/show/' + item.id">
+                            <td class="text-center">{{ startNo - i}}</td>
+                            <td>
+                                    {{ item.title}}
+                                    <p class="mobile-block">{{ item.created_at | moment : 'YY.MM.DD HH:mm' }}</p>
+
+                            </td>
+                            <td>{{ item.user_name}}</td>
+                            <td class="text-center mobile-none">{{ item.created_at | moment : 'YY.MM.DD HH:mm' }}</td>
+                        </tr>
+                        <ng-container *ngIf="articles.length === 0">
+                            <tr class="no-display">
+                                <td colspan="4">{{ 'bbs.no_list' | translate }}</td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+                <app-pagenator
+                    (currentPageChanged)="pageChanged($event)"
+                    [currentPage]="pagination.currentPage"
+                    [pageCount]="pagination.pageCount"
+                    [collectionSize]="pagination.collectionSize">
+                </app-pagenator>
+                <!-- <div class="btn-home">
+                    <a routerLink="/notice/write/">글쓰기</a>
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+</div>

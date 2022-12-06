@@ -1,0 +1,105 @@
+<div class="sign-modal container">
+    <div mat-dialog-title class="dialog-title modal-header">
+        <button mat-icon-button mat-dialog-close>
+            <mat-icon>clear</mat-icon>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="modal-content">
+            <mat-tab-group mat-align-tabs="center" animationDuration="0ms" [selectedIndex]="data.type">
+                <mat-tab label="{{'auth.find-email' | translate}}">
+                    <form [formGroup]="findEmailGroup" (ngSubmit)="findEmail()">
+                        <div class="field">
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Name" formControlName="name" required>
+                                <mat-error class="error">{{'auth.messages.name-require' | translate}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="field certification-field">
+                            <mat-form-field appearance="fill" class="select">
+                                <mat-select formControlName="national_code" required>
+                                    <mat-option value="82" selected >82</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="input3">
+                                <input matInput placeholder="Mobile Number" formControlName="phone" maxlength="200" required>
+                                <mat-error class="error">{{'auth.messages.mobile-require' | translate}}</mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="field ">
+                            <div class="btn-home">
+                                <button type="submit" name="button">{{'auth.find-email' | translate}}</button>
+                                <a class="link" (click)="openLogin()">{{'auth.sign-in' | translate}}</a>
+                            </div>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="{{'auth.find-pwd' | translate}}">
+                    <ng-container *ngIf="step === 1">
+                        <form [formGroup]="findPwdGroup" (ngSubmit)="getAuthKey()">
+                            <div class="field">
+                                <mat-form-field appearance="outline">
+                                    <input matInput placeholder="Email" formControlName="email" maxlength="200" required>
+                                    <mat-error class="error">{{'auth.messages.mail-require' | translate}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="field">
+                                <mat-form-field appearance="outline">
+                                    <input matInput placeholder="Name" formControlName="name" required>
+                                    <mat-error class="error">{{'auth.messages.name-require' | translate}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="btn-home">
+                                <button type="submit" name="button">{{'auth.get-auth-num' | translate}}</button>
+                                <a class="link" (click)="openLogin()">{{'auth.sign-in' | translate}}</a>
+                            </div>
+                        </form>
+                    </ng-container>
+
+                    <ng-container *ngIf="step === 2">
+                        <form [formGroup]="checkCertiGroup" (ngSubmit)="checkAuthNum()">
+                            <div class="field">
+                                <mat-form-field appearance="outline">
+                                    <input matInput placeholder="Number Check" formControlName="certification_number" maxlength="200" required>
+                                    <mat-error class="error">{{'auth.messages.authnum-require' | translate}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="btn-home">
+                                <button type="submit" name="button">{{'auth.find-pwd' | translate}}</button>
+                                <a class="link" (click)="openLogin()">{{'auth.sign-in' | translate}}</a>
+                            </div>
+                        </form>
+                    </ng-container>
+
+                    <ng-container *ngIf="step === 3">
+                        <form [formGroup]="resetPwdGroup" (ngSubmit)="newPwd()">
+                            <div class="field">
+                                <mat-form-field appearance="outline">
+                                    <input matInput type="password" placeholder="New Password" formControlName="password" maxlength="200" required>
+                                    <mat-error class="error">{{'auth.messages.password-require' | translate}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="field">
+                                <mat-form-field appearance="outline">
+                                    <input matInput type="password" placeholder="Confirm Password" formControlName="password_check" maxlength="200" required>
+                                    <mat-error class="error">{{'auth.messages.confirm-password-require' | translate}}</mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="btn-home">
+                                <button type="submit" name="button">{{'auth.find-pwd' | translate}}</button>
+                                <a class="link" (click)="openLogin()">{{'auth.sign-in' | translate}}</a>
+                            </div>
+                        </form>
+                    </ng-container>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+        <div class="modal-visual">
+            <img src="" alt="">
+        </div>
+    </div>
+    <!-- <div mat-dialog-actions align="end" class="modal-footer">
+        <button mat-button mat-dialog-close>취소</button>
+        <button mat-raised-button color="primary">보내기</button>
+    </div> -->
+</div>

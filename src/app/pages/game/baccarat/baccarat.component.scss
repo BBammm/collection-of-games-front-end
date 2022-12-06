@@ -1,0 +1,1043 @@
+
+.mat-tab-header{
+    border-color:#34424f;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar {
+    background-color:#14dbcf;
+}
+
+mat-tab-group{
+    .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{
+        display:none;
+    }
+    .mat-tab-header-pagination{
+        display:none;
+    }
+    .mat-tab-label{
+        opacity: 1;
+        color:#8fa8c0;
+        &.mat-tab-label-active{
+            color: #fff;
+        }
+    }
+}
+
+div.block-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+}
+div.game-container.baccarat{
+    max-width: 1230px;
+    padding: 60px 15px;
+    div.game-wrap{
+        display: flex;
+        div.game-left{
+            padding: 30px;
+            background-color: #15212c;
+            width: 35%;
+            order: 1;
+            div.user-balance{
+                display:flex;
+                align-items:center;
+                justify-content: space-between;
+                p.title{
+                    display: inline-block;
+                    margin-bottom: 0;
+                    color:#95a6b5;
+                    font-size: 13px;
+                    img{
+                        margin-right: 5px;
+                    }
+                    span.point{
+                        margin-left: 10px;
+                        font-size: 13px;
+                        color:#fff;
+                        font-weight: bold;
+                    }
+                }
+                button.guide-btn{
+                    border:none;
+                    background: none;
+                    color: #586d7f;
+                    font-size: 20px;
+                    &:hover{
+                        color: #14dbcf;
+                    }
+                }
+            }
+            div.bet-calculator{
+                margin-top: 30px;
+                p.title{
+                    font-size: 14px;
+                    color:#95a6b5;
+                    margin-bottom: 10px;
+                }
+            }
+            div.betting-btn{
+                margin-top: 20px;
+                margin-bottom: 30px;
+                button{
+                    background: #14dbcf;
+                    border-radius:5px;
+                    color:#fff;
+                    width: 100%;
+                    border-style: none;
+                    height: 60px;
+                    font-weight: bold;
+                }
+            }
+            div.code-wrap{
+                margin-top: 25px;
+                div.code-box{
+                    p.title{
+                        font-size: 14px;
+                        color:#95a6b5;
+                        margin-bottom: 5px;
+                    }
+                    div.field{
+                        display:flex;
+                        mat-form-field{
+                            width: 85%;
+                            .mat-form-field-wrapper{
+                                .mat-form-field-outline{
+                                    border-radius: 5px 0 0 5px;
+                                }
+                            }
+                        }
+                        button{
+                            width: 15%;
+                            height: 35px;
+                            border-style: none;
+                            background: #223342;
+                            border-radius:0 5px 5px 0;
+                        }
+                    }
+                }
+            }
+        }
+        div.game-right{
+            padding: 30px;
+            background-color: #1a2732;
+            width: 65%;
+            position: relative;
+            div.game-round-text{
+                position: relative;
+                p.title{
+                    font-size: 22px;
+                    font-weight: bold;
+                    margin-bottom: 15px;
+                    color:#91a2b2;
+                    span{
+                        color:#fff;
+                    }
+                }
+            }
+            div.game-board {
+                display: flex;
+                flex-direction: column;
+                background-repeat: no-repeat;
+                overflow: hidden;
+                position: relative;
+                div.pair-layout{
+                    display: flex;
+                    justify-content: space-between;
+                    div.player{
+                        flex-basis: 49%;
+                        &.pair{
+                            padding: 15px;
+                            flex-basis: 49%;
+                            background-color: #3164c1;
+                            transition: background-color 150ms cubic-bezier(0.47, 0, 0.75, 0.72), transform 0.15s ease-in-out;
+                            border-top-left-radius: 5px;
+                            border-top-right-radius: 5px;
+                            border:5px solid #3164c1;
+                            &:hover,&.on{
+                                background-color: #14459f;
+                            }
+                            cursor: pointer;
+                            div.player-person{
+                                width: 100%;
+                                div.player-pair-text{
+                                    span{
+                                        color:#fff;
+                                        &.choice-title{
+                                            font-size: 18px;
+                                            font-weight: bold;
+                                        }
+                                        &.dividend-rate{
+                                            font-size: 14px;
+                                        }
+                                    }
+                                }
+                                div.betted-cnt {
+                                    color:#79a9f0;
+                                    i.material-icons{
+                                        font-size: 18px;
+                                        vertical-align: sub;
+                                    }
+                                    font-size: 13px;
+                                }
+                            }
+                        }
+                    }
+                    div.banker{
+                        flex-basis: 49%;
+                        &.pair{
+                            padding: 15px;
+                            background-color: #d64646;
+                            transition: background-color 150ms cubic-bezier(0.47, 0, 0.75, 0.72), transform 0.15s ease-in-out;
+                            border-top-left-radius: 5px;
+                            border-top-right-radius: 5px;
+                            border:5px solid #d64646;
+                            &:hover,&.on{
+                                background-color: #a21c1c;
+                            }
+                            cursor: pointer;
+                            div.player-person{
+                                width: 100%;
+                                div.banker-pair-text{
+                                    text-align: right;
+                                    span{
+                                        color:#fff;
+                                        &.choice-title{
+                                            font-size: 18px;
+                                            font-weight: bold;
+                                        }
+                                        &.dividend-rate{
+                                            font-size: 14px;
+                                            text-align: right;
+                                        }
+                                    }
+                                }
+                                div.betted-cnt {
+                                    color:#f58b8b;
+                                    text-align: right;
+                                    i.material-icons{
+                                        font-size: 18px;
+                                        vertical-align: sub;
+                                    }
+                                    font-size: 13px;
+                                }
+                            }
+                        }
+                    }
+                }
+                div.card-layout{
+                    margin-top: 10px;
+                    display: flex;
+                    justify-content: space-between;
+                    height: 280px;
+                    div.player{
+                        &.baccarat-card{
+                            flex-basis: 49%;
+                            padding: 15px;
+                            box-sizing: border-box;
+                            align-items: flex-start;
+                            border: 5px solid #3164c1;
+                            background-color: #3164c1;
+                            border-bottom-left-radius: 5px;
+                            transition: background-color 150ms cubic-bezier(0.47, 0, 0.75, 0.72), transform 0.15s ease-in-out;
+                            cursor: pointer;
+                            position: relative;
+                            &:hover,&.on{
+                                background-color: #14459f;
+                            }
+                            div.cards{
+                                overflow: hidden;
+                                position: relative;
+                                div.baccarat-card-place{
+                                    float: left;
+                                    position: relative;
+                                    border: 1px solid #d0be59;
+                                    width: 45px;
+                                    height: 67.5px;
+                                    margin-right: 10px;
+                                    border-radius: 2px;
+                                    &.playerMore{
+                                        margin-left: 10px;
+                                        margin-top: -10px;
+                                        transform: rotate(-90deg);
+                                    }
+                                }
+                                div.card-sum {
+                                    position: absolute;
+                                    right: 0;
+                                    bottom: 0;
+                                    padding: 0 10px;
+                                    border-radius: 5px;
+                                    color: #fff;
+                                    font-weight: bold;
+                                    font-size: 20px;
+                                    background-color:#0e3782;
+                                }
+                            }
+                            div.player-person{
+                                margin-top: 30px;
+                                div.player-text{
+                                    span{
+                                        color:#fff;
+                                        &.choice-title{
+                                            font-size: 18px;
+                                            font-weight: bold;
+                                        }
+                                        &.dividend-rate{
+                                            font-size: 14px;
+                                        }
+                                    }
+                                }
+                                div.betted-cnt {
+                                    color:#79a9f0;
+                                    font-size: 13px;
+                                    i.material-icons{
+                                        font-size: 18px;
+                                        vertical-align: sub;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    div.tie-wrap{
+                        padding: 10px 10px 0 10px;
+                        position: absolute;
+                        bottom: 0;
+                        left: 50%;
+                        transform: translate3d(-50%,0,0);
+                        z-index: 5;
+                        background-color:#1a2732;
+                        width: 150px;
+                        div.tie{
+                            background-color: #259f87;
+                            border:5px solid #259f87;
+                            border-radius: 5px;
+                            height: 90px;
+                            cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            &:hover,&.on{
+                                background-color:#06735d;
+                                transition: all 0.3s ease;
+                            }
+                            div.tie-person{
+                                div.tie-text{
+                                    span{
+                                        color:#fff;
+                                        &.choice-title{
+                                            font-size: 18px;
+                                            font-weight: bold;
+                                        }
+                                        &.dividend-rate{
+                                            font-size: 14px;
+                                            text-align: right;
+                                        }
+                                    }
+                                }
+                                div.betted-cnt {
+                                    color:#7cd8c6;
+                                    font-size: 13px;
+                                    i.material-icons{
+                                        font-size: 18px;
+                                        vertical-align: sub;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    div.banker{
+                        &.baccarat-card {
+                            position: relative;
+                            flex-basis: 49%;
+                            padding: 15px;
+                            box-sizing: border-box;
+                            border:5px solid #d64646;
+                            background-color: #d64646;
+                            border-bottom-right-radius: 20px;
+                            transition: background-color 150ms cubic-bezier(0.47, 0, 0.75, 0.72), transform 0.15s ease-in-out;
+                            cursor: pointer;
+                            &:hover,&.on{
+                                background-color: #a21c1c;
+                            }
+                            div.cards{
+                                overflow: hidden;
+                                position: relative;
+                                div.baccarat-card-place{
+                                    float: right;
+                                    position: relative;
+                                    border: 1px solid #d0be59;
+                                    width: 45px;
+                                    height: 67.5px;
+                                    margin-left: 10px;
+                                    border-radius: 2px;
+                                    &.bankerMore{
+                                        margin-right: 0;
+                                        margin-right: 10px;
+                                        margin-top: -10px;
+                                        transform: rotate(90deg);
+                                    }
+                                }
+                                div.card-sum {
+                                    position: absolute;
+                                    left: 0;
+                                    bottom: 0;
+                                    padding: 0 10px;
+                                    border-radius: 5px;
+                                    color: #fff;
+                                    font-weight: bold;
+                                    font-size: 20px;
+                                    background-color:#880e0e;
+                                }
+                            }
+                            div.banker-person{
+                                margin-top: 30px;
+                                text-align: right;
+                                div.banker-text{
+                                    span{
+                                        color:#fff;
+                                        &.choice-title{
+                                            font-size: 18px;
+                                            font-weight: bold;
+                                        }
+                                        &.dividend-rate{
+                                            font-size: 14px;
+                                        }
+                                    }
+                                }
+                                div.betted-cnt {
+                                    color:#f58b8b;
+                                    font-size: 13px;
+                                    i.material-icons{
+                                        font-size: 18px;
+                                        vertical-align: sub;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .game-board div.round-progress {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                round-progress {
+                    z-index: 5;
+                }
+                .count-down{
+                    color:#ffdd4d;
+                    position: absolute;
+                    width: 58px;
+                    height: 58px;
+                    background-color: #1a2732;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%,-50%);
+                    border-radius: 50%;
+                    span{
+                        position: absolute;
+                        left: 50%;
+                        top:50%;
+                        transform: translate(-50%,-50%);
+                        font-family: 'Russo One', 'Noto Sans KR', sans-serif;
+                    }
+                }
+             }
+
+            .game-board .player.pair.inactive,
+            .game-board .banker.pair.inactive,
+            .game-board .player.baccarat-card.inactive,
+            .game-board .banker.baccarat-card.inactive,
+            .game-board .tie.inactive {
+                opacity: 0.3;
+            }
+
+            .baccarat-card-place app-card {
+                position: absolute;
+                top: 200px;
+                left: 0;
+            }
+
+            .baccarat-card-place.playerMore app-card {
+                left: -400px;
+            }
+
+            .baccarat-card-place.player1 app-card {
+                left: 300px;
+            }
+
+            .baccarat-card-place.player2 app-card {
+                left: 200px;
+            }
+
+            .baccarat-card-place.bankerMore app-card {
+                left: 400px;
+            }
+
+            .baccarat-card-place.banker1 app-card {
+                left: -200px;
+            }
+
+            .baccarat-card-place.banker2 app-card {
+                left: -300px;
+            }
+
+            ngx-flip {
+                width: 45px;
+                height: 67.5px;
+                background-color: #fff;
+                div.flipper{
+                    div.front{
+                        background-color: #fff;
+                        div.diamond,div.heart{
+                            color:red;
+                        }
+                        div.spade,div.clover{
+                            color: black;
+                        }
+                        div.card-icon {
+                            display: flex;
+                            mat-icon {
+                               width: 15px;
+                               height: 15px;
+                               svg{
+                                   vertical-align: text-top;
+                               }
+                           }
+                        }
+                        div.number {
+                            text-align: center;
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            left: 0;
+                            top:0;
+                            span{
+                                position: absolute;
+                                left: 50%;
+                                top: 50%;
+                                transform: translate(-50%,-50%);
+                                font-size: 30px;
+                                font-family: 'Russo One', 'Noto Sans KR', sans-serif;
+                            }
+                        }
+                    }
+                    div.back {
+                        background-image: url("/assets/games/baccarat/images/card.png");
+                        background-repeat: no-repeat;
+                        background-size: 100% auto;
+                        border-radius: 0px;
+                    }
+                }
+            }
+
+        }
+    }
+    div.bonus-game-info{
+        background-color: #101d28;
+        padding: 20px 30px;
+        div.baccarat-percent-panel{
+            display: flex;
+            margin-bottom: 0.5rem;
+            max-width: 715px;
+            div.baccarat-percent-player{
+                width: 45.9%;
+                margin: 0 1px;
+                min-width: 5%;
+                text-align: center;
+                font-size: 12px;
+                letter-spacing: 0.9px;
+                background-color: #3c83ee;
+                border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+                color:#fff;
+            }
+            div.baccarat-percent-tie{
+                width: 9.8%;
+                margin: 0 1px;
+                min-width: 5%;
+                text-align: center;
+                font-size: 12px;
+                letter-spacing: 0.9px;
+                background-color: #259f87;
+                color:#fff;
+            }
+            div.baccarat-percent-banker{
+                width: 42.6%;
+                margin: 0 1px;
+                min-width: 5%;
+                text-align: center;
+                font-size: 12px;
+                letter-spacing: 0.9px;
+                background-color: #f84f4f;
+                border-top-right-radius: 5px;
+                border-bottom-right-radius: 5px;
+                color:#fff;
+            }
+        }
+        ul.baccarat-history-field{
+            columns: 12;
+            font-size: 6pt;
+            line-height: 6pt;
+            padding: 0;
+            margin-bottom: 0;
+            li {
+                width: 17px;
+                height: 17px;
+                line-height: 17px;
+                margin-bottom: 2px;
+                text-align: center;
+                border-radius: 50%;
+                display: inline-block;
+                color:#fff;
+                position: relative;
+                div.baccarat-history-pair {
+                    visibility: hidden;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    border: 1px solid #19343f;
+                    &.player {
+                        background-color: #3164c1;
+                    }
+                    &.banker {
+                        background-color: #d64646;
+                    }
+                }
+                &.player{
+                    background-color: #01588a;
+                }
+                &.tie{
+                    background-color: #006d70;
+                }
+                &.banker{
+                    background-color: #ac0000;
+                }
+            }
+        }
+        div.game-bets-container{
+            overflow-y: hidden;
+            margin-top: 15px;
+            p.title{
+                font-size: 14px;
+                color:#95a6b5;
+                margin-bottom: 5px;
+            }
+            div.columns-list{
+                ul.column{
+                    padding: 0;
+                    margin-bottom: 0;
+                    list-style: none;
+                    div.game-bets-header{
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        display: flex;
+                        justify-content:space-between;
+                        color:#fff;;
+                        font-size: 14px;
+                        background: #275072;
+                        li{
+                            width: 25%;
+                            text-align: center;
+                            padding: 10px 0;
+                        }
+                    }
+                    div.game-bets-list {
+                        -webkit-transform: scale3d(1, 1, 1);
+                        transform: scale3d(1, 1, 1);
+                        -webkit-animation-name: showed;
+                        -webkit-animation-duration: 0.2s;
+                        animation-name: showed;
+                        animation-duration: 0.2s;
+                        font-size: 12px;
+                        display: flex;
+                        justify-content:space-between;
+                        color:#94a5b5;
+                        background-color: #182937;
+                        &:nth-child(even){
+                            background-color:#101d28;
+                        }
+                        li{
+                            width: 25%;
+                            text-align: center;
+                            padding: 10px;
+                        }
+                        @-webkit-keyframes showed {
+                            0%   {-webkit-transform: scale3d(1, 0, 1); transform: scale3d(1, 0, 1);}
+                            100% {-webkit-transform: scale3d(1, 1, 1);transform: scale3d(1, 1, 1);}
+                        }
+
+                        /* Standard syntax */
+                        @keyframes showed {
+                            0%   {-webkit-transform: scale3d(1, 0, 1); transform: scale3d(1, 0, 1);}
+                            100% {-webkit-transform: scale3d(1, 1, 1);transform: scale3d(1, 1, 1);}
+                        }
+                    }
+                }
+            }
+        }
+    }
+    div.history-wrap{
+        background-color: #2b3c4c;
+        margin-top:30px;
+        div.verification-btn{
+            text-align: right;
+            background-color: #212e3a;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            button{
+                font-size: 13px;
+                border-style: none;
+                outline: none;
+                background: none;
+                color:#95a6b5;
+                padding: 6px 15px;
+                border-radius: 15px;
+                background-color: #273643;
+                i{
+                    color:#626f7c;
+                    font-size: 19px;
+                    vertical-align: bottom;
+                    margin-right: 5px;
+                }
+                &:hover{
+                    color:#fff;
+                    i{
+                        color:#14dbcf;
+                    }
+                }
+            }
+        }
+        mat-tab-group{
+            // margin-top: 30px;
+            div.history-box{
+                padding: 30px 50px;
+                background-color: #2b3c4c;
+                h2.title{
+                    color:#fff;
+                    font-size: 18px;
+                    text-align: center;
+                    margin-bottom: 30px;
+                    font-weight: bold;
+                }
+                div.table-home{
+                    table{
+                        table-layout: fixed;
+                        .mobile-block{
+                            display: none;
+                        }
+                        thead{
+                             background-color: #3e6c96;
+                             tr{
+                                 th{
+                                     color:#fff;
+                                     font-size: 14px;
+                                     text-align: center;
+                                     font-weight: normal;
+                                 }
+                             }
+                        }
+                        tbody{
+                            tr{
+                                background-color: #3c5062;
+                                td{
+                                    text-align: center;
+                                    color:#94a5b5;
+                                    font-size: 14px;
+                                    p{
+                                        text-overflow: ellipsis;
+                                        margin-bottom: 0;
+                                        overflow: hidden;
+                                        display: inline-block;
+                                        cursor: pointer;
+                                        width: 80%;
+                                        height: 20px;
+                                        white-space: nowrap;
+                                    }
+                                }
+                                &.no-display{
+                                    td{
+                                        text-align: center;
+                                    }
+                                }
+                                &:nth-child(odd){
+                                    background-color: #2b3c4c;
+                                }
+                            }
+                        }
+                    }
+                    nav{
+                        ul{
+                            text-align: center;
+                            justify-content: center;
+                            margin-bottom: 0;
+                            li{
+                                a.page-link{
+                                    color:#627281;
+                                    background: none;
+                                    border:none;
+                                    font-size: 12px;
+                                    font-weight: bold;
+                                    i{
+                                        font-size: 10px;
+                                    }
+                                }
+                                &.active{
+                                    a{
+                                        color:#95a6b5;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    div.more-btn{
+                        text-align: center;
+                        button{
+                            border-style: none;
+                            background: #2d516f;
+                            border-radius: 5px;
+                            color: #fff;
+                            font-size: 13px;
+                            padding: 5px 15px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+// Large devices (desktops, 992px and up)
+@media (max-width: 1024px) {
+
+    div.game-container.baccarat{
+        div.game-wrap{
+            div.game-left{
+                width:48%;
+            }
+            div.game-right{
+                width:52%;
+            }
+        }
+    }
+
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    div.game-container.baccarat{
+        div.game-wrap{
+            flex-wrap: wrap;
+            div.game-right{
+                div.game-board{
+                    div.card-layout{
+                        div.player{
+                            &.baccarat-card{
+                                padding: 10px;
+                                div.cards{
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    justify-content: flex-start;
+                                    div.baccarat-card-place{
+                                        margin-right: 15px;
+                                        &.playerMore{
+                                            margin-top: 0;
+                                            margin-left: 12px;
+                                            margin-bottom: -10px;
+                                        }
+                                    }
+                                }
+                                div.player-person{
+                                    margin-top: 10px;
+                                }
+                            }
+                        }
+                        div.banker{
+                            &.baccarat-card{
+                                padding: 10px;
+                                div.cards{
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    justify-content: flex-start;
+                                    flex-direction: row-reverse;
+                                    div.baccarat-card-place{
+                                        margin-left: 15px;
+                                        &.bankerMore{
+                                            margin-top: 0;
+                                            margin-right: 12px;
+                                            margin-bottom: -10px;
+                                        }
+                                    }
+                                }
+                                div.banker-person{
+                                    margin-top: 10px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@media (max-width: 768px) {
+    div.game-container.baccarat{
+        padding: 15px;
+        div.game-wrap{
+            flex-wrap: wrap;
+            div.game-left{
+                width:100%;
+                padding: 15px;
+                order:1;
+            }
+            div.game-right{
+                width:100%;
+                padding: 15px;
+            }
+        }
+        div.bonus-game-info{
+            padding: 15px;
+            ul.baccarat-history-field{
+                columns:4;
+            }
+        }
+        div.history-wrap{
+            mat-tab-group{
+                div.history-box{
+                    padding: 20px 15px;
+                    div.table-home{
+                        table{
+                            .mobile-none{
+                                display:none;
+                            }
+                            .mobile-block{
+                                display: block;
+                                mat-accordion{
+                                    mat-expansion-panel{
+                                        border-radius: 0 !important;
+                                        background: none;
+                                        &:not([class*=mat-elevation-z]){
+                                            box-shadow: none;
+                                        }
+                                        mat-expansion-panel-header{
+                                            padding: 0;
+                                            &:hover{
+                                                background: none;
+                                            }
+                                            mat-panel-title{
+                                                color:#94a5b5;
+                                                font-size: 14px;
+                                            }
+                                            span.mat-expansion-indicator{
+                                                padding-right: 5px;
+                                                &::after{
+                                                    color:#94a5b5;
+                                                }
+                                            }
+                                        }
+                                        div.mat-expansion-panel-body{
+                                            padding: 0;
+                                            div.game-info{
+                                                display: flex;
+                                                margin-bottom:5px;
+                                                color:#94a5b5;
+                                                font-size: 14px;
+                                                span{
+                                                    // width: 20%;
+                                                    color:#94a5b5;
+                                                    text-align: left;
+                                                    margin-right: 5px;
+                                                }
+                                                p{
+                                                    color:#53e996;
+                                                    text-align: left;
+                                                }
+                                                &.data{
+                                                    text-align: right;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (max-width: 576px) {
+
+    div.game-container.baccarat{
+        div.game-wrap{
+            flex-wrap: wrap;
+            div.game-right{
+                div.game-board{
+                    div.card-layout{
+                        div.player{
+                            &.baccarat-card{
+                                padding: 10px;
+                                div.cards{
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    justify-content: flex-start;
+                                    div.baccarat-card-place{
+                                        margin-right: 15px;
+                                        &.playerMore{
+                                            margin-top: 0;
+                                            margin-left: 12px;
+                                            margin-bottom: -10px;
+                                        }
+                                    }
+                                }
+                                div.player-person{
+                                    margin-top: 10px;
+                                }
+                            }
+                        }
+                        div.banker{
+                            &.baccarat-card{
+                                padding: 10px;
+                                div.cards{
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    justify-content: flex-start;
+                                    flex-direction: row-reverse;
+                                    div.baccarat-card-place{
+                                        margin-left: 15px;
+                                        &.bankerMore{
+                                            margin-top: 0;
+                                            margin-right: 12px;
+                                            margin-bottom: -10px;
+                                        }
+                                    }
+                                }
+                                div.banker-person{
+                                    margin-top: 10px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        div.bonus-game-info{
+            ul.baccarat-history-field{
+                columns:4;
+            }
+        }
+    }
+
+}

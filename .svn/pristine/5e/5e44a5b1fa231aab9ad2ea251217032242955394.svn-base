@@ -1,0 +1,35 @@
+<footer>
+    <div class="container row">
+        <div class="logo">
+            <img src="/assets/images/common/footer-logo.png" alt="logo" class="logo">
+        </div>
+        <div class="content">
+            <div class="icon-box">
+                <ul>
+                    <li>
+                        <img src="/assets/images/common/btc.png" alt="">
+                    </li>
+                    <li>
+                        <img src="/assets/images/common/eth.png" alt="">
+                    </li>
+                    <li>
+                        <img src="/assets/images/common/xrp.png" alt="">
+                    </li>
+                    <li>
+                        <img src="/assets/images/common/trx.png" alt="">
+                    </li>
+                    <li>
+                        <img src="/assets/images/common/18-years.png" alt="">
+                    </li>
+                </ul>
+                <div class="copyright">
+                    <p>Copyright(c) NCBIT All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div (click)="qna()" class="qna-box">
+        <span>
+        </span>
+    </div>
+</footer>

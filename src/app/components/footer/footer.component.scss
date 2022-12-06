@@ -1,0 +1,107 @@
+footer{
+    background: #17212a;
+    div.container{
+        max-width: 1230px;
+        min-height: 50px;
+        margin: 0 auto;
+        padding: 30px 15px;
+        div.content{
+            margin-left: 120px;
+            max-width: 710px;
+            width: 100%;
+            ul{
+                list-style: none;
+                padding-left: 0;
+                li{
+                    display: inline-block;
+                    margin-left: 50px;
+                    &:first-child{
+                        margin-left: 0;
+                    }
+                }
+            }
+        }
+        div.copyright{
+            p{
+                margin-bottom: 0;
+                color:#3c4c5a;
+                font-size: 12px;
+            }
+        }
+    }
+    div.qna-box{
+        position: fixed;
+        width: 50px;
+        height: 50px;
+        right: 5%;
+        cursor: pointer;
+        z-index: 99999;
+        bottom: 10%;
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+        border-radius:50%;
+        background-color:#3e6c96;
+        padding: 5px;
+        overflow: hidden;
+        span{
+            display:inline-block;
+            width: 30px;
+            height: 28px;
+            background-size:cover;
+            background-repeat: no-repeat;
+            background-image:url('/assets/images/common/qna-icon.png');
+            background-position: 0 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+        &:hover{
+            span{
+                background-position:0 -27.5px;
+            }
+        }
+    }
+}
+
+
+@media (max-width: 900px) {
+
+    footer{
+        div.container{
+            div.content{
+                max-width: 600px;
+                margin-left: 25px;
+                ul{
+                    li{
+                        margin-left: 20px;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    footer{
+        div.container{
+            div.content{
+                width: 100%;
+                max-width: 100%;
+                margin-left: 0;
+                ul{
+                    display: flex;
+                    flex-wrap: wrap;
+                    li{
+                        margin-left: 0px;
+                        width:50%;
+                        margin-top: 15px;
+                        // text-align: center;
+                    }
+                }
+            }
+        }
+    }
+
+}

@@ -1,0 +1,385 @@
+{
+  "auth": {
+    "auth-num": "Auth. Num",
+    "confirm-auth-num": "Confirm",
+    "find-email": "Find Email",
+    "find-pwd": "Reset Password",
+    "get-auth-num": "Get auth num.",
+    "login-required": "please try again after signing in.",
+    "messages": {
+      "authnum-not-match": "The authentication number does not match.",
+      "authnum-required": "The auth number field is required.",
+      "confirm-password-required": "The confirm password field is required.",
+      "mail-dup-check": "Email duplicate check is required",
+      "mail-required": "The e-mail field is required.",
+      "mail-type": "Enter in email format",
+      "mobile-required": "The mobile field is required.",
+      "name-required": "The name field is required",
+      "need-login": "Login is required.",
+      "password-required": "The password field is required."
+    },
+    "sign-in": "Sign In",
+    "sign-up": "Sign Up"
+  },
+  "bbs": {
+    "created_at": "Created At",
+    "no_list": "There is no data to display.",
+    "notice": "Notice",
+    "qna": {
+      "content-placeholder": "Your question.",
+      "done-message": "Thanks for your inquiry.",
+      "no_list": "There is no question to display.",
+      "some-required": "Some fields is missed.",
+      "status": {
+        "answerd": "Answerd",
+        "waiting": "Waiting"
+      },
+      "tab_list": "Inquiries",
+      "tab_write": "Contact us",
+      "title-error": "The title filed is required."
+    },
+    "title": "Title",
+    "writer": "Writer"
+  },
+  "button": {
+    "auth": "Get",
+    "cancel": "Cancel",
+    "check": "Check",
+    "close": "Close",
+    "confirm": "Confirm",
+    "copy": "Copy",
+    "list": "List",
+    "more": "More",
+    "next": "Next",
+    "save": "Save"
+  },
+  "dep-wdl": {
+    "deposit": {
+      "btn-create-address": "Create Address",
+      "goto-list": "Go to deposit logs",
+      "message-symbol-required": "The Symbol field is required.",
+      "notice-1": "Deposits made to the old address cannot be processed. Please make sure to deposit money to the new address.",
+      "notice-2": "- If you make an incorrect deposit to the wrong address, it is technically impossible to process the deposit.<br/>\nPlease confirm the correct deposit address before depositing.",
+      "notice-3": "- Be sure to check whether the virtual asset you are depositing is eligible for mainnet support.<br/>\nIn the event of an incorrect deposit due to this, it may not be technically possible to process.",
+      "notice-4-1": "* ERC-20 -> Deposit to NCbit cryptocurrency address: When depositing to NCbit from an exchange that has not completed mainnet conversion",
+      "notice-4-2": "* Mainnet cryptocurrency -> Deposit to NCbit ERC-20 address: When depositing to NCbit ERC-20 deposit address from the exchange where the mainnet conversion has been completed",
+      "notice-5": "- When depositing Ripple, be sure to enter the destination tag.<br/>\n(If the destination tag is omitted, the deposit may be delayed or impossible.)",
+      "place-holder-deposit-address": "Deposit address",
+      "place-holder-destination-tag": "Destination tag",
+      "select": "Select",
+      "title-apply": "Apply Deposit"
+    },
+    "notice": "Notice",
+    "realtime-quote": "Real-time quotes",
+    "title-deposit": "Deposit",
+    "title-withdraw": "Withdrawal",
+    "withdraw": {
+      "address": "To Address",
+      "btn-withdraw": "Next",
+      "commission": "Commission",
+      "destination-tag": "Destination Tag",
+      "goto-list": "Go to withdraw logs",
+      "messages": {
+        "applied": "It has been successfully applied."
+      },
+      "min-amount": "Min. Amount",
+      "notice-1": "- When applying for withdrawal, review will be conducted, and there may be a delay of up to 72 hours after the review result and identity verification.\nWithdrawal may be restricted if fraudulent transactions are suspected.",
+      "notice-2": "- The total amount of cryptocurrency that are actually transferred is the requested quantity minus the transfer fee.",
+      "required": {
+        "address": "The address field is required.",
+        "amount": "The amount field is required.",
+        "auth-num": "The auth number field is required.",
+        "destination-tag": "The destination tag field is required.",
+        "somefield": "Some fields is missed."
+      },
+      "title-withdraw": "Apply Withdraw",
+      "transaction-amount": "Transaction Amount",
+      "withdraw-amount": "Amount"
+    }
+  },
+  "fairness": {
+    "check": "Check",
+    "cur-salt": "Cur. Salt",
+    "externally": "Externally",
+    "game-hash": "Game Hash",
+    "game-salt": "Game Salt",
+    "prev-hash": "Prev. Hash",
+    "result-card": "Result Card",
+    "result-code": "Result Code",
+    "result-color": "Result Color",
+    "result-dice": "Result Dices",
+    "result-graph": "Result Graph",
+    "result-hash": "Result Hash",
+    "result-keno": "Result Keno",
+    "result-ladder": "Result Ladder",
+    "result-number": "Result Number",
+    "result-title": "Result",
+    "secret-code": "Secret Code",
+    "vali-title": "Validation",
+    "validation": "Validation",
+    "veri-title": "Verification",
+    "view-code": "View Code"
+  },
+  "games": {
+    "alert": {
+      "10_LIMIT": "You can select up to 10.",
+      "ALREADY_PLACED_BET": "You already bet in this round.",
+      "BETTED": "Betted",
+      "GAIN": "{{money}} won",
+      "IN_PROGRESS": "The game is in progress.",
+      "NOT_AVAILABLE_CHANGE_LEVEL": "You can not change the difficulty level while the game is in progress.",
+      "NOT_AVAILABLE_CHANGE_MONEY": "You can not change your participation points during the game.",
+      "NOT_AVAILABLE_TIME": "Betting is not available in this moment",
+      "NOT_ENOUGH_MONEY": "Money is not enough.",
+      "NOT_START": "Please start the game",
+      "NO_GAIN_MONEY": "There are no points to get",
+      "NO_LOGIN": "You are not logged in",
+      "SELECT_TILES": "Please select Tiles",
+      "USER_NOT_FOUND": "This user does not exist.",
+      "WIN_AMOUNT": "Win {{amount}} TGM.",
+      "betAfterResult": "result comes out.",
+      "maxBet": "You can bet up to {{maxBet}} max.",
+      "minBet": "You can bet at least {{minBet}}.",
+      "notEnoughPoint": "There are not enough points.",
+      "resultFail": "{{round}} round participation is failed.",
+      "resultSuccess": "#{{round}} result is success .",
+      "selBetAmount": "Please put betting amount",
+      "selBetGame": "Please select a game to bet",
+      "selBetItem": "Please select a betting item"
+    },
+    "allocation": "Profit",
+    "bet": "BETTING",
+    "betAmount": "Bet Amount",
+    "betTable": {
+      "bet": "Bet",
+      "multiplier": "Multiplier",
+      "player": "Player",
+      "players": "Players",
+      "profit": "Profit",
+      "stop": "Stop"
+    },
+    "beted": "Betted",
+    "betting": "betting",
+    "bettings": "Bet",
+    "dice": {
+      "Even": "Even",
+      "Odd": "Odd",
+      "descDefault": "- After selecting game type above, betting items will come out.\n- At each round, you can bet after selecting only 1 item among all items.\n- You can not participate in the game until 10 seconds before the start of the lottery.\n- Dice results is sent every two minutes.",
+      "descDiceChoice": "- \"Dice Select\" Guess number of 1 of 2 coming dices.",
+      "descDouble": "- \"Double Select\" Selects the number on which the two dice will appear equally.<br>\"ANY DOUBLE\"  is obtained when the double number comes out regardless of the number.",
+      "descLowHigh": "- \"Low High\" Guess sum of 2 dices is high/low/equal to 7.\n- \"LOW, SEVEN, HIGH\" Choose among low, seven, high.",
+      "descNumber": "-\"Select Number\" Guess sum of 2 dices.",
+      "descOddEven": "-\"OddEven\" Guess sum of 2 dices is odd or even.",
+      "minutes": "Min.",
+      "salt": "Salt",
+      "seconds": "Sec.",
+      "srtLowHigh": "LowHigh",
+      "strAnyDouble": "AnyDouble",
+      "strBetInfo": "Bet Info.",
+      "strDice": "Dice",
+      "strIs": " ",
+      "strOddEven": "OddEven",
+      "strRemainTime": "{{sec}} Sec"
+    },
+    "dividendRate": "Multiplier",
+    "fifty": {
+      "black": "Blue",
+      "green": "Green",
+      "raffle": "Raffling",
+      "red": "Red",
+      "result": {
+        "b": "Blue",
+        "g": "Green",
+        "r": "Red",
+        "y": "Yellow"
+      },
+      "yellow": "Yellow"
+    },
+    "fourteen": {
+      "last": "Last",
+      "raffle": "Raffling",
+      "recently": "Recently",
+      "result": {
+        "b": "Blue",
+        "r": "Red",
+        "z": "Green"
+      }
+    },
+    "games": "Games",
+    "graph": {
+      "alert": {
+        "AUTO_BET_MODE": "This is an automatic betting mode. Click the \"Run\" button",
+        "OVER_THAN_100": "Please put your bet amount in units of 100"
+      },
+      "auto": "auto",
+      "autoStop": "AutoStop",
+      "autowithdrawPoint": "Auto CashOut",
+      "bust": "Bust",
+      "manual": "Manual",
+      "stop": "Stop",
+      "strRemainGameStart": "Start the game in {{second}} seconds"
+    },
+    "half": {
+      "even": "EVEN",
+      "high": "HI",
+      "low": "LO",
+      "odd": "ODD"
+    },
+    "hash": "Hash",
+    "histories": "Histories",
+    "holdAmount": "Balance",
+    "income": "Income",
+    "joker": {
+      "black": "Black",
+      "clover": "Clover",
+      "diamond": "Diamond",
+      "heart": "Heart",
+      "high": "High",
+      "joker": "Joker",
+      "low": "Low",
+      "recently": "Recently",
+      "red": "Red",
+      "spade": "Spade"
+    },
+    "ladder": {
+      "gameboard-Even": "E",
+      "gameboard-Left": "L",
+      "gameboard-Odd": "O",
+      "gameboard-Right": "R",
+      "recently": "Recently",
+      "result": {
+        "L3E": "L3E",
+        "L4O": "L4O",
+        "R3O": "R3O",
+        "R4E": "R4E"
+      },
+      "selEven": "EVEN",
+      "selL3E": "L3E",
+      "selL4O": "L4O",
+      "selLeft": "LEFT",
+      "selLine3": "LI-3",
+      "selLine4": "LI-4",
+      "selOdd": "ODD",
+      "selR3O": "R3O",
+      "selR4E": "R4E",
+      "selRight": "RIGHT"
+    },
+    "list": {
+      "level": "Level",
+      "my": "My games",
+      "my_info": "My games info",
+      "no_list": "There is no data to display.",
+      "recent": "Recent games",
+      "recent_info": "Recent games info",
+      "step": "Step",
+      "title_bet_amount": "Bet Amt.",
+      "title_choice": "Choice",
+      "title_date": "Date",
+      "title_hash": "Hash",
+      "title_result": "Result",
+      "title_salt": "Salt",
+      "title_win_amount": "Win Amt."
+    },
+    "mine": {
+      "answerCode": "Answer Code",
+      "cashOut": "Cash Out",
+      "desc": "Mine game is a game that avoids hidden mines.\nChoose the amount you want to bet and then select the number of mines to be buried.\nMines are randomly buried in 25 (5x5) tiles and the more mines, the more tiles opened, You'll earn more money",
+      "secretCode": "Secret Code",
+      "strCashOut": "Congrats! You have been cashing out <font color=\"red\">{{ stake }}</font>.",
+      "strFoundedBomb": "Game over!  A bomb was found at #{{ failNum }} tile.",
+      "strGain": "<span>{{won}} obtained</span> from tile no. {{ hist }}",
+      "strStart": "{{level}} mine started at ${{betAmount}}. Secret Code: <span class=\"secret_hash\">{{hash}}</span>"
+    },
+    "mining": {
+      "level": {
+        "E": "Easy",
+        "H": "Hard",
+        "N": "Normal"
+      }
+    },
+    "result": {
+      "F": "Fail",
+      "R": "In Prog.",
+      "S": "Succ."
+    },
+    "round": "Round",
+    "salt": "Salt",
+    "verify": "Verify",
+    "withdraw": "CashOut"
+  },
+  "history": {
+    "deposit": {
+      "title-amount": "Amount",
+      "title-date": "Date",
+      "title-deposit-amt": "Dep. Amt.",
+      "title-no": "No.",
+      "title-unit-price": "Unit Price"
+    },
+    "history": {
+      "title-amount": "Amount",
+      "title-date": "Date",
+      "title-holding": "Hoding",
+      "title-statement": "Statement"
+    },
+    "tab-deposit": "Deposit",
+    "tab-history": "History",
+    "tab-withdraw": "Withdrawal",
+    "withdraw": {
+      "status": {
+        "D": "Payed",
+        "H": "Reject",
+        "P": "Payed",
+        "R": "Ready",
+        "T": "Ready"
+      },
+      "title-address": "Address",
+      "title-apply-amount": "Apply Amt.",
+      "title-date": "Date",
+      "title-fee": "Fee",
+      "title-net-amount": "Net Amt.",
+      "title-no": "No.",
+      "title-status": "Status",
+      "title-transaction-amount": "Trans. Amt.",
+      "title-unit-price": "Unit Price"
+    }
+  },
+  "message": {
+    "check": "Check",
+    "no-list": "No Messages",
+    "not-check": "Not Check",
+    "title": "Messages"
+  },
+  "mypage": {
+    "agent-name": "Agent",
+    "btn-info-change": "Update User Info.",
+    "btn-secession": "Secession",
+    "change-pwd": "Update password",
+    "confirm-password": "Confirm Password",
+    "cur-password": "Current Password",
+    "email": "E-Mail",
+    "hold-amount": "Holding Amt.",
+    "level": "Level",
+    "massage-password-required": "The password field is required.",
+    "message-password-not-match": "Passwords do not match.",
+    "message-password-type": "Please enter at least two combinations, such as 8 to 16 alphanumeric characters.",
+    "mobile": "Mobile",
+    "my-info": "User Info.",
+    "mypage": "User Page",
+    "password": "Password",
+    "reason": "Reason",
+    "secession": "Secession",
+    "secession-1": "1. Upon membership withdrawal, all information related to the account will be deleted, and no information will be recovered.",
+    "secession-2": "2. You cannot re-register with the same email.",
+    "secession-3": "3. All the amounts currently held by the customer are extinguished, and refunds are not possible.",
+    "user-name": "Name",
+    "validation": {
+      "current-password-required": "The current password field is required.",
+      "must-diff-newpassword": "The new password must be different from the current password.",
+      "password-required": "The new password field is required.",
+      "password-type-error": "The password format is not correct."
+    }
+  },
+  "system": {
+    "copied": "Copied."
+  }
+}

@@ -1,0 +1,98 @@
+div.board-wrap{
+    max-width: 1230px;
+    height: calc(100ch - 150px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    div.board-content{
+        padding: 30px 50px;
+        background-color: #2b3c4c;
+        width: 100%;
+        div.post-info{
+            padding: 15px;
+            border-bottom: 1px solid #95a6b5;
+            background-color: #3e6c96;
+            margin: 0 auto;
+            p.title{
+                font-size: 16px;
+                font-weight: bold;
+                text-align: center;
+                width: 100%;
+                color:#fff;
+                span{
+                    width: 80%;
+                    display:inline-block;
+                    overflow: hidden;
+                    text-overflow:ellipsis;
+                    white-space: nowrap;
+                }
+            }
+            span.data{
+                color: #666666;
+                font-size: 14px;
+                display: block;
+                text-align: center;
+                width: 100%;
+                color:#fff;
+            }
+        }
+        div.listText{
+            font-size: 14px;
+            padding: 20px;
+            height: 500px;
+            overflow-y: scroll;
+            width: 100%;
+            background-color: #3c5062;
+            color:#94a5b5;
+            /* total width */
+            &::-webkit-scrollbar {
+                background-color:transparent;
+                width:8px
+            }
+            /* background of the scrollbar except button or resizer */
+            &::-webkit-scrollbar-track {
+                background-color:transparent;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color: #0c16208c;
+                border-radius:8px;
+            }
+        }
+        div.btn-home{
+            // border:1px solid pink;
+            text-align: center;
+            margin-top: 20px;
+            a{
+                height: 40px;
+                width: 150px;
+                font-size: 15px;
+                color: #fff;
+                border-radius: 5px;
+                background: #2d516f;
+                display:inline-block;
+                // padding: 10px 0;
+                line-height: 40px;
+                text-align: center;
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    div.board-wrap{
+        div.board-content{
+            padding: 30px 15px;
+            div.listText{
+                height: 350px;
+                padding: 15px;
+            }
+        }
+    }
+}
+
+@media (max-width: 576px) {
+    div.board-wrap{
+        height: auto;
+    }
+}

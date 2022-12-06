@@ -1,0 +1,445 @@
+import { Component, OnInit, Injector, OnDestroy } from '@angular/core'; // ViewChild, ElementRef,
+// import { reverse, shuffle } from 'lodash';
+import { Game } from '../game';
+
+import { SlotCard } from './slot.card';
+import { GAME_SLOT, GAMES } from '../../../../environments/environment';
+// import { CardsMoveAnimations } from '../baccarat/card/cards.move.animation';
+
+@Component({
+    selector: 'app-slot',
+    templateUrl: './slot.component.html',
+    styleUrls: ['./slot.component.scss'],
+})
+export class SlotComponent extends Game implements OnInit, OnDestroy {
+
+    public isBetInit = false;
+    public isProgressing: boolean;
+    public answerCode: any;
+    public nextGameId: number;
+    public recentGame = {
+        hash: null,
+        salt: null
+    };     // 최근게임
+    public choice = []; // 선택한 베팅 라인
+    public cardResultArr = [];
+    public allAmount = 0;
+    public isAutoMode = false;
+    public isAutoProgressing = false; // 오토모드일 때 버튼 보여지게끔 하는 flag
+    public displayResult = [];
+
+    private amount = 0;
+    private myGames: any[] = [];  //
+
+    public doors: any;
+    public cardList = SlotCard;
+
+    constructor(
+        protected injector: Injector,
+    ) {
+        super(injector);
+        this.titleSvc.setTitle('SLOT');
+        this.assetsUrl = { images: './assets/games/slot/images/', sounds: './assets/games/slot/sound/' };
+    }
+
+    ngOnInit(): void {
+        this.ngInit();
+        this.socket.init(GAME_SLOT.game, GAME_SLOT.socketUrl);
+        this.requestOtt();
+
+        this.doors = document.querySelectorAll('.door');
+        this.cardInit();
+        this.setGameSound();
+    }
+
+    public ngOnDestroy(): void {
+        this.ngDestroy();
+        this.isAutoMode = false;
+    }
+
+    /**
+     * 오토모드
+     */
+     public autoMode(e: any): void {
+        this.isAutoMode = e.checked;
+    }
+
+    public async spin(cardList: any): Promise<void> {
+        await this.cardInit(false, 1, 2, cardList);
+        for (const door of this.doors) {
+            const boxes = door.querySelector('.boxes');
+
+            if (door.querySelector('.slow')) {
+                boxes.style.transitionDuration = '5s';
+                boxes.style.transform = 'translateY(0)';
+            }  else if (door.querySelector('.slower')) {
+                boxes.style.transitionDuration = '6.5s';
+                boxes.style.transform = 'translateY(0)';
+            } else {
+                boxes.style.transitionDuration = '3s';
+                boxes.style.transform = 'translateY(0)';
+            }
+        }
+        this.playGameSound('spin');
+    }
+
+    public async cardInit(firstInit = true, groups = 1, duration = 1, cardResult?: any): Promise<void> {
+        for (const [i, door] of this.doors.entries()) {
+            const boxes = door.querySelector('.boxes');
+            const boxesClone = boxes.cloneNode(false);
+
+            const pool = ['question'];
+            if (!firstInit) {
+                const arr = [];
+                for (let n = 0; n < (groups > 0 ? groups : 1); n++) {
+                    arr.push(...this.cardList);
+                }
+                // this.shuffle로 마지막에 보여야되는 값을 배열에 push
+                pool.unshift(...this.shuffle(arr, cardResult[i]));
+
+                boxesClone.addEventListener(
+                    'transitionstart',
+                    function () {
+                        door.dataset.spinned = '1';
+                    },
+                    // function () {
+                    //     door.dataset.spinned = '1';
+                    // },
+                    { once: true }
+                );
+
+                boxesClone.addEventListener(
+                    'transitionend',
+                    function () {
+                        this.querySelectorAll('.box').forEach((box, index) => {
+                            // box.style.filter = 'blur(0)';
+                            if (index > 0) {
+                                this.removeChild(box);
+                            }
+                        });
+                    },
+                    { once: true }
+                );
+            }
+
+            for (const item of pool) {
+                const img = document.createElement('img');
+                img.src = `${this.assetsUrl.images}/${item !== undefined ? item : 'question'}.png`;
+                img.classList.add('box');
+                /* 부모의 넓이 높이를 같게 만듬 */
+                img.style.width =  '100%';
+                img.style.height = '100%';
+                boxesClone.appendChild(img);
+            }
+            boxesClone.style.transitionDuration = `${duration > 0 ? duration : 1}s`;
+            boxesClone.style.transform = `translateY(-${door.clientHeight * (pool.length - 1)
+                }px)`;
+            door.replaceChild(boxesClone, boxes);
+        }
+    }
+
+    /**
+     * 베팅 라인선택
+     */
+    public setBetType(type: number): void { // , e: any
+        if (this.isProgressing) {
+            return;
+        }
+        const gameLevel = document.querySelectorAll('.game-level');
+        const slotLine = document.querySelectorAll('.slot-line');
+
+        if ( this.choice.includes(type) ) {
+            this.choice = this.choice.filter(el => el !== type);
+            switch (type) {
+                case 1:
+                    gameLevel[0].classList.remove('on');
+                    slotLine[1].classList.remove('select');
+                    break;
+                case 2:
+                    gameLevel[1].classList.remove('on');
+                    slotLine[0].classList.remove('select');
+                    break;
+                case 3:
+                    gameLevel[2].classList.remove('on');
+                    slotLine[2].classList.remove('select');
+                    break;
+            }
+        } else {
+            this.choice.push(type);
+            switch (type) {
+                case 1:
+                    gameLevel[0].classList.add('on');
+                    slotLine[1].classList.add('select');
+                    break;
+                case 2:
+                    gameLevel[1].classList.add('on');
+                    slotLine[0].classList.add('select');
+                    break;
+                case 3:
+                    gameLevel[2].classList.add('on');
+                    slotLine[2].classList.add('select');
+                    break;
+            }
+        }
+
+
+        this.calcAllAmount();
+    }
+
+    public setBetAmount(e: any): void {
+        this.amount = e;
+        this.calcAllAmount();
+    }
+
+    /**
+     * 게임 그만하기 버튼 클릭 시
+     */
+    public stopBet(): void {
+        this.isAutoMode = false;
+        if (!this.isProgressing) {
+            this.isAutoProgressing = false;
+        }
+    }
+
+    /**
+     * dobet
+     */
+    public dobet(): void {
+        if (this.isProgressing) {
+            return;
+        }
+
+        const betObj = {
+            betAmount: this.allAmount,
+            selectLine: this.choice
+        };
+
+        if (this.userInfo.id === 0) {
+            return this.transSystemMessage('games.alert.NO_LOGIN');
+        } else if (this.choice.length === 0) {
+            return this.transSystemMessage('games.alert.selBetItem');
+        } else if (betObj.betAmount < GAMES.minBet) {
+            return this.transSystemMessage('games.alert.minBet', { minBet: GAMES.minBet });
+        } else if (betObj.betAmount > GAMES.maxBet) {
+            return this.transSystemMessage('games.alert.maxBet', { maxBet: GAMES.maxBet });
+        } else if (betObj.betAmount > this.userInfo.point || this.userInfo.point === 0) {
+            return this.transSystemMessage('games.alert.NOT_ENOUGH_MONEY');
+        }
+
+        this.socket.Emit(GAME_SLOT.game, 'doBet', betObj, async (err: string, resp: any) => { // resp {selVal, betResult}
+            if (err) {
+                this.svcMessage(err);
+            } else {
+                const cards = JSON.parse(resp.gameInfo.cards);
+                const setCardResult = [...cards];
+
+                this.displayResult = [...cards];
+
+                resp.gameInfo.cardResult = [];
+                for (const [i, c] of cards.entries()) {
+                    this.displayResult[i].ingame = false;
+                    setCardResult[i].ingame = false;
+                    c.cardArr = [];
+                    for (const c1 of c.cards) {
+                        const cardArr = (c1.card + c1.suit).toLowerCase();
+                        this.cardResultArr.push(cardArr);
+                        c.cardArr.push(cardArr);
+                    }
+                }
+
+                this.isProgressing = true;
+                this.isAutoProgressing = true;
+                const betPoint = resp.currentPoint - this.allAmount;
+                this.eventSvc.setPoint(betPoint);
+
+                [cards[0], cards[1]] = [cards[1], cards[0]];    // 데이터 순서 변경
+                resp.gameInfo.cardResult = cards;
+                this.addMyGames({
+                    id: resp.gameInfo.gameId,
+                    hash:  resp.gameInfo.hash,
+                    bet_amount: resp.gameInfo.betAmount,
+                    sel_items: this.cardResultArr,
+                    cardResult: resp.gameInfo.cardResult,
+                    result: 'R',
+                    win_amount: 0,
+                    created_at: new Date()
+                });
+
+                this.setMyGameList(this.myGames);
+                this.recentGame.hash = resp.gameInfo.hash;
+                this.recentGame.salt = resp.gameInfo.salt;
+                this.answerCode = resp.gameInfo.salt;
+                const point = betPoint + resp.gameInfo.winAmount;
+                const windAmount = resp.gameInfo.winAmount;
+
+                /*
+                    게임이 끝난 후 event들을 settimeout에서 동작하게끔
+                */
+                await this.spin(this.cardResultArr).then(() => {
+                    const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+                    wait(7700).then(() => {
+                        this.isProgressing = false;
+                        this.eventSvc.setPoint(point);
+                        // this.setResultDisplay(JSON.parse(resp.gameInfo.cards));
+                        this.setResultDisplay();
+                        this.cardResultArr = [];
+
+                        if (this.myGames[0].id === resp.gameInfo.gameId) {
+                            this.myGames[0].result = resp.gameInfo.result;
+                            this.myGames[0].win_amount = resp.gameInfo.winAmount;
+                        }
+                        if (windAmount !== 0) {
+                            this.transSystemMessage('games.alert.WIN_AMOUNT', {amount: windAmount}, null, 'start', 'success');
+                        } else {
+                            this.transSystemMessage('games.alert.WIN_AMOUNT', {amount: windAmount});
+                        }
+                    }).then(() => {
+                        setTimeout(() => {
+                            if (!this.isAutoMode) {
+                                this.isAutoProgressing = false;
+                            }
+                            if (this.isAutoMode) {
+                                this.dobet();
+                            }
+                        }, 2300);
+                    });
+                });
+            }
+        });
+    }
+
+    private calcAllAmount(): void {
+        this.allAmount = this.amount * this.choice.length;
+    }
+
+    private setResultDisplay(): void {
+    // private setResultDisplay(resultArr: any): void {
+        for (const ch of this.choice) {
+            switch (ch) {
+                case 1:
+                    this.displayResult[1].ingame = true;
+                    break;
+                case 2:
+                    this.displayResult[0].ingame = true;
+                    break;
+                case 3:
+                    this.displayResult[2].ingame = true;
+                    break;
+            }
+        }
+
+        // console.log('setResultDisplay', resultArr);
+        // for (const [i, arr] of resultArr.entries()) {
+        //     console.log(i, arr, this.choice);
+        //     for (const ch of this.choice) {
+        //         if (i + 1 === ch) {
+        //             console.log('ch: ' + ch);
+        //             switch (ch) {
+        //                 case 1:
+        //                     this.displayResult[1].ingame = true;
+        //                     break;
+        //                 case 2:
+        //                     this.displayResult[0].ingame = true;
+        //                     break;
+        //                 case 3:
+        //                     this.displayResult[2].ingame = true;
+        //                     break;
+        //             }
+        //         }
+        //     }
+        // }
+    }
+
+    private requestOtt(): void {
+        this.isBetInit = true;
+        // 서버에 접근하여 실제 userinfo를 가져온다.
+        this.http.requestOtt(GAME_SLOT.game, (paramObj) => {
+            if (paramObj.error === false) {
+                /*
+                *@param resp : user: {}, ingGame: {}, dividend
+                */
+                this.socket.Emit(GAME_SLOT.game, 'join', { ott: paramObj.ott }, (err: string, resp: any) => {
+                    if (err) {
+                        console.error('Error when joining the game...', err);
+                        return;
+                    }
+                    if (!resp.user) { // 회원정보를 수신 못한 경우
+                        return;
+                    }
+
+                    const reversedMyGame = resp.myGames.reverse(); // connecDataObj.games 도 동시에 reversㄷ 됨
+                    for (const rev of reversedMyGame) {
+                        rev.cardResult = {
+                            result: JSON.parse(rev.cards).result,
+                            cards: JSON.parse(rev.cards).cards,
+                            ingame: false
+                        };
+                        this.addMyGames(rev, true);
+                    }
+
+                    this.setMyGameList(this.myGames);
+                    this.userInfo.name = resp.user.name;
+                    this.userInfo.id = resp.user.userId;
+                    this.eventSvc.setPoint(resp.user.point);
+                    this.nextGameId = null;
+                    // this.recentGame.hash = this.cGameInfo.hash;
+                });
+            }
+        }).finally(() => {
+            setTimeout(() => {
+                this.isBetInit = false;
+            }, 1000);
+        });
+    }
+
+    /**
+     * @param Object obj {betAmount, createdAt, gameId, gameLevel, hash, result, salt, step, winAmount}
+     */
+    private addMyGames(obj: any, isInit?: boolean): void {
+        if (isInit) {
+            const cards = JSON.parse(obj.cards);
+            [cards[0], cards[1]] = [cards[1], cards[0]];    // 데이터 순서 변경
+            const select = obj.sel_items.split(',');
+            for (const [i, card] of cards.entries()) {
+                card.ingame = false;
+                card.cardArr = [];
+                for (const c1 of card.cards) {
+                    const cardArr = (c1.card + c1.suit).toLowerCase();
+                    card.cardArr.push(cardArr);
+                }
+                select.forEach((y: any) => {
+                    if (i + 1 === parseInt(y, 10)) {
+                        card.ingame = true;
+                    }
+                });
+            }
+            obj.cardResult = cards;
+        }
+
+        this.myGames.unshift(obj); // {userId, name, betAmount, incom, level, step, step} // player, Bet, winAmount Step
+        if (this.myGames.length > 10) {
+            this.myGames.splice(-1, 1);
+        }
+        this.nextGameId = this.myGames[0].id;
+    }
+
+    /*
+        맨 마지막에 값을 추가하면 마지막값이 보임
+    */
+    private shuffle([...arr], newItem: any): string[] {
+        /* 이부분이 없으면 셔플 도중 마지막 쯤 다같은 카드로 보임 */
+        let m = arr.length;
+        while (m) {
+            const i = Math.floor(Math.random() * m--);
+            [arr[m], arr[i]] = [arr[i], arr[m]];
+        }
+        arr.unshift(newItem);
+        console.log('shuffle', arr);
+        return arr;
+    }
+
+    private setGameSound(): void {
+        this.setDefaultSound();
+        this.addSound('spin', this.assetsUrl.sounds + 'slot.wav');
+    }
+}

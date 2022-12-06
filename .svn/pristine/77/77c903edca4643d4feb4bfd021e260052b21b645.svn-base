@@ -1,0 +1,469 @@
+import { Component, OnInit, Injector, OnDestroy, HostListener, Renderer2 } from '@angular/core';
+import { Game } from '../game';
+
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { takeUntil } from 'rxjs/operators';
+import { GAME_DICE, GAMES } from '../../../../environments/environment';
+import { GameTimer } from '../../../services/game-timer';
+
+import { InterfaceDiceGame } from '../../../interface/games/dice.game';
+import { InterfaceDiceMyGame } from '../../../interface/games/dice.my.game';
+
+const gameInterval = 60;
+
+@Component({
+    selector: 'app-dice',
+    templateUrl: './dice.component.html',
+    styleUrls: ['./dice.component.scss'],
+    animations: [
+        trigger('choicePannelTrigger', [
+            state('inactive', style({
+                opacity: 0,
+                position: 'absolute',
+                transform: 'translateY(-0px)'
+            })),
+            state('active', style({
+                opacity: 1,
+                transform: 'translateY(0)'
+            })),
+            transition('inactive => active', animate('500ms ease-in')),
+            transition('active => inactive', animate('500ms ease-out'))
+        ])
+    ]
+})
+export class DiceComponent extends Game implements OnInit, OnDestroy {
+    // @ViewChild('rendererContainer') private rendererContainer: ElementRef;
+    // private ngUnsubscribe = new Subject();
+    /*
+    * start:플레이진행, ing:플레이진행중, end:플레이끝,
+    * ready:대기중 : 현재 진행 status bar show;
+    */
+    public assetsUrl: any;
+    public nextGameId: number;
+    // private is_login = false;
+    public GameStatus = 'ready';
+    private serverTime = null; // new Date(); // 서버 시간을 가져와서 세팅시킨다(connection 및 매 게임 결과 전송시 리셋 시킨다.)
+    private gameTimer = null;
+    // 실제 데이타는 connected 시 및 login 시 불러옮
+    public dividends = {
+        NC: { 2: 24, 3: 12, 4: 8, 5: 6, 6: 4.8, 7: 4, 8: 4.8, 9: 6, 10: 8, 11: 12, 12: 24 },
+        DC: 2.6,
+        DB: 24,
+        ADB: 4,
+        LH: { L: 2.1, H: 2.1, 7: 3 },
+        OE: 1.9
+    };
+
+    public timerInfo: any = { next_id: 0, next_no: 0, countdown_ii: 0, countdown_ss: 0, remainsecond: 0, remainTime: '-', ramainTimeGraph: 0, c_datetime: '-' };
+    public diceResult: any = { id: 0, dice1: 0, dice2: 0, oddeven_str: '', oddeven_tran: '', lowhigh_str: '' };
+
+    private games: InterfaceDiceGame[] = [];
+    private myGames: InterfaceDiceMyGame[] = [];
+    // public myGamesHistory: InterfaceDiceMyGame[] = []; // 참여내역 10게임에 대한 List
+    // public recentGamesHistory: InterfaceDiceGame[] = []; // 최근 10게임에 대한 List
+
+    public betAmount = 0;
+    public gameType: string = null; // (NC:numChoice, DC:diceChoice, LH:LowHigh, OE:OddEven)
+    public choice: string; // 배팅항목
+
+    public choiceState = { NULL: 'active', NC: 'inactive', DC: 'inactive', DB: 'inactive', LH: 'inactive', OE: 'inactive' };
+
+    public playpannel = { offsetWidth: 290, offsetHeight: 220 };
+    public isProgressing: boolean;
+    public isBetInit = false;
+
+    @HostListener('window:resize', ['$event']) // 아래 onResize 와 붙어 있어야 함
+
+    protected onResize(): void {
+        this.setPlayPannel();
+    }
+
+    constructor(
+        protected injector: Injector,
+        private render: Renderer2,
+    ) {
+        super(injector);
+        this.titleSvc.setTitle('DICE');
+        this.assetsUrl = { images: './assets/games/dice/images/', sounds: './assets/games/dice/sounds/' };
+        this.setIcons();
+        this.setGameSound();
+    }
+
+    public ngOnInit(): void {
+        this.ngInit();
+        this.socket.init(GAME_DICE.game, GAME_DICE.socketUrl);
+        this.requestOtt();
+
+        // 게임관련 이벤트 처리
+        this.eventSvc.getDiceGameStatus()
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe((message) => {
+                this.GameStatus = message;
+                switch (message) {
+                    case 'ready':
+                        // this.audioTadaa.pause();
+                        this.displayPoint = this.userInfo.point; // 추첨완료 후 디스플레이 포인트를 동기화 시킨다.
+                        this.isProgressing = false;
+                        this.setRecentGameList(this.games);
+                        this.setMyGameList(this.myGames);
+                        break;
+                    case 'start': // 다이스 애님 시작
+                        this.playGameSound('play');
+                        this.isProgressing = true;
+                        break;
+                    case 'end': // 다이스 애님 끝
+                        this.pauseGameSound('play');
+                        this.playGameSound('roll');
+                        this.isProgressing = true;
+                        setTimeout(() => {
+                            this.eventSvc.setDiceGameStatus('ready');
+                            this.setNextGameId();
+                            this.displayUserGameResult(this.myGameResult, () => {
+                                // 포인트 변경
+                                if (this.myGameResult && this.myGameResult.result === 'S') {
+                                    const point = this.userInfo.point + this.myGameResult.win_amount;
+                                    this.displayPoint = point;
+                                    this.eventSvc.setPoint(point);
+                                }
+                                this.myGameResult = null;
+                            }); // 사용자 베팅결과 출력
+
+                        }, 4000);
+
+                        break;
+                }
+            });
+
+        this.setPlayPannel();
+
+
+
+        /**
+         * 매 2분마다 게임결과를 전송받는다.
+         * 이 결과값을 받고 게임결과 애니메이션을 실행
+         * @param String data {hash:해시값, dice1:주사위1결과, dice2:주사위2결과, datetime:게임일시, roundNo:회차수 }
+         * 1일 1020회 게임이므로 1020회가 넘어가면 1회로 한다.
+         */
+        this.socket.On(GAME_DICE.game, 'game_created')
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe((data: any) => {
+
+                const obj: any = data[0];
+                // {datetime, dice1, dice2, hash, id, lowhight_str, oddevent_str, rond_no, salt, serverDateTimem sum}
+                this.eventSvc.setDiceGameStatus('start');
+                this.diceResult = this.setDiceResult(obj);
+
+                // 게임리스트에 저장해둔다.
+                // this.set_games(obj);
+                this.addGames(obj);
+                this.setRecentGameList(this.games);
+                if (this.gameTimer) {
+                    this.gameTimer.refreshNowDateTime(obj.serverDateTime);
+                }
+                // play game
+                this.eventSvc.setDiceGameResult(obj);
+            });
+
+        /*
+         * 자신이 참여한 게임 결과 (실제적으로는 게임 create 시 받아오나 애니메이션상 결과가 공개될때 메시지 출력(displayUserGameResult()))
+         * betAmount, choice, dividendRate, gameId, id, result, user_id, winAmount}
+        */
+        this.socket.On(GAME_DICE.game, 'game_result')
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe((data: any) => {
+            this.myGameResult = {game_id: data[0].gameId, result: data[0].result, win_amount: data[0].winAmount};
+
+            if (this.myGames[0].game_id === data[0].gameId) {
+                this.myGames[0].result = data[0].result;
+                this.myGames[0].win_amount = data[0].winAmount;
+            }
+        });
+
+        this.eventSvc.setDiceGameStatus('ready');
+    }
+
+    private setGameSound(): void {
+        this.setDefaultSound();
+        this.addSound('play', this.assetsUrl.sounds + 'play-bgm.mp3');
+        this.addSound('roll', this.assetsUrl.sounds + 'roll.mp3');
+    }
+
+    private setIcons(): void {
+        this.iconRegistry
+            .addSvgIcon('c-number', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'choice-number.svg'))
+            .addSvgIcon('c-dice', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'choice-dice.svg'))
+            .addSvgIcon('c-double', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'choice-double.svg'))
+            .addSvgIcon('c-lowhigh', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'choice-lowhigh.svg'))
+            .addSvgIcon('c-oddeven', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'choice-oddeven.svg'))
+            .addSvgIcon('n-3', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'number-3.svg'))
+            .addSvgIcon('n-4', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'number-4.svg'))
+            .addSvgIcon('n-5', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'number-5.svg'))
+            .addSvgIcon('n-6', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'number-6.svg'))
+            .addSvgIcon('n-7', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'number-7.svg'))
+            .addSvgIcon('n-8', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'number-8.svg'))
+            .addSvgIcon('n-9', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'number-9.svg'))
+            .addSvgIcon('n-10', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'number-10.svg'))
+            .addSvgIcon('n-11', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'number-11.svg'))
+            .addSvgIcon('d-d1', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dice1.svg'))
+            .addSvgIcon('d-d2', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dice2.svg'))
+            .addSvgIcon('d-d3', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dice3.svg'))
+            .addSvgIcon('d-d4', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dice4.svg'))
+            .addSvgIcon('d-d5', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dice5.svg'))
+            .addSvgIcon('d-d6', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dice6.svg'))
+            .addSvgIcon('d-dd1', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dicedouble1.svg'))
+            .addSvgIcon('d-dd2', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dicedouble2.svg'))
+            .addSvgIcon('d-dd3', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dicedouble3.svg'))
+            .addSvgIcon('d-dd4', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dicedouble4.svg'))
+            .addSvgIcon('d-dd5', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dicedouble5.svg'))
+            .addSvgIcon('d-dd6', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dicedouble6.svg'))
+            .addSvgIcon('d-dda', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'dice-dicedoubleany.svg'))
+            .addSvgIcon('l-h', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'lowhigh-highnumber.svg'))
+            .addSvgIcon('l-l', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'lowhigh-lownumber.svg'))
+            .addSvgIcon('l-s', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'lowhigh-sevennumber.svg'))
+            .addSvgIcon('o-o', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'oddeven-oddnumber.svg'))
+            .addSvgIcon('o-e', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'oddeven-evennumber.svg'))
+            .addSvgIcon('c-b', this.sanitizer.bypassSecurityTrustResourceUrl(this.assetsUrl.images + 'coin-betting.svg'))
+            ;
+    }
+
+    public ngOnDestroy(): void {
+        this.ngDestroy();
+        this.gameTimer.stopTimer();
+    }
+
+    /**
+     * @param Object obj {hash: "87407746a124ed77b38ecd2c9ed2f18b84c6d8eec4bfa854625b99a00f2dee9b", id: 1000090, resultNumber: 13}
+     */
+    private addGames(obj: any): void {
+
+    //    if (obj.resultNumber === null) { return; }
+        // obj.color = this.raffleNumsAttr[obj.resultNumber].c;
+        // obj.resultNumber = obj.resultNumber;
+        // get lo-hi class
+
+        //  this.games.push(this.setDiceResult(v));
+        this.games.unshift(this.setDiceResult(obj));
+
+        if (this.games.length > 200) {
+            this.games.pop();
+        }
+    }
+
+    /**
+     * 내가 참여했던 게임 결과를 이곳에 저장해 둔다.
+     */
+    private addMyGames(obj: any): void {
+        this.myGames.unshift(obj);
+
+        if (this.myGames.length > 100) {
+            this.myGames.pop();
+        }
+    }
+
+    private requestOtt(): void {
+        this.isBetInit = true;
+        this.http.requestOtt(GAME_DICE.game, (paramObj) => {
+            // obj.result is always true. ott is null or ott code if logined
+            if (paramObj.error === false) {
+                this.socket.Emit(GAME_DICE.game, 'join', { ott: paramObj.ott }, (err: string, resp: any) => {
+                    if (err) {
+                        console.error('Error when joining the game...', err);
+                        return;
+                    }
+
+                    this.dividends = resp.dividend; // 업체별 dividend 정보
+                    this.serverTime = resp.serverDateTime; // 서버와의 시간동기화를 위한 서버 시간
+                    this.startTimer();
+
+                    const reversed = resp.games.reverse(); // connecDataObj.games 도 동시에 reversㄷ 됨
+                    for (const entry of reversed) {
+                        this.addGames(entry);
+                    }
+                    this.setNextGameId();
+                    this.diceResult = this.setDiceResult(this.games[0]); // 가장 최근에 나온 결과
+                    this.setRecentGameList(this.games);
+
+                    if (!resp.user) { // 회원정보를 수신 못한 경우
+                        return;
+                    }
+
+                    const reversedMyGame = resp.bets.reverse(); // connecDataObj.games 도 동시에 reversㄷ 됨
+                    for (const rev of reversedMyGame) {
+                        this.addMyGames(rev);
+                    }
+
+                    this.setMyGameList(this.myGames);
+                    // If username is a falsey value the user is not logged in
+                    this.userInfo.id = resp.user.id;
+                    this.userInfo.name = resp.user.name;
+                    this.userInfo.point = resp.user.point;
+                    this.displayPoint = resp.user.point;
+                    this.myBetInfo(resp.participants, resp.user.id);
+                    this.eventSvc.setPoint(resp.user.point);
+                });
+            }
+
+        }).finally(() => {
+            setTimeout(() => {
+                this.isBetInit = false;
+            }, 1000);
+        });
+    }
+
+    /**
+     * 초기 접속시 현재 게임에 대한 나의 베팅 내역을 가져와 디스플레이 하기
+     */
+    private myBetInfo(players: any, userId: number): void {
+        // {betAmount: 10000 gameId: 255401 playdId: 0 selVal: "g"}
+        if (players[userId]) {
+            this.isProgressing = true;
+        }
+    }
+
+    private setDiceResult(obj: any): any {
+        obj.sum = obj.dice1 + obj.dice2;
+        if (obj.sum % 2) {
+            obj.oddeven_str = 'games.dice.Odd';
+        } else {
+            obj.oddeven_str = 'games.dice.Even';
+        }
+
+        if (obj.sum === 7) {
+            obj.lowhigh_str = '7';
+        } else if (obj.sum < 7) {
+            obj.lowhigh_str = 'L';
+        } else if (obj.sum > 7) {
+            obj.lowhigh_str = 'H';
+        }
+        return obj;
+        // this.dice_result = obj;
+    }
+
+    private startTimer(): void {
+        if (this.gameTimer != null) {
+            return;
+        }
+
+        this.gameTimer = new GameTimer({ timeInterval: gameInterval });
+        // this.gameTimer = this.timerService.gameTimer({timeInterval: gameInterval}).getInstance();
+        this.gameTimer.countdownStart(this.serverTime, (obj: any) => { // Object {next_no: 178, countdown_ii: 3, countdown_ss: 33}
+            this.timerInfo = obj;
+            this.timerInfo.ramainTimeGraph = Math.round(obj.countdown_ss / gameInterval * 10000) / 100;
+        });
+    }
+
+    /**
+     * set game type (NC:numChoice, DC:diceChoice, LH:LowHigh, OE:OddEven)
+     *     choiceState = {'NC': 'inactive', 'DC': 'inactive', 'DB': 'inactive', 'LH': 'inactive', 'OE': 'inactive'};
+     */
+    public setGameType(gametype: string): void {
+        this.choice = null;
+        //    this.dividend = null;
+        if (gametype === 'reset') {
+            this.choiceState = { NULL: 'active', NC: 'inactive', DC: 'inactive', DB: 'inactive', LH: 'inactive', OE: 'inactive' };
+            this.gameType = null;
+        } else if (this.gameType !== gametype) {
+
+            this.choiceState = {
+                NULL: 'inactive', NC: 'inactive', DC: 'inactive', DB: 'inactive', LH: 'inactive',
+                OE: 'inactive'
+            };
+            this.choiceState[gametype] = 'active';
+            this.gameType = gametype;
+        }
+
+        this.playGameSound('select');
+    }
+
+    /**
+     *
+     */
+    public setChoice(val: string): void {
+        this.choice = val.toString();
+        this.playGameSound('select');
+    }
+
+
+    /**
+     * 배팅
+     * 1. 로그인 상태 체크
+     * 2. 최소/최대 금액 체크
+     * 3. 게임 선택 체크
+     * 4. 보유한 금액 체크
+     * 5. 서버단에서도 체크(1,3,4, 동일사용자)
+     */
+    public doBet(): void {
+        if (this.userInfo.id === 0) {
+            return this.transSystemMessage('games.alert.NO_LOGIN');
+        } else if (this.betAmount < GAMES.minBet) {
+            return this.transSystemMessage('games.alert.minBet', { minBet: GAMES.minBet });
+        } else if (this.betAmount > GAMES.maxBet) {
+            return this.transSystemMessage('games.alert.maxBet', { maxBet: GAMES.maxBet });
+        } else if (this.betAmount > this.userInfo.point || this.userInfo.point === 0) {
+            return this.transSystemMessage('games.alert.NOT_ENOUGH_MONEY');
+        } else if (this.timerInfo.remainsecond <= 10) {
+            return this.transSystemMessage('games.alert.NOT_AVAILABLE_TIME');
+        } else if (this.GameStatus !== 'ready') {
+            return this.transSystemMessage('games.alert.betAfterResult');
+        } else if (!this.gameType) {
+            return this.transSystemMessage('games.alert.selBetGame');
+        } else if (!this.choice) {
+            return this.transSystemMessage('games.alert.selBetItem');
+        } else {
+            // NC:selVal:[3,2], DC:selVal:[3,2], LH: L, OE:O
+            // gameId 및 roundNo는 서버에 저장시 별도로 저장됨
+            const betObject = {
+                betAmount: this.betAmount,
+                gameType: this.gameType,
+                selVal: this.choice,
+                gameId: null
+            }; // roundNo 및 user_id는 서버측에서 계산
+
+            this.socket.Emit(GAME_DICE.game, 'doBet', betObject, (err: string, resp: any) => {
+                // resp: {gameInfo:{hash, id, dice1, dice2, datetime}, userInfo:{id, name, point },
+                // playdId,  currentPoint: res.currentPoint}
+                if (err) {
+                    this.svcMessage(err);
+                } else {
+                    const point = resp.currentPoint - this.betAmount;
+                    this.isProgressing = true;
+                    this.displayPoint = point; // 실제 업체측 데이타와 동기화
+                    this.eventSvc.setPoint(point);
+                    this.transSystemMessage('games.alert.BETTED', null, null, 'start', 'success');
+                    betObject.gameId = resp.gameInfo.id + 1;
+
+                    this.addMyGames({
+                        game_id: betObject.gameId,
+                        choice: betObject.selVal,
+                        gametype: betObject.gameType,
+                        bet_amount: betObject.betAmount,
+                        result: 'R',
+                        win_amount: 0,
+                        created_at: new Date()
+                    });
+                    this.setMyGameList(this.myGames);
+                }
+            });
+        }
+    }
+
+    private setNextGameId(): void {
+        this.nextGameId = this.games[0].id + 1;
+    }
+
+    private setPlayPannel(): void {
+        if (window.innerWidth < 650) { // height 를 줄임
+            this.playpannel = { offsetWidth: 300, offsetHeight: 180 };
+        } else {
+            this.playpannel = { offsetWidth: 290, offsetHeight: 220 };
+        }
+    }
+
+    public choicePannelTriggerEnd(e: any): void {
+        if (e.toState === 'active') {
+            this.render.addClass(e.element, 'active');
+        } else {
+            this.render.removeClass(e.element, 'active');
+        }
+    }
+}

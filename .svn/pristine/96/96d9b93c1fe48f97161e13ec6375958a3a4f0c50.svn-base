@@ -1,0 +1,135 @@
+::ng-deep{
+    .mat-tab-header{
+        border-color:#34424f;
+    }
+    .mat-tab-group.mat-primary .mat-ink-bar {
+        background-color:#14dbcf;
+    }
+    mat-tab-group{
+        .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-label{
+            opacity: 1;
+            color:#8fa8c0;
+            &.mat-tab-label-active{
+                color: #fff;
+            }
+        }
+    }
+    .game-fairness-modal{
+        .mat-dialog-container{
+            background-color: #212e3a;
+            padding: 15px;
+            article.fairness-wrap{
+                h1.title{
+                    font-size: 18px;
+                    font-weight: bold;
+                    text-align: center;
+                    color: #fff;
+                    margin-bottom:1rem;
+                }
+                mat-tab-group{
+                    div.form-wrap{
+                        padding: 15px;
+                        form{
+                            display: flex;
+                            justify-content: space-between;
+                            mat-form-field{
+                                width: 75%;
+                            }
+                            button{
+                                width: 20%;
+                                background-color: #2d516f;
+                                color: #fff;
+                                border-style: none;
+                                font-size: 13px;
+                                height: 35px;
+                                border-radius: 5px;
+                            }
+                            &.Validation{
+                                flex-wrap: wrap;
+                                mat-form-field{
+                                    width: 100%;
+                                }
+                            }
+                        }
+                        div.list{
+                            margin-top: 10px;
+                            p{
+                                margin-bottom: 5px;
+                                color:#94a5b5;
+                                font-size: 13px;
+                                span.point{
+                                    color:#00fff0;
+                                }
+                                &.code{
+                                    width: 98%;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                }
+                            }
+                        }
+                    }
+                }
+                div.link-box{
+                    height: 35px;
+                    padding: 0 15px;
+                    a{
+                        display:inline-block;
+                        width: 50%;
+                        height: 100%;
+                        text-align: center;
+                        line-height: 35px;
+                        font-size: 13px;
+                        text-decoration: none;
+                        background-color:#1a2732;
+                        color:#94a5b5;
+                        border-right:1px solid #91a2b35c;
+                        &:last-child{
+                            border:none;
+                        }
+                    }
+                }
+                div.btn-home{
+                    padding: 15px;
+                    text-align: right;
+                    button{
+                        background-color: #2d516f;
+                        color: #fff;
+                        border-style: none;
+                        border-radius: 5px;
+                        font-size: 13px;
+                        padding: 5px 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    // Small devices (landscape phones, 576px and up)
+    @media (max-width: 576px) {
+        .game-fairness-modal{
+            min-width: 90vw;
+            .mat-dialog-container{
+                // div.qna-modal{
+                //     div.mat-tab-body-wrapper{
+                //         padding: 15px 0;
+                //     }
+                // }
+            }
+        }
+    }
+
+    @media (min-width: 577px) {
+        .game-fairness-modal{
+            min-width: 450px;
+            max-width: 450px !important;
+        }
+    }
+
+}

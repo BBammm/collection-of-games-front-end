@@ -1,0 +1,454 @@
+<div class="game-container container half">
+    <div class="game-wrap">
+        <div class="game-left">
+            <div class="user-balance">
+                <p class="title">
+                    <img src="/assets/games/common/images/point.png" alt="">
+                    <!-- {{ 'games.holdAmount' | translate }}-->
+                    <span class="point">
+                        <span appCountUp [endVal]="userInfo.point" [duration]='0.1'></span> TGM
+                    </span>
+                </p>
+                <button type="button" name="button" class="guide-btn">
+                    <i class="fa fa-question-circle"></i>
+                </button>
+            </div>
+            <div class="bet-container-wrapper">
+                <div class="bonus-game-calc">
+                    <ul class="game-row large-btn">
+                        <li class="bet-btn hi" (click)="setBet('LH', 'H')" [ngClass]="{'on': choice === 'LH:H'}">
+                            <p class="dividend-rate">x {{ dividendRate.LH}}</p>
+                            <div class="info-box">
+                                <span class="sel-title">{{ 'games.half.high' | translate}}</span>
+                                <span class="attendance">
+                                    <i class="material-icons md-14">person</i>
+                                    {{betedCount['LH:H']}}
+                                </span>
+                            </div>
+                        </li>
+                        <li class="bet-btn lo" (click)="setBet('LH', 'L')" [ngClass]="{'on': choice === 'LH:L'}">
+                            <p class="dividend-rate">x {{ dividendRate.LH}}</p>
+                            <div class="info-box">
+                                <span class="sel-title">{{ 'games.half.low' | translate}}</span>
+                                <span class="attendance">
+                                    <i class="material-icons md-14">person</i>
+                                    {{betedCount['LH:L']}}
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                    <ul class="game-row large-btn">
+                        <li class="bet-btn odd" (click)="setBet('OE', 'O')" [ngClass]="{'on': choice === 'OE:O'}">
+                            <p class="dividend-rate">x {{ dividendRate.OE}}</p>
+                            <div class="info-box">
+                                <span class="sel-title">{{ 'games.half.odd' | translate}}</span>
+                                <span class="attendance">
+                                    <i class="material-icons md-14">person</i>
+                                    {{betedCount['OE:O']}}
+                                </span>
+                            </div>
+                        </li>
+                        <li class="bet-btn even" (click)="setBet('OE', 'E')" [ngClass]="{'on': choice === 'OE:E'}">
+                            <p class="dividend-rate">x {{ dividendRate.OE}}</p>
+                            <div class="info-box">
+                                <span class="sel-title">{{ 'games.half.even' | translate}}</span>
+                                <span class="attendance">
+                                    <i class="material-icons md-14">person</i>
+                                    {{betedCount['OE:E']}}
+                                </span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bet-calculator">
+                    <p class="title">{{ 'games.betAmount' | translate}}</p>
+                    <ng-container *ngIf="!isBetInit">
+                        <app-bet-container [point]="userInfo.point" [betted]="betAmount" [direction]="'down'" (setPoint)="setBetAmount($event)"></app-bet-container>
+                    </ng-container>
+                    <ng-container *ngIf="isBetInit">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </ng-container>
+                </div> <!-- .bet-calculator -->
+                <div class="betting-btn">
+                    <button type="button" name="button" (click)="doBet()">
+                        {{ 'games.bet' | translate}}
+                    </button>
+                </div>
+                <ng-container *ngIf="isProgressing">
+                    <app-block-screen></app-block-screen>
+                </ng-container>
+            </div>
+        </div>
+        <div class="game-right">
+            <div class="game-round-text">
+                <p class="title"># <span appCountUp [endVal]="nextGameId" [duration]='0.1' [useGrouping]="false"></span></p>
+                <app-sound (soundFlag)="soundOnOff($event)"></app-sound>
+                <!-- <p class="title">Round <span>{{nextGameId}}</span></p> -->
+            </div>
+            <div class="play-board-pannel">
+                <div class="play-board">
+                    <div class='card-flip' [ngStyle]="flipCardStyles" style=""></div>
+                    <div class='opened-card card-flip' [@cardMovetoListTrigger]="{value: cardMovetoListState, params:animPos}" [ngStyle]="finalCardStyles">
+                        <!-- <img [src]="assetsUrl.images + currentCardInfo.resultClass+'.png'"> -->
+                        <div>{{currentCardInfo.cardNum}}</div>
+                    </div>
+                    <round-progress
+                        [current]="roundProgress.currentValue"
+                        [max]="100"
+                        [color]="roundProgress.color"
+                        [background]="'#696969'"
+                        [radius]="50"
+                        [stroke]="3"
+                        [duration]="roundProgress.duration"
+                        [animation]="'linearEase'"
+                        (onRender)="roundProgressBarRenderer($event)" [ngStyle]="gameStyles.roundTimerDisplay">]
+                    </round-progress>
+                    <!-- [duration]="12500" for 15second game -->
+                    <!-- [duration]="27500" for 30second game -->
+                    <!--  <img src="/assets/images/flip-card.gif"> -->
+                </div>
+            </div>
+            <div class='opend-card-list'>
+                <ng-container *ngFor="let game of games; let i = index">
+                    <ng-container *ngIf="i == 0">
+                        <ng-container *ngIf="cardOpenedListState !== 'active'">
+                            <div class="card-history" [@cardMovetoListFirstchildTrigger]="cardOpenedListState" >
+                                <span class="card-num">?</span>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="cardOpenedListState === 'active'">
+                            <div class="card-history" [ngClass]="'bg-' + game.resultCode.toLowerCase()" [@cardMovetoListFirstchildTrigger]="cardOpenedListState" >
+                                <span class="card-num" [ngClass]="game.cardSvg">{{game.cardNum}}</span>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="i < cardHistoryListCnt && i != 0">
+                        <div class="card-history" [ngClass]="'bg-' + game.resultCode.toLowerCase()">
+                            <span class="card-num" [ngClass]="game.cardSvg">{{game.cardNum}}</span>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <div class="bonus-game-info">
+        <div class="recently-wrap">
+            <p class="title">{{ 'games.list.recent' | translate}}</p>
+            <ul class='history-cnt'>
+                <li>
+                    <span (click)="setHistoryCnt(20)" [ngClass]="{'on': recentAnalysis.sampling_cnt==20}">20</span>
+                </li>
+                <li>
+                    <span (click)="setHistoryCnt(50)" [ngClass]="{'on': recentAnalysis.sampling_cnt==50}">50</span>
+                </li>
+                <li>
+                    <span (click)="setHistoryCnt(100)" [ngClass]="{'on': recentAnalysis.sampling_cnt==100}">100</span>
+                </li>
+                <li>
+                    <span (click)="setHistoryCnt(200)" [ngClass]="{'on': recentAnalysis.sampling_cnt==200}">200</span>
+                </li>
+            </ul>
+        </div>
+        <div class="recent-analysis">
+            <div class="colors-ratio">
+                <div class="colors-ratio-reddish" [ngStyle]="{'width': recentAnalysis.lh.hi_ratio + '%'}">
+                    {{recentAnalysis.lh.hi_ratio}}%
+                </div>
+                <div class="colors-ratio-green" [ngStyle]="{'width': recentAnalysis.lh.lo_ratio + '%'}">
+                    {{recentAnalysis.lh.lo_ratio}}%
+                </div>
+            </div>
+            <div class="colors-ratio">
+                <div class="colors-ratio-blue" [ngStyle]="{'width': recentAnalysis.oe.o_ratio + '%'}">
+                    {{recentAnalysis.oe.o_ratio}}%
+                </div>
+                <div class="colors-ratio-red" [ngStyle]="{'width': recentAnalysis.oe.e_ratio + '%'}">
+                    {{recentAnalysis.oe.e_ratio}}%
+                </div>
+            </div>
+        </div>
+        <div class="card-opened">
+            <div>
+                <p class="half-card num-a">
+                    <b>A</b>
+                </p>
+                <span class="text">X {{openedCardSum['1']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-2">
+                    <b>2</b>
+                </p>
+                <span class="text">X {{openedCardSum['2']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-3">
+                    <b>3</b>
+                </p>
+                <span class="text">X {{openedCardSum['3']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-4">
+                    <b>4</b>
+                </p>
+                <span class="text">X {{openedCardSum['4']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-5">
+                    <b>5</b>
+                </p>
+                <span class="text">X {{openedCardSum['5']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-6">
+                    <b>6</b>
+                </p>
+                <span class="text">X {{openedCardSum['6']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-7">
+                    <b>7</b>
+                </p>
+                <span class="text">X {{openedCardSum['7']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-8">
+                    <b>8</b>
+                </p>
+                <span class="text">X {{openedCardSum['8']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-9">
+                    <b>9</b>
+                </p>
+                <span class="text">X {{openedCardSum['9']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-j">
+                    <b>J</b>
+                </p>
+                <span class="text">X {{openedCardSum['10']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-q">
+                    <b>Q</b>
+                </p>
+                <span class="text">X {{openedCardSum['11']}}</span>
+            </div>
+            <div>
+                <p class="half-card num-k">
+                    <b>K</b>
+                </p>
+                <span class="text">X {{openedCardSum['12']}}</span>
+            </div>
+        </div>
+        <div class="game-bets-container">
+            <p class="title">
+                {{ 'games.betTable.players' | translate}}
+            </p>
+            <div class="columns-list">
+                <ul class="column black">
+                    <div class="game-bets-header">
+                        <li>{{ 'games.betTable.player' | translate}}</li>
+                        <li class="game-bets-info">{{ 'games.betTable.bet' | translate}}</li>
+                        <li>{{ 'games.betTable.multiplier' | translate}}</li>
+                        <li>{{ 'games.betTable.profit' | translate}}</li>
+                    </div>
+                    <div class="game-bets-list" *ngFor="let player of players" style="transition: transform 0s; transform: translate3d(0px, 0px, 0px);" [ngClass]="{'win': player.bet_result==1, 'loose': player.bet_result==0}">
+                        <li class="bet-user-info">
+                            <div class="user-name">{{player.userName}}</div>
+                        </li>
+                        <li class="game-bets-info">{{player.betAmount | number}} P | {{player.betInfo}}</li>
+                        <li class="bet-value">X{{player.dividendRate}}</li>
+                        <li class="bet-value">{{ (player.dividendRate * player.betAmount) | number}}</li>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="history-wrap">
+        <!-- 검증 Modal창 -->
+        <div class="verification-btn">
+            <button (click)="proveModal('half')">
+                <i class="fa fa-check-circle"></i>
+                {{'games.verify' | translate}}
+            </button>
+        </div>
+        <mat-tab-group mat-align-tabs="center" animationDuration="0ms" >
+            <mat-tab label="{{ 'games.list.recent' | translate}}">
+                <div class="history-box">
+                    <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%" class="mobile-none">
+                                <col width="5%" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="mobile-none">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_hash' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_salt' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                    <th scope="col" class="mobile-block">{{'games.list.recent' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td class="mobile-none">
+                                            {{ data.id }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{ data.cardNum }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                        </td>
+                                        <td class="mobile-none">
+                                            <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                        </td>
+                                        <td class="mobile-block">
+                                            <mat-accordion>
+                                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                                               (closed)="panelOpenState = false">
+                                                <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    #{{ data.id }} / {{ 'games.list.title_result' | translate}} : {{ data.cardNum }}
+                                                </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_hash' | translate}} : </span>
+                                                        <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_salt' | translate}} : </span>
+                                                        <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                    </div>
+                                                    <div class="game-info data">
+                                                        <span>
+                                                            {{ 'games.list.title_date' | translate}} :
+                                                        </span>
+                                                        {{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                                    </div>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td class="mobile-block">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="more-btn">
+                            <button (click)="openHistoryModal('half', 0)">{{ 'button.more' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="{{ 'games.list.my' | translate}}">
+                <div class="history-box">
+                    <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="5%" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="mobile-none">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                    <th scope="col" class="mobile-block">{{ 'games.list.my' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td class="mobile-none">
+                                            {{ data.game_id }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{ data.choice }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.bet_amount | number}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{'games.result.' + data.result  | translate}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.win_amount | number}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                        </td>
+                                        <td class="mobile-block">
+                                            <mat-accordion>
+                                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                                               (closed)="panelOpenState = false">
+                                                <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    #{{ data.game_id }} / {{'games.result.' + data.result  | translate}}
+                                                </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_choice' | translate}} : </span>
+                                                        {{ data.choice }}
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_bet_amount' | translate}} : </span>
+                                                        {{data.bet_amount | number}}
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_win_amount' | translate}} : </span>
+                                                        {{data.win_amount | number}}
+                                                    </div>
+                                                    <div class="game-info data">
+                                                        <span>
+                                                            {{ 'games.list.title_date' | translate}} :
+                                                        </span>
+                                                        {{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                                    </div>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td class="mobile-block">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="more-btn">
+                            <button (click)="openHistoryModal('half', 1)">{{ 'button.more' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+<article class="fairness-wrap">
+    <div class="modal-header">
+        <h1 class="title">{{ data.title | uppercase }} {{ 'fairness.veri-title' | translate }}</h1>
+        <button type="button" name="button" (click)="close()" class="close-btn">
+            <img src="/assets/images/common/close-btn.png" alt="">
+        </button>
+    </div>
+    <mat-tab-group  animationDuration="0ms" mat-align-tabs="center">
+        <mat-tab label="{{ 'fairness.result-title' | translate }}">
+            <div class="form-wrap">
+                <form>
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="{{ 'fairness.game-hash' | translate }}" name="hash" [(ngModel)]="gameResultCode">
+                    </mat-form-field>
+                    <button (click)="getResult()">{{ 'fairness.check' | translate }}</button>
+                </form>
+                <div class="list">
+                    <p class="code">
+                        {{ 'fairness.secret-code' | translate }} :
+                        <span class="point">{{gameHash}}</span>
+                    </p>
+                    <p>
+                        {{ 'fairness.result-code' | translate }} :
+                        <span class="point">{{gameResult}}</span>
+                    </p>
+                    <ul>
+                        <li *ngFor="let a of cardsInfo">{{a}}</li>
+                    </ul>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+    <div class="link-box">
+        <a href="https://jsfiddle.net/JacksonChang/tuxd0ngs/embedded/result " target="_blank">{{ 'fairness.externally' | translate }}</a>
+        <a href="https://jsfiddle.net/JacksonChang/tuxd0ngs/" target="_blank">{{ 'fairness.view-code' | translate }}</a>
+    </div>
+</article>

@@ -1,0 +1,20 @@
+<div class="board-wrap container">
+    <div class="board-content">
+        <div class="post-info">
+            <p class="title">
+                <span>{{article?.title}}</span>
+            </p>
+            <span class="data">
+                {{article?.created_at | moment : 'YY.MM.DD HH:mm'}}
+                <b class="mr-2">{{article?.user_name}}</b>
+            </span>
+        </div>
+        <div class="listText" [innerHTML]="article?.content">
+        </div>
+        <div class="btn-home">
+            <a type="button" name="button" routerLink="/bbs/notice">
+                {{ 'button.list' | translate }}
+            </a>
+        </div>
+    </div>
+</div>

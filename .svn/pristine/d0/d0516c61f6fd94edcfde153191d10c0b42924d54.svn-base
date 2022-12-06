@@ -1,0 +1,110 @@
+<div class="sign-modal container">
+    <div mat-dialog-title class="dialog-title modal-header">
+        <button mat-icon-button mat-dialog-close>
+            <mat-icon>clear</mat-icon>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="modal-content">
+            <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+                <mat-tab label="{{'auth.sign-in' | translate}}"> <!-- 로그인 -->
+                    <form [formGroup]="loginFormGroup" (ngSubmit)="login()">
+                        <div class="field">
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Email" formControlName="email" required>
+                                <mat-error *ngIf="loginFormGroup.get('email').hasError('required')" class="error">{{'auth.messages.mail-required' | translate}}</mat-error><!-- 이메일 주소를 입력해 주세요. -->
+                                <mat-error *ngIf="loginFormGroup.get('email').hasError('email')" class="error">{{'auth.messages.mail-type' | translate}}</mat-error><!-- 이메일 형식으로 입력해 주세요. -->
+                            </mat-form-field>
+                        </div>
+                        <div class="field">
+                            <mat-form-field appearance="outline">
+                                <input matInput type="password" placeholder="Password" formControlName="password" required>
+                                <mat-error *ngIf="loginFormGroup.get('password').hasError('required')" class="error">{{'auth.messages.password-required' | translate}}</mat-error><!-- 비밀번호를 입력해 주세요. -->
+                            </mat-form-field>
+                        </div>
+                        <div class="btn-home">
+                            <button type="submit" name="button">{{'auth.sign-in' | translate}}</button>
+                            <div class="btn-box">
+                                <a class="link" (click)="openFindModal(0)">{{'auth.find-email' | translate}}</a> <!-- 아이디 찾기 -->
+                                <a class="link" (click)="openFindModal(1)">{{'auth.find-pwd' | translate}}</a> <!-- 비밀번호 찾기 -->
+                            </div>
+                        </div>
+                    </form>
+                </mat-tab>
+                <mat-tab label="{{'auth.sign-up' | translate}}"> <!-- 회원가입 -->
+                    <form [formGroup]="joinFormGroup" (ngSubmit)="join()">
+                        <div class="field certification-field">
+                            <mat-form-field appearance="outline" style="margin-right: 8px;">
+                                <input matInput placeholder="Email" formControlName="email" maxlength="200" required>
+                                <mat-error *ngIf="joinFormGroup.get('email').hasError('required')" class="error">{{'auth.messages.mail-required' | translate}}</mat-error><!-- 이메일 주소를 입력해 주세요. -->
+                                <mat-error *ngIf="joinFormGroup.get('email').hasError('email')" class="error">{{'auth.messages.mail-type' | translate}}</mat-error>
+                                <!-- <mat-error *ngIf="joinFormGroup.get('email_check').hasError('required')" class="error">11{{'auth.messages.mail-dup-check' | translate}}</mat-error>
+                                <mat-error *ngIf="joinFormGroup.get('email_check').hasError('requiredTrue')" class="error">22{{'auth.messages.mail-dup-check' | translate}}</mat-error> -->
+                                <!-- 이메일 중복검사가 필요합니다. -->
+                            </mat-form-field>
+                            <button type="button" (click)="emailCheck()">{{'button.check' | translate}}</button><!-- 확인 -->
+                        </div>
+                        <div class="field">
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Name" formControlName="name" maxlength="200" required>
+                                <mat-error *ngIf="joinFormGroup.get('email_check').hasError('required')" class="error">{{'auth.messages.mail-dup-check' | translate}}</mat-error>
+                                <mat-error *ngIf="joinFormGroup.get('name').hasError('required')" class="error">{{'auth.messages.name-required' | translate}}</mat-error><!-- 이름을 입력해 주세요. -->
+                            </mat-form-field>
+
+                        </div>
+                        <div class="field">
+                            <mat-form-field appearance="outline">
+                                <input matInput type="password" placeholder="Password" formControlName="password" maxlength="200" required>
+                                <mat-error *ngIf="joinFormGroup.get('password').hasError('required')" class="error">{{'auth.messages.password-required' | translate}}</mat-error><!-- 비밀번호를 입력해 주세요. -->
+                            </mat-form-field>
+
+                        </div>
+                        <div class="field">
+                            <mat-form-field appearance="outline">
+                                <input matInput type="password" placeholder="Confirm Password" formControlName="password_check" maxlength="200" required>
+                                <mat-error *ngIf="joinFormGroup.get('password_check').hasError('required')" class="error">{{'auth.messages.confirm-password-required' | translate}}</mat-error><!-- 비밀번호 확인을 입력해 주세요. -->
+                            </mat-form-field>
+
+                        </div>
+                        <div class="field certification-field">
+                            <mat-form-field appearance="fill" class="select">
+                                <mat-select formControlName="national_code" required>
+                                    <mat-option value="82" selected >82</mat-option>
+                                    <mat-option value="82">82</mat-option>
+                                    <mat-option value="82">82</mat-option>
+                                    <mat-option value="82">82</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="input2">
+                                <input matInput placeholder="Mobile Number" formControlName="phone_number" maxlength="200" required>
+                                <mat-error *ngIf="joinFormGroup.get('phone_number').hasError('required')" class="error">{{'auth.messages.mobile-required' | translate}}</mat-error><!-- 핸드폰 번호를 입력해 주세요. -->
+                            </mat-form-field>
+                            <button type="button" (click)="phoneNumCheck()">{{'button.check' | translate}}</button><!-- 인증 -->
+                        </div>
+                        <div class="field">
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Authenticated Code" formControlName="phone_number_check" maxlength="200" required>
+                                <mat-error *ngIf="joinFormGroup.get('phone_number_check').hasError('required')" class="error">{{'auth.messages.authnum-required' | translate}}</mat-error><!-- 인증번호를 입력해 주세요. -->
+                            </mat-form-field>
+                        </div>
+                        <div class="field">
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Recommender" formControlName="recommender" maxlength="200">
+                            </mat-form-field>
+                        </div>
+                        <div class="btn-home">
+                            <button type="submit" name="button">Sign Up</button>
+                        </div>
+                    </form>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+        <div class="modal-visual">
+            <img src="" alt="">
+        </div>
+    </div>
+    <!-- <div mat-dialog-actions align="end" class="modal-footer">
+        <button mat-button mat-dialog-close>취소</button>
+        <button mat-raised-button color="primary">보내기</button>
+    </div> -->
+</div>

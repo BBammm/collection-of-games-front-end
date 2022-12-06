@@ -1,0 +1,215 @@
+<div class="mypage-wrapper container">
+    <div class="myinfo-change">
+        <h5 class="title">
+            {{ 'mypage.mypage' | translate}}
+        </h5>
+        <p class="sub-title">
+            {{ 'mypage.my-info' | translate}}
+        </p>
+        <div class="form-box-wrap">
+            <div class="row fild" *ngIf="user.agentName">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        {{ 'mypage.agent-name' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box">
+                    <span>{{user.agentName}}</span>
+                </div>
+            </div>
+            <div class="row fild">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        {{ 'mypage.email' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box">
+                    <span>{{user.email}}</span>
+                </div>
+            </div>
+            <div class="row fild">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        {{ 'mypage.user-name' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box">
+                    <span>{{user.name}}</span>
+                </div>
+            </div>
+            <div class="row fild">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        {{ 'mypage.level' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box">
+                    <span>Lv.{{user.level}}</span>
+                </div>
+            </div>
+            <div class="row fild">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        {{ 'mypage.mobile' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box number">
+                    <div>
+                        <span>
+                            +{{user.national_code}}
+                        </span>
+                        <mat-form-field appearance="outline">
+                            <input matInput type="number" placeholder="Mobile Number" maxlength="200" [(ngModel)]="user.mobile">
+                        </mat-form-field>
+                        <button type="button" name="button" (click)="checkPhoneNum()">{{ 'auth.get-auth-num' | translate}}</button>
+                    </div>
+                    <div>
+                        <mat-form-field appearance="outline">
+                            <input matInput placeholder="{{ 'auth.auth-num' | translate}}" maxlength="200" [(ngModel)]="authParam.num">
+                        </mat-form-field>
+                        <button type="button" name="button" (click)="changePhoneNum()">
+                            {{ 'auth.confirm-auth-num' | translate}}
+                        </button>
+                        <p class="point" *ngIf="!isChangePhoneNum">
+                            {{ 'auth.messages.authnum-not-match' | translate}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="row fild">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        일일 이체한도
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box">
+                    <span>3,000,000 원</span>
+                </div>
+            </div> -->
+            <!-- <div class="row fild">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        국가
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box">
+                    <span>대한민국</span>
+                </div>
+            </div> -->
+        </div>
+        <div class="btn-home">
+            <button type="button" name="button">
+                {{ 'mypage.btn-info-change' | translate}}
+            </button>
+        </div>
+
+        <p class="sub-title">
+            {{ 'mypage.change-pwd' | translate}}
+        </p>
+        <div class="form-box-wrap">
+            <div class="row fild">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        {{ 'mypage.cur-password' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box">
+                    <mat-form-field appearance="outline">
+                        <input matInput type="password" placeholder="{{ 'mypage.cur-password' | translate}}" maxlength="200" [(ngModel)]="pwdObj.current_password">
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div class="row fild">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        {{ 'mypage.password' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box">
+                    <mat-form-field appearance="outline">
+                        <input matInput type="password" placeholder="{{ 'mypage.password' | translate}}" maxlength="200"  [(ngModel)]="pwdObj.password">
+                    </mat-form-field>
+                    <p class="defult">
+                         {{ 'mypage.message-password-type' | translate}}
+                    </p>
+                </div>
+            </div>
+            <div class="row fild">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        {{ 'mypage.confirm-password' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box">
+                    <mat-form-field appearance="outline">
+                        <input matInput type="password" placeholder="{{ 'mypage.confirm-password' | translate}}" maxlength="200"  [(ngModel)]="pwdObj.password_confirmation">
+                    </mat-form-field>
+                    <p class="point" *ngIf="!isBeforePwd">
+                        {{ 'mypage.message-password-not-match' | translate}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="btn-home">
+            <button type="button" name="button" (click)="changePwd()">
+                {{ 'mypage.change-pwd' | translate}}
+            </button>
+        </div>
+    </div>
+
+    <div class="myinfo-change Withdrawal">
+        <h5 class="title">
+            {{ 'mypage.secession' | translate}}
+        </h5>
+        <ul>
+            <li>{{ 'mypage.secession-1' | translate}}</li>
+            <li>{{ 'mypage.secession-2' | translate}}</li>
+            <li>{{ 'mypage.secession-3' | translate}}</li>
+        </ul>
+        <div class="form-box-wrap">
+            <div class="row fild">
+                <div class="col-lg-2 col-3 title-box">
+                    <span>
+                        {{ 'mypage.hold-amount' | translate}}
+                    </span>
+                </div>
+                <div class="col-lg-10 col-9 content-box">
+                    <span>
+                        <b>{{user.point | number}}</b> TGM
+                    </span>
+                </div>
+            </div>
+            <form [formGroup]="secetionGroup" (ngSubmit)="secetion()">
+                <div class="row fild">
+                    <div class="col-lg-2 col-3 title-box">
+                        <span>
+                            {{ 'mypage.password' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-lg-10 col-9 content-box">
+                        <mat-form-field appearance="outline">
+                            <input type="password" matInput placeholder="{{ 'mypage.password' | translate}}" maxlength="200" formControlName="password" required>
+                            <mat-error *ngIf="secetionGroup.get('password').hasError('required')" class="error">{{ 'mypage.message-password-required' | translate}}</mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row fild">
+                    <div class="col-lg-2 col-3 title-box">
+                        <span>
+                            {{ 'mypage.reason' | translate}}
+                        </span>
+                    </div>
+                    <div class="col-lg-10 col-9 content-box">
+                        <textarea name="name" rows="8" cols="80" formControlName="reason"></textarea>
+                    </div>
+                </div>
+                <div class="btn-home">
+                    <button type="submit" name="button" class="remove">
+                        {{ 'mypage.btn-secession' | translate}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

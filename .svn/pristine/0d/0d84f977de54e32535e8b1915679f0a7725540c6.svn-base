@@ -1,0 +1,232 @@
+::ng-deep{
+    .mat-tab-header{
+        border-color:#34424f;
+    }
+    .more {
+        border-style: none;
+        background: #2d516f;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 13px;
+        padding: 10px 15px;
+        width: 100%;
+        text-transform: capitalize;
+    }
+    .mat-tab-group.mat-primary .mat-ink-bar {
+        background-color:#14dbcf;
+    }
+    mat-tab-group{
+        .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-header-pagination{
+            display:none;
+        }
+        .mat-tab-label{
+            opacity: 1;
+            color:#8fa8c0;
+            &.mat-tab-label-active{
+                color: #fff;
+            }
+        }
+    }
+    ::-webkit-scrollbar {
+        background-color:transparent;
+        width:8px
+    }
+    ::-webkit-scrollbar-track {
+        background-color:transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #0c16208c;
+        border-radius:8px;
+    }
+
+    .game-history-modal{
+        // border:1px solid pink;
+        min-width: 350px;
+        max-width: 90vw !important;
+        div.modal-header{
+            padding: 0;
+            justify-content: center;
+            border: none;
+            position: relative;
+            padding:15px 0;
+            h1.title{
+                font-size: 18px;
+                font-weight: bold;
+                text-align: center;
+                color: #fff;
+                margin-bottom: 0;
+                span{
+                    text-transform: uppercase ;
+                }
+            }
+            button.close-btn{
+                position: absolute;
+                top:0;
+                right: 0;
+                background: none;
+                border-style: none;
+                color:#fff;
+                font-size:18px;
+                max-height:100%;
+                i{
+                    vertical-align: top;
+                }
+            }
+        }
+        .mat-dialog-container{
+            padding: 0;
+            // border:1px solid green;
+            div.game-history{
+                // border:1px solid tomato;
+                padding: 15px;
+                background: #2b3c4c;
+                max-width: 700px;
+                mat-tab-group{
+                    margin-top: 15px;
+                    // border:1px solid gold;
+                    max-height: 450px;
+
+                    div.history-box{
+                        padding: 15px 0px;
+                        background-color: #2b3c4c;
+
+                        h2.title{
+                            color:#fff;
+                            font-size: 18px;
+                            text-align: center;
+                            margin-bottom: 30px;
+                            font-weight: bold;
+                        }
+                        div.table-home{
+                            table{
+                                table-layout: fixed;
+                                .mobile-flex{
+                                    display:none;
+                                }
+                                .mobile-cell{
+                                    display: none;
+                                }
+                                thead{
+                                     background-color: #3e6c96;
+                                     tr{
+                                         th{
+                                             color:#fff;
+                                             font-size: 14px;
+                                             text-align: center;
+                                             font-weight: normal;
+                                         }
+                                     }
+                                }
+                                tbody{
+                                    tr{
+                                        background-color: #3c5062;
+                                        td{
+                                            text-align: center;
+                                            color:#94a5b5;
+                                            font-size: 14px;
+                                            vertical-align: middle;
+                                            p{
+                                                text-overflow: ellipsis;
+                                                margin-bottom: 0;
+                                                overflow: hidden;
+                                                display: inline-block;
+                                                cursor: pointer;
+                                                width: 80%;
+                                                white-space: nowrap;
+                                                text-align: left;
+                                                font-size: 13px;
+                                                &.create{
+                                                    cursor: auto;
+                                                }
+                                            }
+                                            ul{
+                                                list-style: none;
+                                                padding: 0;
+                                                display:flex;
+                                                margin-bottom: 0;
+                                                flex-direction: column;
+                                                li{
+                                                    display: flex;
+                                                    align-items: center;
+                                                    // justify-content: center;
+                                                    margin-bottom: 10px;
+                                                    &:last-child{
+                                                        margin-bottom: 0;
+                                                    }
+                                                    span.point{
+                                                        color: #fff;
+                                                        margin-right: 10px;
+                                                        display:inline-block;
+                                                        width: 20%;
+                                                        text-align: right;
+                                                        font-size: 13px;
+                                                    }
+                                                }
+                                                &.my-game{
+                                                    li{
+                                                        span.point{
+                                                            width: 50%;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        &.no-display{
+                                            td{
+                                                text-align: center;
+                                            }
+                                        }
+                                        &:nth-child(odd){
+                                            background-color: #2b3c4c;
+                                        }
+                                    }
+                                }
+                            }
+                            div.more-btn{
+                                text-align: center;
+                                button{
+                                    border-style: none;
+                                    background: #2d516f;
+                                    border-radius: 5px;
+                                    color: #fff;
+                                    font-size: 13px;
+                                    padding: 5px 15px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    @media (max-width: 768px) {
+        .game-history-modal{
+            .mat-dialog-container{
+                div.game-history{
+                    mat-tab-group {
+                        div.history-box{
+                            div.table-home {
+                                table{
+                                    .mobile-none{
+                                        display:none;
+                                    }
+                                    .mobile-flex{
+                                        display:flex;
+                                    }
+                                    .mobile-cell{
+                                        display: table-cell;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,385 @@
+{
+  "auth": {
+    "auth-num": "인증번호",
+    "confirm-auth-num": "인증확인",
+    "find-email": "이메일 찾기",
+    "find-pwd": "비밀번호 재설정",
+    "get-auth-num": "인증번호 받기",
+    "login-required": "로그인 후 이용해 주세요.",
+    "messages": {
+      "authnum-not-match": "인증번호가 올바르지않습니다.",
+      "authnum-required": "인증번호를 입력해 주세요.",
+      "confirm-password-required": "비밀번호 확인을 입력해 주세요.",
+      "mail-dup-check": "이메일 중복검사가 필요합니다",
+      "mail-required": "이메일을 입력해 주세요.",
+      "mail-type": "이메일 형식으로 입력해 주세요.",
+      "mobile-required": "핸드폰 번호를 입력해 주세요.",
+      "name-required": "이름을 입력해 주세요.",
+      "need-login": "로그인이 필요합니다.",
+      "password-required": "패스워드를 입력해 주세요"
+    },
+    "sign-in": "로그인",
+    "sign-up": "회원가입"
+  },
+  "bbs": {
+    "created_at": "작성일",
+    "no_list": "데이터가 없습니다.",
+    "notice": "공지사항",
+    "qna": {
+      "content-placeholder": "문의내용",
+      "done-message": "문의가 등록되었습니다.",
+      "no_list": "문의내역이 없습니다.",
+      "some-required": "모든 항목을 빠짐없이 작성해 주세요.",
+      "status": {
+        "answerd": "답변완료",
+        "waiting": "대기중"
+      },
+      "tab_list": "문의내역",
+      "tab_write": "1:1 문의",
+      "title-error": "제목을 입력해주세요."
+    },
+    "title": "제목",
+    "writer": "작성자"
+  },
+  "button": {
+    "auth": "확인",
+    "cancel": "취소",
+    "check": "확인",
+    "close": "닫기",
+    "confirm": "확인",
+    "copy": "복사",
+    "list": "목록",
+    "more": "더보기",
+    "next": "다음",
+    "save": "등록"
+  },
+  "dep-wdl": {
+    "deposit": {
+      "btn-create-address": "주소 생성",
+      "goto-list": "입금내역 바로가기",
+      "message-symbol-required": "심볼을 선택해주세요.",
+      "notice-1": "- 구주소로 입금한 입금 건은 처리가 불가능 합니다. 반드시 새로운 주소로 입금해 주세요.",
+      "notice-2": "- 잘못된 주소로 오입금하신 경우 기술적으로 입금처리가 불가능하오니,<br/>\n정확한 입금 주소를 확인하시고 입금해 주시기 바랍니다.",
+      "notice-3": "- 입금하시는 가상자산이 메인넷 지원 대상인지 여부를 반드시 확인 하시기 바랍니다.<br/>\n이로인한 오입금 발생 시 기술적으로 처리가 불가능 할 수 있습니다.",
+      "notice-4-1": "* ERC-20 -> NCbit 메인넷 가상자산 주소로 입금 : 메인넷 전환이 완료되지 않은 거래소로부터 NCbit 의 메인넷 가상자산 입금 주소로 입금 할 경우",
+      "notice-4-2": "* 메인넷 가상자산 -> NCbit ERC-20 주소로 입금 : 메인넷 전환이 완료된 거래소로부터 NCbit ERC-20 입금 주소로 입금 할 경우",
+      "notice-5": "- 리플 입금 시 반드시 데스티네이션 태그를 입력하여 주시기 바랍니다.<br/>\n(데스티네이션 태그 누락 시 입금이 지연되거나 불가 할 수 있습니다.)",
+      "place-holder-deposit-address": "입금주소",
+      "place-holder-destination-tag": "데스티네이션",
+      "select": "선택",
+      "title-apply": "입금신청"
+    },
+    "notice": "주의사항",
+    "realtime-quote": "실시간 시세",
+    "title-deposit": "입금",
+    "title-withdraw": "출금",
+    "withdraw": {
+      "address": "출금주소",
+      "btn-withdraw": "출금하기",
+      "commission": "수수료",
+      "destination-tag": "데스티네이션 태그",
+      "goto-list": "출금내역 바로가기",
+      "messages": {
+        "applied": "신청되었습니다."
+      },
+      "min-amount": "최소 출금금액",
+      "notice-1": "- 출금 신청 시 심사가 진행되며 심사 결과에 따라 본인확인 후 최대 72시간 지연될 수 있습니다.\n부정거래가 의심될 경우 출금이 제한 될 수 있습니다.",
+      "notice-2": "- 실제로 전송되는 가상자산 총 수량은 신청한 수량에 전송 수수료를 제외한 수량입니다.",
+      "required": {
+        "address": "출금주소를 입력해주세요.",
+        "amount": "금액을 입력해주세요.",
+        "auth-num": "인증번호를 입력해주세요.",
+        "destination-tag": "데스티네이션 태그를 입력해주세요.",
+        "somefield": "모든 항목을 입력해 주세요."
+      },
+      "title-withdraw": "출금신청",
+      "transaction-amount": "전송금액",
+      "withdraw-amount": "출금금액"
+    }
+  },
+  "fairness": {
+    "check": "검증",
+    "cur-salt": "현재 솔트",
+    "externally": "외부 링크",
+    "game-hash": "게임 해쉬",
+    "game-salt": "게임 솔트",
+    "prev-hash": "이전 해쉬",
+    "result-card": "카드 결과",
+    "result-code": "결과 코드",
+    "result-color": "컬러 결과",
+    "result-dice": "주사위 결과",
+    "result-graph": "그래프 결과",
+    "result-hash": "해쉬 결과",
+    "result-keno": "키노 결과",
+    "result-ladder": "사다리 결과",
+    "result-number": "숫자 결과",
+    "result-title": "게임 결과 검증",
+    "secret-code": "시크릿 코드",
+    "vali-title": "해쉬 검증",
+    "validation": "검증",
+    "veri-title": "검증 하기",
+    "view-code": "코드 보기"
+  },
+  "games": {
+    "alert": {
+      "10_LIMIT": "최대 10개까지 선택할 수 있습니다.",
+      "ALREADY_PLACED_BET": "금번 회차에 이미 배팅되었습니다",
+      "BETTED": "참여되었습니다",
+      "GAIN": "{{money}} 획득",
+      "IN_PROGRESS": "게임이 진행중입니다",
+      "NOT_AVAILABLE_CHANGE_LEVEL": "게임진행중에는 난이도를 변경하실 수 없습니다.",
+      "NOT_AVAILABLE_CHANGE_MONEY": "게임진행중에는 참여포인트를 변경하실 수 없습니다.",
+      "NOT_AVAILABLE_TIME": "현재 시간대에서는 배팅이 불가능 합니다.",
+      "NOT_ENOUGH_MONEY": "보유하신 금액이 모자랍니다.",
+      "NOT_START": "게임을 시작해 주세요",
+      "NO_GAIN_MONEY": "획득할 포인트가 없습니다",
+      "NO_LOGIN": "로그인 되지 않았습니다.",
+      "SELECT_TILES": "타일을 선택해 주세요.",
+      "USER_NOT_FOUND": "존재하지 않는 사용자입니다.",
+      "WIN_AMOUNT": "{{amount}} TGM 획득.",
+      "betAfterResult": "결과 발표 후 배팅해 주세요.",
+      "maxBet": "최대 {{maxBet}} 이하 배팅 가능합니다.",
+      "minBet": "최소 {{minBet}}이상 배팅 가능합니다.",
+      "notEnoughPoint": "포인트가 부족합니다.",
+      "resultFail": "{{round}}회차 참여 결과는 실패입니다.",
+      "resultSuccess": "#{{round}} 참여 결과는 성공입니다.",
+      "selBetAmount": "배팅하실 금액을 입력해 주세요",
+      "selBetGame": "배팅하실 게임을 선택해주세요",
+      "selBetItem": "배팅항목을 선택해 주세요"
+    },
+    "allocation": "배당",
+    "bet": "베팅",
+    "betAmount": "베팅금액",
+    "betTable": {
+      "bet": "베팅",
+      "multiplier": "승수",
+      "player": "참가자",
+      "players": "참가자 표",
+      "profit": "수익금",
+      "stop": "선택"
+    },
+    "beted": "베팅됨",
+    "betting": "베팅중",
+    "bettings": "베팅내역",
+    "dice": {
+      "Even": "짝",
+      "Odd": "홀",
+      "descDefault": "- 위의 게임종류를 선택하시면 베팅항목이 나옵니다. \n- 한 회차에 선택지중 한가지만 선택하여 배팅 할수있습니다.\n- 추첨 시작 10초전부터는 게임에 참여할 수 없습니다.\n- 주사위 결과는 2분에 한 번씩 전송됩니다.",
+      "descDiceChoice": "-\"주사위선택\" 2개의 주사위에서 나오는 숫자중 하나를 예측 선택.",
+      "descDouble": "-\"더블선택\" 2개의 주사위가 동일하게 나올 숫자를 예측 선택.<br>\"ANY DOUBLE\"는 숫자 상관없이 더블 나올시 획득.",
+      "descLowHigh": "- \"로우하이\" 2개의 주사위의 합이 7을 기준으로 높낮이를 예측.\n- \"LOW, SEVEN, HIGH\" 3가지중 선택.",
+      "descNumber": "-\"숫자선택\" 2개의 주사위의 합을 예측 선택.",
+      "descOddEven": "-\"홀짝선택\" 2개의 주사위의 합이 홀수인지 짝수인지 예측 선택.",
+      "minutes": "분",
+      "salt": "솔트",
+      "seconds": "초",
+      "srtLowHigh": "로하이",
+      "strAnyDouble": "애니더블",
+      "strBetInfo": "베팅정보",
+      "strDice": "주사위",
+      "strIs": "입니다.",
+      "strOddEven": "홀짝",
+      "strRemainTime": "{{sec}} 초"
+    },
+    "dividendRate": "배당율",
+    "fifty": {
+      "black": "블루",
+      "green": "그린",
+      "raffle": "추첨중",
+      "red": "레드",
+      "result": {
+        "b": "블루",
+        "g": "그린",
+        "r": "레드",
+        "y": "옐로"
+      },
+      "yellow": "옐로"
+    },
+    "fourteen": {
+      "last": "마지막 게임",
+      "raffle": "추첨중",
+      "recently": "최근",
+      "result": {
+        "b": "블루",
+        "r": "레드",
+        "z": "그린"
+      }
+    },
+    "games": "게임결과",
+    "graph": {
+      "alert": {
+        "AUTO_BET_MODE": "자동베팅 모드입니다. \"실행\" 버튼을 눌러주세요",
+        "OVER_THAN_100": "베팅금액은 백단위로 넣어주세요"
+      },
+      "auto": "자동",
+      "autoStop": "자동스톱",
+      "autowithdrawPoint": "자동출금배당",
+      "bust": "배당율",
+      "manual": "수동",
+      "stop": "자동멈춤",
+      "strRemainGameStart": "{{second}}초 후에 게임시작"
+    },
+    "half": {
+      "even": "짝",
+      "high": "하이",
+      "low": "로",
+      "odd": "홀"
+    },
+    "hash": "해시",
+    "histories": "게임결과",
+    "holdAmount": "보유금액",
+    "income": "수익",
+    "joker": {
+      "black": "블루",
+      "clover": "클로버",
+      "diamond": "다이아몬드",
+      "heart": "하트",
+      "high": "하이",
+      "joker": "조커",
+      "low": "로우",
+      "recently": "최근",
+      "red": "레드",
+      "spade": "스페이드"
+    },
+    "ladder": {
+      "gameboard-Even": "짝",
+      "gameboard-Left": "좌",
+      "gameboard-Odd": "홀",
+      "gameboard-Right": "우",
+      "recently": "최근",
+      "result": {
+        "L3E": "좌3짝",
+        "L4O": "좌4홀",
+        "R3O": "우3홀",
+        "R4E": "우4짝"
+      },
+      "selEven": "짝",
+      "selL3E": "좌3짝",
+      "selL4O": "좌4홀",
+      "selLeft": "좌",
+      "selLine3": "줄-3",
+      "selLine4": "줄-4",
+      "selOdd": "홀",
+      "selR3O": "우3홀",
+      "selR4E": "우4짝",
+      "selRight": "우"
+    },
+    "list": {
+      "level": "레벨",
+      "my": "내 게임",
+      "my_info": "내 게임 정보",
+      "no_list": "데이타가 없습니다.",
+      "recent": "최근 게임",
+      "recent_info": "최근 게임 정보",
+      "step": "단계",
+      "title_bet_amount": "베팅 금액",
+      "title_choice": "초이스",
+      "title_date": "날짜",
+      "title_hash": "해쉬",
+      "title_result": "결과",
+      "title_salt": "솔트",
+      "title_win_amount": "배당 금액"
+    },
+    "mine": {
+      "answerCode": "정답 코드",
+      "cashOut": "캐쉬아웃",
+      "desc": "마인게임은 숨겨진 지뢰를 피하는 게임입니다. \n베팅하실 금액 선택 후 매설할 지뢰 갯수를 선택해 주세요.\n지뢰는 25(5x5)개의 타일속에 랜덤하게 매설되며 지뢰가 많을 수록, 오픈된 타일이 많을 수록\n적립되는 금액도 많아집니다",
+      "secretCode": "비밀 코드",
+      "strCashOut": "축하합니다.<font color=\"red\">{{ stake }}</font>을 캐쉬아웃 하셨습니다.",
+      "strFoundedBomb": "게임 종료! {{ failNum }}번 타일에서 폭탄을 발견했습니다.",
+      "strGain": "{{ hist }}번 타일에서 <span>{{won}} 획득</span>",
+      "strStart": "{{level}}개의 지뢰 {{betAmount}} 으로 시작했습니다. 시크릿 코드: <span class=\"secret_hash\">{{hash}}</span>"
+    },
+    "mining": {
+      "level": {
+        "E": "쉬움",
+        "H": "어려움",
+        "N": "보통"
+      }
+    },
+    "result": {
+      "F": "실패",
+      "R": "진행중",
+      "S": "성공"
+    },
+    "round": "회차",
+    "salt": "솔트",
+    "verify": "해시 검사",
+    "withdraw": "출금"
+  },
+  "history": {
+    "deposit": {
+      "title-amount": "전송량",
+      "title-date": "충전일",
+      "title-deposit-amt": "충전금액",
+      "title-no": "번호",
+      "title-unit-price": "시가"
+    },
+    "history": {
+      "title-amount": "금액",
+      "title-date": "날짜",
+      "title-holding": "현재 보유금",
+      "title-statement": "변동사유"
+    },
+    "tab-deposit": "입금내역",
+    "tab-history": "변동내역",
+    "tab-withdraw": "출금내역",
+    "withdraw": {
+      "status": {
+        "D": "지불완료",
+        "H": "지불보류",
+        "P": "지불완료",
+        "R": "준비중",
+        "T": "준비중"
+      },
+      "title-address": "출금주소",
+      "title-apply-amount": "신청금액",
+      "title-date": "신청일시",
+      "title-fee": "수수료",
+      "title-net-amount": "실 전송금액",
+      "title-no": "번호",
+      "title-status": "처리상태",
+      "title-transaction-amount": "전송금액",
+      "title-unit-price": "시가"
+    }
+  },
+  "message": {
+    "check": "읽음",
+    "no-list": "메시지가 없습니다.",
+    "not-check": "읽지않음",
+    "title": "쪽지함"
+  },
+  "mypage": {
+    "agent-name": "지점명",
+    "btn-info-change": "회원정보 수정",
+    "btn-secession": "탈퇴신청",
+    "change-pwd": "비밀번호 변경",
+    "confirm-password": "비밀번호 확인",
+    "cur-password": "기존 비밀번호",
+    "email": "이메일",
+    "hold-amount": "보유금액",
+    "level": "레벨",
+    "massage-password-required": "패스워드를 입력해주세요.",
+    "message-password-not-match": "비밀번호가 일치하지 않습니다.",
+    "message-password-type": "8~16자의 영문/숫자 등 두 가지 이상의 조합으로 입력해주세요.",
+    "mobile": "전화번호",
+    "my-info": "정보관리",
+    "mypage": "마이페이지",
+    "password": "비밀번호",
+    "reason": "탈퇴사유",
+    "secession": "회원탈퇴",
+    "secession-1": "1. 회원탈퇴 시 계정과 관련된 모든 정보가 삭제되며, 어떠한 정보도 복구되지 않습니다.",
+    "secession-2": "2. 동일한 이메일로는 재가입이 되지 않습니다.",
+    "secession-3": "3. 현재 고객님이 보유하신 금액은 모두 소멸되며, 환급 또한 불가능합니다.",
+    "user-name": "회원명",
+    "validation": {
+      "current-password-required": "현재 비밀 번호를 입력해 주세요.",
+      "must-diff-newpassword": "새 비밀번호는 현재 비밀번호와 달라야 합니다.",
+      "password-required": "신규 패스워드를 입력해 주세요.",
+      "password-type-error": "패스워드 형식이 맞지 않습니다."
+    }
+  },
+  "system": {
+    "copied": "복사되었습니다."
+  }
+}

@@ -1,0 +1,744 @@
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import { Game } from '../game';
+import { InterfaceFourteenGame } from '../../../interface/games/fourteen.game';
+import { InterfaceFourteenMyGame } from '../../../interface/games/fourteen.my.game';
+import { GAME_FOURTEEN, GAMES } from '../../../../environments/environment';
+import { takeUntil } from 'rxjs/operators';
+import { forEach } from 'lodash';
+
+@Component({
+    selector: 'app-fourteen',
+    templateUrl: './fourteen.component.html',
+    styleUrls: ['./fourteen.component.scss']
+})
+export class FourteenComponent extends Game implements OnDestroy, OnInit {
+    //  {hash: '', id: 0, resultNumber: 0, color: 'zero'} - rfaaling 이 끝날때 업데이트 한다.
+    public games: InterfaceFourteenGame[] = [];
+    private myGames: InterfaceFourteenMyGame[] = [];
+    public recentGames = [{ id: 0, color: '', result_number: 0}]; // games 중에서 최근 10개의 내역을 디스플레이
+
+    public latestResult = { r: 0, b: 0, z: 0 }; // for display
+    public nextGameId: number;
+    public focusOutStyle = { r: null, z: null, b: null, all: null }; // focus-out : opacity 0.3
+    // this.players.participants
+    public players = { r: { total: 0, players: [] }, b: { total: 0, players: [] }, z: { total: 0, players: [] } };
+    private participants: any = {};
+    // resultNum = 0; // resultNum은 소켓에서 받아오고 raffling 이 시작되면 resultNumAttr에 전송된다.
+    private resultNumAttr: InterfaceFourteenGame; // zero, red, balck
+    public dividendRate: any = { r: 0, z: 0, b: 0 };
+
+    // private gameStatus = 'betting'; // betting : 베팅카운트, raffling : 회전판 돌아가기, result : 게임 결과 디스플레이 하기
+    private gameInit = true; // 중간에 들어온 경우 true, 1회전 한 경우 false;
+    private raffleNums = [8, 1, 0, 14, 7, 13, 6, 12, 5, 11, 4, 10, 3, 9, 2];
+    private raffleNumsAttr = {
+        0: { color: 'zero', c: 'z' },
+        1: { color: 'red', c: 'r' },
+        2: { color: 'red', c: 'r' },
+        3: { color: 'red', c: 'r' },
+        4: { color: 'red', c: 'r' },
+        5: { color: 'red', c: 'r' },
+        6: { color: 'red', c: 'r' },
+        7: { color: 'red', c: 'r' },
+        8: { color: 'black',  c: 'b' },
+        9: { color: 'black',  c: 'b' },
+        10: { color: 'black',  c: 'b' },
+        11: { color: 'black',  c: 'b' },
+        12: { color: 'black',  c: 'b' },
+        13: { color: 'black',  c: 'b' },
+        14: { color: 'black',  c: 'b' }
+    };
+    private indicatorDegree = 75; // 현재 숫자를 가르키는 degree (초기는 0번 숫자)
+
+    // 회원판
+    public raffleStyle: any = {
+        transition: 'none',
+        transform: 'rotate(75deg)',
+        '-moz-transform': 'rotate(75deg)',
+        '-o-transform': 'rotate(75deg)',
+        '-webkit-transform': 'rotate(75deg)',
+        '-ms-transform': 'rotate(75deg)',
+        '-webkit-animation': null,
+        animation: null
+    }; // 초기
+    public gameStateStyle = {
+        // 회원판 중앙의 state (카운팅, 결과, raffle 메시지 출력)
+        // 0 : 남은시간 및 회전판 출력, 180 : 라플링 메시지및 결과숫자 출력
+        container: { transition: '600ms ease', transform: 'rotateY(0deg)' },
+        counterDisplay: { opacity: '1' },
+        countStyle: {// 22부터 카운 다운
+            left: { transform: 'rotate(0deg)', transition: 'none' },
+            right: { transform: 'rotate(0deg)', transition: 'none' }
+        },
+        backDisplay: { opacity: '0' },
+        // 0 : 라플링 메시지 출력, 180 : 결과숫자 출력
+        raffleMessageDisplay: { opacity: '1' },
+        raffleMessageStyle: { transition: '600ms ease', transform: 'rotateY(0deg)', '-ms-transform': 'rotateY(0deg)' },
+        resulteMessageDisplay: { opacity: '0' },
+        resulteMessageStyle: { transition: '600ms ease', transform: 'rotateY(180deg)', '-ms-transform': 'rotateY(180deg)' }
+    };
+
+    public progressBarStyle = { clip: 'rect(auto, auto, auto, auto)' }; // style="clip: rect(0px, 154px, 154px, 77px);">
+    // 중간 {'transition': '-webkit-transform 10000ms cubic-bezier(0.42, 0, 1, 1) -14ms', 'transform': 'rotate(6800deg)'}
+    // 최종 {'transition': 'transform 15000ms cubic-bezier(0.32, 0.95, 0.45, 1) -0ms', 'transform': 'rotate(7521.39deg)'}
+    private ticktock: number;
+    public counterDownTimer = 22;
+    // serviceInfo = fourteenGame.serviceInfo;
+
+    public betAmount = 0;
+    public isProgressing = false;
+    public betedAmount = { r: 0, b: 0, z: 0 }; // for display
+    private isBetted = false;
+    private choice: string = null;
+    public choiceColor: string;
+    public isBetInit = true;
+
+    // private serverTime = new Date(); // 서버 시간을 가져와서 세팅시킨다(connection 및 매 게임 결과 전송시 리셋 시킨다.)
+    // private gameTimer = null;
+    // private timerInfo: any = {next_no: 0, countdown_ii: 0, countdown_ss: 0, remainsecond: 0, remainTime: '-', ramainTimeGraph: 0, c_datetime: '-'};
+
+    constructor(
+        protected injector: Injector,
+    ) {
+        super(injector);
+        this.titleSvc.setTitle('FOURTEEN');
+        this.assetsUrl = { images: './assets/games/fourteen/images/', sounds: './assets/games/fourteen/sounds/'};
+        this.setGameSound();
+    }
+
+    public ngOnInit(): void {
+        this.ngInit();
+        this.socket.init(GAME_FOURTEEN.game, GAME_FOURTEEN.socketUrl);
+        this.requestOtt();
+        // this.socket.On('connection') 아래에 다른 On 을 둘 경우 서버 connection이  재 실행될 경우 여러개가 호출됨
+        /**
+         * @param Object data[0] {hash: "a8e36959c0012f24984ad75ee63031a17e315d60aa456c783e5a787ab9c9d1fc", id: 1000078, resultNumber: 4}
+         */
+        this.socket.On(GAME_FOURTEEN.game, 'game_created')
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe((data: any) => {
+                const obj: any = data[0];
+                // 시간 보정
+                // if (this.gameTimer) {
+                //     this.gameTimer.refresh_nowDateTime(obj.serverDateTime);
+                // }
+                // this.resultNum = obj.resultNumber;
+                // this.resultNumAttr = {number: this.resultNum, color: this.raffleNumsAttr[this.resultNum].c};
+                this.resultNumAttr = {
+                    id: obj.id,
+                    result_code: obj.resultCode,
+                    result_number: obj.resultNumber,
+                    hash: obj.hash,
+                    salt: obj.salt,
+                    color: this.raffleNumsAttr[obj.resultNumber].color,
+                    datetime: obj.datetime
+                };
+
+                this.raffleStart(0);
+            });
+
+        /**
+         * 추후는 상기 부분을 삭제하고 아래 부분으로 처리 ()
+         */
+        this.socket.On(GAME_FOURTEEN.game, 'player_bet')
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe((data: any) => {
+                const participant = data[0].participant;
+                this.participants[participant.userInfo.id] = participant;
+
+                this.showPlayers(this.participants);
+                // print bet list
+            });
+
+        /**
+         * 자신이 참여한 게임 결과 (실제적으로는 게임 create 시 받아오나 애니메이션상 결과가 공개될때 메시지 출력(displayUserGameResult()))
+         * betAmount, choice, created_at, dividendRate, gameId, id, result, user_id, winAmount}
+         */
+        this.socket.On(GAME_FOURTEEN.game, 'game_result')
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe((data: any) => {
+                this.myGameResult = {game_id: data[0].gameId, result: data[0].result, win_amount: data[0].winAmount};
+
+                // 현재 내게임 결과에 대해 업데이트
+                if (this.myGames && this.myGames[0].game_id === data[0].gameId) {
+                    this.myGames[0].result = data[0].result;
+                    this.myGames[0].win_amount = data[0].winAmount;
+                }
+            });
+
+        /*
+        카운트 다운
+        .bonus-game-state.front timer transform: rotateY(0deg) -> rotateY(18deg)
+        .bonus-game-state.back rotateY(0deg) -> rotateY(18deg)
+        */
+        this.socket.On(GAME_FOURTEEN.game, 'ticktock')
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe((data: any) => {
+                this.ticktock = data[0];
+                switch (this.ticktock) {
+                    case 0:
+
+                        this.focusOutStyle = { r: null, z: null, b: null, all: null };
+                        this.progressBarStyle = { clip: 'rect(0px, 154px, 154px, 77px)' };
+                        this.stateContainerStart();
+                        this.setNextGameId();
+                        this.playGameSound('flip');
+
+                        // 0 ~ 22 초 사이에 남은 시간을 디스플레이 한다.
+                        this.gameStateStyle.countStyle = {
+                            left: { transform: 'rotate(360deg)', transition: 'transform 22000ms linear -0ms' },
+                            right: { transform: 'rotate(180deg)', transition: 'transform 11000ms linear -0ms' }
+                        };
+                        break;
+                    case 11: // 11초 부터는 카운트 스타일을 변경한다.
+                        this.progressBarStyle = { clip: 'rect(auto, auto, auto, auto)' };
+                        break;
+                    case 18:
+                        // this.audioRoll.pause();
+                        this.playGameSound('roll');
+                        this.rafflePreStart();
+                        break;
+                    case 22:
+                        this.playGameSound('flip');
+                        this.stateContainerRafflemessage();
+                        break;
+                    case 23:
+                        this.gameStateStyle.countStyle = {
+                            left: { transform: 'rotate(0deg)', transition: 'none' },
+                            right: { transform: 'rotate(0deg)', transition: 'none' }
+                        };
+                        break;
+                    case 25:
+                        // this.raffleStart(); from  game created 에서 받아서 처리
+                        break;
+                    case 40:
+                        if (!this.resultNumAttr) {
+                            return;
+                        }
+                        const resultCode = this.getrzbCode(this.resultNumAttr.result_number);
+                        this.focusOutStyle[resultCode] = null;
+                        // calculator total
+                        switch (resultCode) {
+                            case 'r':
+                                this.players.r.total = this.players.r.total * 2;
+                                this.players.z.total = this.players.z.total * -1;
+                                this.players.b.total = this.players.b.total * -1;
+                                break;
+                            case 'z':
+                                this.players.r.total = this.players.r.total * -1;
+                                this.players.z.total = this.players.z.total * 14;
+                                this.players.b.total = this.players.b.total * -1;
+                                break;
+                            case 'b':
+                                this.players.r.total = this.players.r.total * -1;
+                                this.players.z.total = this.players.z.total * -1;
+                                this.players.b.total = this.players.b.total * 2;
+                                break;
+                        }
+                        //    if ()
+                        //    this.players = {'r': {total: 0, players: []}, 'b': {total: 0, players: []}, 'z': {total: 0, players: []}};
+
+                        this.stateContainerResultmessage();
+                        if(this.isBetted) {
+                            this.displayUserGameResult(this.myGameResult, () => {
+                                // 포인트 변경
+                               if (this.myGameResult && this.myGameResult.result === 'S') {
+                                   const point = this.userInfo.point + this.myGameResult.win_amount;
+                                   this.displayPoint = point;
+                                   this.eventSvc.setPoint(point);
+                                   this.myGameResult = null;
+                               }
+                            }); // 사용자 베팅결과 출력
+                        }
+                        this.playGameSound('flip');
+                        break;
+                    case 49: // 게임관련 초기화
+                        this.raffleReset();
+                        this.choice = null;
+                        this.choiceColor = '';
+                        this.isBetted = false;
+                        this.setbetedAmount('reset');
+                        this.setMyGameList(this.myGames);
+                        this.setRecentGameList(this.games);
+                        this.players = { r: { total: 0, players: [] }, b: { total: 0, players: [] }, z: { total: 0, players: [] } };
+                        this.participants = {};
+                        break;
+                }
+
+                if (this.gameInit === false) {
+                    if (this.ticktock >= 0 && this.ticktock <= 22) {
+                        this.counterDownTimer = 22 - this.ticktock;
+                    }
+                }
+
+                if (this.gameInit === true) { // 초기 페이지를 열경우 현재 상태에 따라 다양한 시작 화면 처리
+                    if (this.ticktock < 11) {
+                        this.progressBarStyle = { clip: 'rect(0px, 154px, 154px, 77px)' };
+                    }
+
+                    if (this.ticktock >= 18 && this.ticktock < 25) {
+                        this.rafflePreStart();
+                    } else if (this.ticktock >= 25 && this.ticktock < 40) {
+                        this.raffleStart((40 - this.ticktock) * 1000);
+                    }
+
+                    if (this.ticktock < 22) {
+                        this.counterDownTimer = 22 - this.ticktock;
+
+                        // 0 ~ 22 초 사이에 남은 시간을 디스플레이 한다.
+                        if (this.ticktock > 11) {
+                            this.gameStateStyle.countStyle = {
+                                left: { transform: 'rotate(360deg)', transition: 'transform 22000ms linear -' + this.ticktock + 's' },
+                                right: { transform: 'rotate(180deg)', transition: 'null' }
+                            };
+                        } else {
+                            this.gameStateStyle.countStyle = {
+                                left: { transform: 'rotate(360deg)', transition: 'transform 22000ms linear -' + this.ticktock + 's' },
+                                right: { transform: 'rotate(180deg)', transition: 'transform 11000ms linear -' + this.ticktock + 's' }
+                            };
+                        }
+                        // this.countStart();
+                    } else {
+                        // 카운트 스타트
+                        this.gameStateStyle.container = { transition: 'none', transform: 'rotateY(180deg)' };
+                        this.gameStateStyle.counterDisplay = { opacity: '0' };
+                        this.gameStateStyle.backDisplay = { opacity: '1' };
+
+                        if (this.ticktock >= 40) { // 결과 숫자 출력
+                            this.gameStateStyle.raffleMessageStyle = { transition: '600ms ease', transform: 'rotateY(180deg)', '-ms-transform': 'rotateY(180deg)' };
+                            this.gameStateStyle.raffleMessageDisplay = { opacity: '0' };
+                            this.gameStateStyle.resulteMessageStyle = { transition: '600ms ease', transform: 'rotateY(0deg)', '-ms-transform': 'rotateY(0deg)' };
+                            this.gameStateStyle.resulteMessageDisplay = { opacity: '1' };
+                            this.choiceColor = '';
+                        }
+
+                        this.focusOutStyle = { r: 'focus-out', z: 'focus-out', b: 'focus-out', all: 'focus-out' };
+                    }
+                    this.gameInit = false;
+                }
+
+                if (this.ticktock >= 22) {
+                    this.isProgressing = true;
+                } else if (this.isBetted && this.isProgressing) {
+                    this.isProgressing = true;
+                } else {
+                    this.isProgressing = false;
+                }
+            });
+
+    }  // end of constructor
+
+    public ngOnDestroy(): void {
+        this.ngDestroy();
+    }
+
+    private setGameSound(): void {
+        this.setDefaultSound();
+        this.addSound('roll', this.assetsUrl.sounds + 'roll-sound.mp3');
+        this.addSound('flip', this.assetsUrl.sounds + 'flip.mp3');
+    }
+
+    private requestOtt(): void {
+        this.isBetInit = true;
+        // 서버에 접근하여 실제 userinfo를 가져온다.
+        this.http.requestOtt(GAME_FOURTEEN.game, (paramObj: any) => {
+            if (paramObj.error === false) {
+                this.socket.Emit(GAME_FOURTEEN.game, 'join', { ott: paramObj.ott }, (err: string, resp: any) => {
+                    if (err) {
+                        console.error('Error when joining the game...', err);
+                        return;
+                    }
+
+                    // 현재 진행되는 게임정보를 받아와서 초기화 시킨다.
+                    // this.serverTime = resp.serverDateTime; // 서버와의 시간동기화를 위한 서버 시간
+                    // this.startTimer();
+
+                    this.dividendRate = resp.dividend;
+                    this.participants = resp.participants;
+                    this.showPlayers(resp.participants);
+
+                    // this.dividendRate = connecDataObj.dividendRate;
+                    // this.games = connecDataObj.games;
+                    const reversed = resp.games.reverse(); // connecDataObj.games 도 동시에 reversㄷ 됨
+
+                    for (const rev of reversed) {
+                        rev.result_code = rev.resultCode;
+                        rev.result_number = rev.resultNumber;
+                        this.addGames(rev);
+                    }
+
+                    // 게임이 생성된 후 게임에 접근하였을 경우 animation이 멈추는 현상으로 인해 이 부분 추가
+                    const currgame = reversed[reversed.length - 1];
+                    this.resultNumAttr = {
+                        hash: currgame.hash,
+                        salt: currgame.salt,
+                        id: currgame.id,
+                        result_number: currgame.resultNumber,
+                        result_code: currgame.resultCode,
+                        color: this.raffleNumsAttr[currgame.resultNumber].color,
+                        datetime: currgame.datetime
+                    };
+
+                    this.setRecentGames();
+                    this.setRecentGameList(this.games);
+                    this.setNextGameId();
+
+                    // 초기 faffleStyle Setting
+                    this.getDegree(this.games[0].result_number);
+                    const initDegree = this.resetDegree();
+                    this.raffleStyle = {
+                        transition: 'none',
+                        transform: 'rotate(' + initDegree + 'deg)',
+                        '-moz-transform': 'rotate(' + initDegree + 'deg)',
+                        '-o-transform': 'rotate(' + initDegree + 'deg)',
+                        '-webkit-transform': 'rotate(' + initDegree + 'deg)',
+                        '-ms-transform': 'rotate(' + initDegree + 'deg)',
+                        '-webkit-animation': null,
+                        animation: null
+                    };
+
+                    if (!resp.user) { // 회원정보를 수신 못한 경우
+                        return;
+                    }
+
+                    // If username is a falsey value the user is not logged in
+
+                    this.myBetInfo(resp.participants, resp.user.id);
+
+                    const reversedMyGame = resp.bets.reverse(); // connecDataObj.games 도 동시에 reversㄷ 됨
+                    for (const rev of reversedMyGame) {
+                        this.addMyGames(rev);
+                    }
+
+                    this.setMyGameList(this.myGames);
+
+                    this.userInfo.id = resp.user.id;
+                    this.userInfo.name = resp.user.name;
+                    this.displayPoint = resp.user.point;
+                    this.eventSvc.setPoint(resp.user.point);
+
+                });
+            }
+        }).finally(() => {
+            setTimeout(() => {
+                this.isBetInit = false;
+            }, 1000);
+        });
+    }
+
+    /**
+     * @param Object obj {hash: "87407746a124ed77b38ecd2c9ed2f18b84c6d8eec4bfa854625b99a00f2dee9b", id: 1000090, resultNumber: 13}
+     */
+    private addGames(obj: any): void {
+        if (obj.resultNumber === null) { return; }
+        obj.color = this.raffleNumsAttr[obj.result_number].color;
+        if (!this.games.length || obj.id !== this.games[0].id) {
+            this.games.unshift(obj);
+        }
+
+        if (this.games.length > 100) {
+            this.games.pop();
+        }
+    }
+
+    /**
+     * 내가 참여했던 게임 결과를 이곳에 저장해 둔다.
+     */
+    private addMyGames(obj: any): void {
+        this.myGames.unshift(obj);
+
+        if (this.myGames.length > 100) {
+            this.myGames.pop();
+        }
+    }
+
+    /**
+     * 100개의 게임에서 최근 10개의 게임 리스트를 별도로 구하고
+     * 100개에 대한 나온 확률을 구한다.
+     */
+    private setRecentGames(): void {
+        this.recentGames = [];
+        let i: number;
+        for (i = 0; i < 10; i++) {
+            if (this.games[i]) {
+                this.recentGames.push({ id: this.games[i].id, color: this.games[i].color, result_number: this.games[i].result_number});
+            }
+        }
+
+        this.latestResult = { r: 0, b: 0, z: 0 };
+        for (i = 0; i < this.games.length; i++) {
+            switch (this.games[i].color) {
+                case 'red':
+                    this.latestResult.r++;
+                    break;
+                case 'zero':
+                    this.latestResult.z++;
+                    break;
+                case 'black':
+                    this.latestResult.b++;
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 1) 초기 deg
+     * 2) 카운트 22초 -> 04초에 시작
+     * 3) raffling => 6800 deg   8초
+     * 4) 최종 deg > 6800 deg
+     * 5) raffling 숨김 (텍스트)
+     * 6) 결과 숫자 노출
+     * 7) 초기 deg
+     */
+    private rafflePreStart(): void {
+        /*
+        IE OK but chrome
+        */
+        this.raffleStyle = { '-webkit-animation': 'roulette-rotate 10000ms cubic-bezier(0.42, 0, 1, 1) -14ms', animation: 'roulette-rotate 10000ms cubic-bezier(0.42, 0, 1, 1) -14ms' };
+        /* chrome Ok But IE
+                this.raffleStyle = {'transition': '-webkit-transform 10000ms cubic-bezier(0.42, 0, 1, 1) -14ms',
+                                    'transform': 'rotate(6800deg)',
+                                    '-moz-transform': 'rotate(6800deg)',
+                                    '-o-transform': 'rotate(6800deg)',
+                                    '-webkit-transform': 'rotate(6800deg)',
+                                    '-ms-transform': 'rotate(6800deg)'};
+        */
+
+    }
+
+    private raffleStart(dalaytime: number): void {
+        let targetDegree: number;
+        let resultNum: number;
+        if (!this.resultNumAttr) {
+            return;
+        }
+        if (this.resultNumAttr.result_number === null) { // 값이 생성된 이후 로딩시는 이부분이 존재 하지 않음
+            resultNum = this.games[0].result_number;
+        } else {
+            resultNum = this.resultNumAttr.result_number;
+        }
+
+        targetDegree = this.getDegree(resultNum);
+        this.raffleStyle = {};
+        // settimeout 없이 할 경우 바로 정지하는 현상이 발생
+        // 생각컨테 IE 호환을 위해 animatin 을 사용하는데 이 부분과 호환이 안되는 듯 함
+        setTimeout(() => {
+            this.raffleStyle = {
+                transition: 'transform 15000ms cubic-bezier(0.32, 0.95, 0.45, 1) -' + dalaytime + 'ms',
+                transform: 'rotate(' + targetDegree + 'deg)',
+                '-moz-transform': 'rotate(' + targetDegree + 'deg)',
+                '-o-transform': 'rotate(' + targetDegree + 'deg)',
+                '-webkit-transform': 'rotate(' + targetDegree + 'deg)',
+                '-ms-transform': 'rotate(' + targetDegree + 'deg)'
+            };
+        }, 50);
+    }
+
+    // 결과값 출력
+    // action3 : 결과값 출력
+    // message raffling....
+    private stateContainerRafflemessage(): void {
+        this.focusOutStyle = { r: 'focus-out', z: 'focus-out', b: 'focus-out', all: 'focus-out' };
+        this.gameStateStyle.container = { transition: '600ms ease', transform: 'rotateY(180deg)' };
+        this.gameStateStyle.counterDisplay = { opacity: '0' };
+        this.gameStateStyle.backDisplay = { opacity: '1' };
+        this.gameStateStyle.raffleMessageStyle = { transition: '600ms ease', transform: 'rotateY(0deg)', '-ms-transform': 'rotateY(0deg)' };
+        this.gameStateStyle.raffleMessageDisplay = { opacity: '1' };
+        this.gameStateStyle.resulteMessageStyle = { transition: '600ms ease', transform: 'rotateY(180deg)', '-ms-transform': 'rotateY(180deg)' };
+        this.gameStateStyle.resulteMessageDisplay = { opacity: '0' };
+    }
+
+    /**
+     * 결과값 디스플레이
+     */
+    private stateContainerResultmessage(): void {
+        this.gameStateStyle.raffleMessageStyle = { transition: '600ms ease', transform: 'rotateY(180deg)', '-ms-transform': 'rotateY(180deg)' };
+        this.gameStateStyle.raffleMessageDisplay = { opacity: '0' };
+        this.gameStateStyle.resulteMessageStyle = { transition: '600ms ease', transform: 'rotateY(0deg)', '-ms-transform': 'rotateY(0deg)' };
+        this.gameStateStyle.resulteMessageDisplay = { opacity: '1' };
+        this.addGames(this.resultNumAttr);
+        this.setRecentGames();
+
+        const initDegree = this.resetDegree();
+        this.raffleStyle = {
+            transition: 'none',
+            transform: 'rotate(' + initDegree + 'deg)',
+            '-moz-transform': 'rotate(' + initDegree + 'deg)',
+            '-o-transform': 'rotate(' + initDegree + 'deg)',
+            '-webkit-transform': 'rotate(' + initDegree + 'deg)',
+            '-ms-transform': 'rotate(' + initDegree + 'deg)',
+            '-webkit-animation': null,
+            animation: null
+        };
+    }
+
+    private raffleReset(): void {
+        this.progressBarStyle = { clip: 'rect(0px, 154px, 154px, 77px)' };
+    }
+
+    private stateContainerStart(): void {
+        this.gameStateStyle.container = { transition: '600ms ease', transform: 'rotateY(0deg)' };
+        this.gameStateStyle.counterDisplay = { opacity: '1' };
+        this.gameStateStyle.backDisplay = { opacity: '0' };
+    }
+
+    // style="transition: 600ms ease; transform: rotateY(0deg);">
+    /**
+     * 15deg (8번 시작), 15개 section 각 degree : 24;
+     */
+    private getDegree(num: number): number {
+        const preMargin = 15;
+
+        const firstDegree = 7200 + preMargin;
+        const indexof = this.raffleNums.indexOf(num);
+        this.indicatorDegree = indexof * 24 + (Math.random() * (20 - 4) + 4); // min : 0 Max 24 이나  경계선 문제로 인해 4 ~20 사이의 랜덤을 구한다.
+        const finalDegree = firstDegree + this.indicatorDegree;
+
+        return finalDegree;
+    }
+
+    private resetDegree(): number {
+        const preMargin = 15;
+        const firstDegree = preMargin;
+        const finalDegree = firstDegree + this.indicatorDegree;
+
+        return finalDegree;
+    }
+    /**
+     * @param String flag : r: red, b: black, z: zero
+     */
+    public doBet(): void {
+        // this.choice = flag;
+        this.choiceColor = this.choice;
+
+        if (this.userInfo.id === 0) {
+            return this.transSystemMessage('games.alert.NO_LOGIN');
+        } else if (this.choice === null) {
+            return this.transSystemMessage('games.alert.selBetItem');
+        } else if (this.isBetted) {
+            return this.transSystemMessage('games.alert.ALREADY_PLACED_BET');
+        } else if (this.betAmount < GAMES.minBet) {
+            return this.transSystemMessage('games.alert.minBet', { minBet: GAMES.minBet });
+        } else if (this.betAmount > GAMES.maxBet) {
+            return this.transSystemMessage('games.alert.maxBet', { maxBet: GAMES.maxBet });
+        } else if (this.betAmount > this.userInfo.point || this.userInfo.point === 0) {
+            return this.transSystemMessage('games.alert.NOT_ENOUGH_MONEY');
+        } else if (this.ticktock >= 22) {
+            return this.transSystemMessage('games.alert.NOT_AVAILABLE_TIME');
+        } else {
+            // gameId 및 roundNo는 서버에 저장시 별도로 저장됨
+            this.setbetedAmount();
+            this.isProgressing = true;
+            const betObject = {
+                betAmount: this.betAmount,
+                selVal: this.choice,
+                gameId: null
+            }; // roundNo 및 user_id는 서버측에서 계산
+
+            this.socket.Emit(GAME_FOURTEEN.game, 'doBet', betObject, (err: string, resp: any) => {
+
+                // resp: {gameInfo:{hash, id, dice1, dice2, datetime}, userInfo:{id, name, point },
+                // playdId,  currentPoint: res.currentPoint}
+                if (err) {
+                    // diceGame.systemMessage(err);
+                    this.svcMessage(err);
+                } else {
+                    const point = resp.currentPoint - this.betAmount;
+                    this.displayPoint = point; // 실제 업체측 데이타와 동기화
+                    this.eventSvc.setPoint(point);
+                    this.eventSvc.setAmount(this.betAmount);
+
+                    this.transSystemMessage('games.alert.BETTED', null, null, 'start', 'success');
+                    this.isBetted = true;
+                    betObject.gameId = resp.gameInfo.id + 1;
+                    // 배팅완료된 정보 디스플레이
+                    this.addMyGames({
+                        game_id: betObject.gameId,
+                        choice: betObject.selVal,
+                        bet_amount: betObject.betAmount,
+                        result: 'R',
+                        win_amount: 0,
+                        created_at: new Date()
+                    });
+                    this.setMyGameList(this.myGames);
+                }
+            });
+        }
+    }
+
+    /**
+     * @param string flag : reset or null
+     */
+    private setbetedAmount(flag?: string): void {
+        this.betedAmount = { r: 0, b: 0, z: 0 };
+        if (flag !== 'reset') {
+            this.betedAmount[this.choice] = this.betAmount;
+        }
+    }
+
+    /**
+     * 초기 접속시 현재 게임에 대한 나의 베팅 내역을 가져와 디스플레이 하기
+     */
+    private myBetInfo(players: any, userId: number): void {
+        // {betAmount: 10000 gameId: 255401 playdId: 0 selVal: "g"}
+        if (players[userId]) {
+            this.isBetted = true;
+            const betinfo = players[userId];
+            this.betAmount = betinfo.betAmount;
+            this.choiceColor = betinfo.selVal;
+            this.betedAmount[players[userId].selVal] = betinfo.betAmount;
+            this.isProgressing = true;
+        }
+    }
+
+    /**
+     * 참여자 리스트 디스플레이
+     * @param Object players [{user_id : {betAmount, selVal, gameId, userInfo: {id, name, point}}}]
+     */
+    private showPlayers(players: any): void {
+        this.players = { r: { total: 0, players: [] }, b: { total: 0, players: [] }, z: { total: 0, players: [] } };
+        forEach(players, (player: any) => { // , user_id: string
+            // if (!this.clib.diplayUser(fourteenGame.serviceInfo.gamblerDisplay)) {
+            //    return;
+            // }
+            const tmp = { betAmount: player.betAmount, userName: player.userInfo.name };
+            this.players[player.selVal].total += player.betAmount;
+            this.players[player.selVal].players.push(tmp);
+        });
+    }
+
+    private setNextGameId(): void {
+        this.nextGameId = this.games[0].id + 1;
+        // this.nextGameId = this.games[0].roundNo + 1;
+    }
+    /**
+     * get r z b from result number
+     */
+    private getrzbCode(num: number): string {
+        switch (num) {
+            case 0:
+                return 'z';
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+                return 'r';
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+                return 'b';
+        }
+    }
+
+    public setBet(flag: string): void {
+        this.choice = flag;
+        this.choiceColor = flag;
+        this.playGameSound('select');
+    }
+}

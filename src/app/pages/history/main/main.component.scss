@@ -1,0 +1,29 @@
+::ng-deep{
+    .mat-tab-nav-bar, .mat-tab-header{
+        border-color:#34424f;
+    }
+    .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+        background-color:#14dbcf;
+    }
+
+
+    div.trade-wrap{
+        max-width: 1230px;
+        padding: 40px 15px;
+        .mat-tab-link-container{
+            .mat-tab-links{
+                a.mat-tab-link{
+                    color:#8fa8c0;
+                    opacity: 1;
+                    text-decoration: none;
+                    font-size: 16px;
+                    &.mat-tab-label-active{
+                        color: #fff;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+    }
+
+}//ng-depp

@@ -1,0 +1,570 @@
+<div class="game-container container dice">
+    <div class="game-wrap">
+        <div class="game-left">
+            <div class="user-balance">
+                <p class="title">
+                    <img src="/assets/games/common/images/point.png" alt="">
+                    <!-- {{ 'games.holdAmount' | translate }}-->
+                    <span class="point">
+                        <span appCountUp [endVal]="displayPoint" [duration]='0.1'></span> TGM
+                    </span>
+                </p>
+                <button type="button" name="button" class="guide-btn">
+                    <i class="fa fa-question-circle"></i>
+                </button>
+            </div>
+            <div class="bet-container-wrapper">
+                <div class="choice-btn-group">
+                    <div class="choice-img" [ngClass]="{'on': 'NC' == gameType}"  (click)="setGameType('NC')">
+                        <mat-icon svgIcon="c-number"></mat-icon>
+                        <!-- <img [src]="assetsUrl.images + 'diceimg4.png'" alt="number choice button" [ngClass]="{'on': 'NC' == gameType}" (click)="setGameType('NC')"> -->
+                    </div>
+                    <!-- 선택버튼 [ 주사위선택 ] -->
+                    <div class="choice-img" [ngClass]="{'on': 'DC' == gameType}" (click)="setGameType('DC')">
+                        <mat-icon svgIcon="c-dice"></mat-icon>
+                    </div>
+                    <!-- 선택버튼 [ 더블 ] -->
+                    <div class="choice-img" [ngClass]="{'on': 'DB' == gameType}" (click)="setGameType('DB')">
+                        <mat-icon svgIcon="c-double"></mat-icon>
+                    </div>
+                    <!-- 선택버튼 [ 로하이선택 ] -->
+                    <div class="choice-img" [ngClass]="{'on': 'LH' == gameType}" (click)="setGameType('LH')">
+                        <mat-icon svgIcon="c-lowhigh"></mat-icon>
+                    </div>
+                    <!-- 선택버튼 [ 홀짝선택 ] -->
+                    <div class="choice-img" [ngClass]="{'on': 'OE' == gameType}" (click)="setGameType('OE')">
+                        <mat-icon svgIcon="c-oddeven"></mat-icon>
+                    </div>
+                </div>
+                <div class="choice-pannel">
+                    <div class="box-choice null" [@choicePannelTrigger]="choiceState.NULL"
+                        (@choicePannelTrigger.done)="choicePannelTriggerEnd($event)">
+                        <div class="box-choice-inner">
+                            <span class="choice-desc" [innerHTML]="'games.dice.descDefault' | translate">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="box-choice num" [@choicePannelTrigger]="choiceState.NC"
+                        (@choicePannelTrigger.done)="choicePannelTriggerEnd($event)">
+                        <div class="box-choice-inner">
+                            <div class="choice-close" (click)="setGameType('reset')">
+                                <i class="fa fa-times"></i>
+                            </div>
+                            <span class="choice-desc" [innerHTML]="'games.dice.descNumber' | translate"></span>
+                            <ul class="choice-items">
+                                <li [ngClass]="{'on': '3' == choice}" (click)="setChoice('3')" class="large-btn yellow">
+                                    <div class="info-box">
+                                        <p>
+                                            3
+                                            <span>x{{dividends.NC[3]}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '4' == choice}" (click)="setChoice('4')" class="large-btn green">
+                                    <div class="info-box">
+                                        <p>
+                                            4
+                                            <span>x{{dividends.NC[4]}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '5' == choice}" (click)="setChoice('5')" class="small-btn red">
+                                    <div class="info-box">
+                                        <p>
+                                            5
+                                            <span>x{{dividends.NC[5]}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '6' == choice}" (click)="setChoice('6')" class="small-btn blue">
+                                    <div class="info-box">
+                                        <p>
+                                            6
+                                            <span>x{{dividends.NC[6]}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '7' == choice}" (click)="setChoice('7')" class="small-btn purple">
+                                    <div class="info-box">
+                                        <p>
+                                            7
+                                            <span>x{{dividends.NC[7]}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '8' == choice}" (click)="setChoice('8')" class="small-btn blue">
+                                    <div class="info-box">
+                                        <p>
+                                            8
+                                            <span>x{{dividends.NC[8]}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '9' == choice}" (click)="setChoice('9')" class="small-btn red">
+                                    <div class="info-box">
+                                        <p>
+                                            9
+                                            <span>x{{dividends.NC[9]}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="two-digit" [ngClass]="{'on': '10' == choice}" (click)="setChoice('10')" class="large-btn green">
+                                    <div class="info-box">
+                                        <p>
+                                            10
+                                            <span>x{{dividends.NC[10]}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="two-digit" [ngClass]="{'on': '11' == choice}" (click)="setChoice('11')" class="large-btn yellow">
+                                    <div class="info-box">
+                                        <p>
+                                            11
+                                            <span>x{{dividends.NC[11]}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="box-choice dice" [@choicePannelTrigger]="choiceState.DC"
+                        (@choicePannelTrigger.done)="choicePannelTriggerEnd($event)">
+                        <div class="box-choice-inner">
+                            <div class="choice-close" (click)="setGameType('reset')">
+                                <i class="fa fa-times"></i>
+                            </div>
+                            <span class="choice-desc" [innerHTML]="'games.dice.descDiceChoice' | translate"></span>
+                            <ul class="choice-items">
+                                <li [ngClass]="{'on': '1' == choice }" class="middle-btn yellow" (click)="setChoice('1')">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-dice1.png" alt="">
+                                            <span>x{{dividends.DC}} </span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '2' == choice }" class="middle-btn green"  (click)="setChoice('2')">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-dice2.png" alt="">
+                                            <span>x{{dividends.DC}} </span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '3' == choice }" class="middle-btn red"  (click)="setChoice('3')">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-dice3.png" alt="">
+                                            <span>x{{dividends.DC}} </span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '4' == choice }" class="middle-btn blue"  (click)="setChoice('4')">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-dice4.png" alt="">
+                                            <span>x{{dividends.DC}} </span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '5' == choice }" class="middle-btn purple" (click)="setChoice('5')">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-dice5.png" alt="">
+                                            <span>x{{dividends.DC}} </span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '6' == choice }" class="middle-btn pink" (click)="setChoice('6')">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-dice6.png" alt="">
+                                            <span>x{{dividends.DC}} </span>
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="box-choice double" [@choicePannelTrigger]="choiceState.DB"
+                        (@choicePannelTrigger.done)="choicePannelTriggerEnd($event)">
+                        <div class="box-choice-inner">
+                            <div class="choice-close" (click)="setGameType('reset')">
+                                <i class="fa fa-times"></i>
+                            </div>
+                            <span class="choice-desc" [innerHTML]="'games.dice.descDouble' | translate"></span>
+                            <ul class="choice-items">
+                                <li [ngClass]="{'on': '1' == choice}" (click)="setChoice('1')" class="middle-btn yellow">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-double1.png" alt="">
+                                            <span>x{{dividends.DB}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '2' == choice}" (click)="setChoice('2')" class="middle-btn green">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-double2.png" alt="">
+                                            <span>x{{dividends.DB}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '3' == choice}" (click)="setChoice('3')" class="middle-btn red">
+                                    <div class="info-box">
+                                        <div class="info-box">
+                                            <p>
+                                                <img src="/assets/games/dice/images/dice-double3.png" alt="">
+                                                <span>x{{dividends.DB}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '4' == choice}" (click)="setChoice('4')" class="middle-btn blue">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-double4.png" alt="">
+                                            <span>x{{dividends.DB}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '5' == choice}" (click)="setChoice('5')" class="middle-btn purple">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-double5.png" alt="">
+                                            <span>x{{dividends.DB}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '6' == choice}" (click)="setChoice('6')" class="middle-btn pink">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-double6.png" alt="">
+                                            <span>x{{dividends.DB}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': 'A' == choice}" (click)="setChoice('A')" class="middle-btn orange">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-double7.png" alt="">
+                                            <span>x{{dividends.ADB}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="box-choice lowhigh" [@choicePannelTrigger]="choiceState.LH"
+                        (@choicePannelTrigger.done)="choicePannelTriggerEnd($event)">
+                        <div class="box-choice-inner">
+                            <div class="choice-close" (click)="setGameType('reset')">
+                                <i class="fa fa-times"></i>
+                            </div>
+                            <span class="choice-desc" [innerHTML]="'games.dice.descLowHigh' | translate"></span>
+                            <ul class="choice-items">
+                                <li [ngClass]="{'on': 'L' == choice}" (click)="setChoice('L')" class="middle-btn yellow">
+                                    <div class="info-box">
+                                        <p>
+                                            Low
+                                            <span>x{{dividends.LH.L}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': '7' == choice}" (click)="setChoice('7')" class="middle-btn green">
+                                    <div class="info-box">
+                                        <p>
+                                            7
+                                            <span>x{{dividends.LH[7]}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': 'H' == choice}" (click)="setChoice('H')" class="middle-btn red">
+                                    <div class="info-box">
+                                        <p>
+                                            High
+                                            <span>x{{dividends.LH.H}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="box-choice oddeven" [@choicePannelTrigger]="choiceState.OE"
+                        (@choicePannelTrigger.done)="choicePannelTriggerEnd($event)">
+                        <div class="box-choice-inner">
+                            <div class="choice-close" (click)="setGameType('reset')">
+                                <i class="fa fa-times"></i>
+                            </div>
+                            <span class="choice-desc" [innerHTML]="'games.dice.descOddEven' | translate"></span>
+                            <ul class="choice-items">
+                                <li [ngClass]="{'on': 'O' == choice}" (click)="setChoice('O')" class="large-btn yellow">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-dice1.png" alt="">
+                                            <strong>Odd</strong><br/>
+                                            <span>x{{dividends.OE}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                                <li [ngClass]="{'on': 'E' == choice}" (click)="setChoice('E')" class="large-btn green">
+                                    <div class="info-box">
+                                        <p>
+                                            <img src="/assets/games/dice/images/dice-dice2.png" alt="">
+                                            <strong>Even</strong><br/>
+                                            <span>x{{dividends.OE}}</span>
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="bet-calculator">
+                    <p class="title">{{ 'games.betAmount' | translate }}</p>
+                    <ng-container *ngIf="!isBetInit">
+                        <app-bet-container [point]="userInfo.point" [betted]="betAmount" (setPoint)="setBetAmount($event)"></app-bet-container>
+                    </ng-container>
+                    <ng-container *ngIf="isBetInit">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </ng-container>
+                </div>
+                <div class="betting-btn">
+                    <button type="button" name="button" (click)="doBet()">
+                        {{ 'games.bet' | translate }}
+                    </button>
+                </div>
+                <ng-container *ngIf="isProgressing">
+                    <app-block-screen></app-block-screen>
+                </ng-container>
+            </div>
+        </div>
+        <div class="game-right">
+            <div class="game-round-text">
+                <p class="title">
+                    <!-- {{GameStatus}} --># <span appCountUp [endVal]="nextGameId" [duration]='0.1' [useGrouping]="false"></span>
+                </p>
+                <app-sound (soundFlag)="soundOnOff($event)"></app-sound>
+            </div>
+            <div class="play-pannel">
+                <div class="play-inner-pannel">
+                    <div class="dicegameplayer" [hidden]="GameStatus == 'ready'">
+                        <app-dicegameplayer [width]="playpannel.offsetWidth" [height]="playpannel.offsetHeight">
+                        </app-dicegameplayer>
+                    </div>
+                    <div class="result-display" [hidden]="GameStatus != 'ready'">
+                        <div class="w-100">
+                            <div class="time-line">
+                                # <span class="next-round" [innerHTML]="nextGameId">-</span>
+                                (<span class="remain-time" [innerHTML]="'games.dice.strRemainTime' | translate:{sec: timerInfo.countdown_ss}">-</span>)
+                            </div>
+                            <div class="ment-line">
+                                <span
+                                    [ngStyle]='{"width": timerInfo.ramainTimeGraph+"%", "height": "30px"}'>
+                                </span>
+                            </div>
+                            <div class="result-line">
+                                # {{diceResult.id}}
+                                <span class="point">
+                                    [
+                                    {{'games.dice.strDice' | translate }}:{{diceResult.dice1}},{{diceResult.dice2}} {{
+                                    'games.dice.srtLowHigh' | translate }}:{{diceResult.lowhigh_str}} {{ 'games.dice.strOddEven' |
+                                    translate }}:{{diceResult.oddeven_str | translate}}
+                                    ]
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="history-wrap">
+        <div class="verification-btn">
+            <button (click)="proveModal('dice')">
+                <i class="fa fa-check-circle"></i>
+                {{ 'games.verify' | translate}}
+            </button>
+        </div>
+        <mat-tab-group mat-align-tabs="center" animationDuration="0ms" >
+            <mat-tab label="{{ 'games.list.recent' | translate}}">
+                <div class="history-box">
+                    <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="5%" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="mobile-none">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_hash' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_salt' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                    <th scope="col" class="mobile-block">{{ 'games.list.recent_info' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td class="mobile-none">{{ data.id }}</td>
+                                        <td class="mobile-none">
+                                            {{data.oddeven_str  | translate}} / {{data.lowhigh_str}} / ({{data.dice1}},{{data.dice2}})
+                                        </td>
+                                        <td class="mobile-none">
+                                            <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                        </td>
+                                        <td class="mobile-none">
+                                            <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                        </td>
+                                        <td class="mobile-block">
+                                            <mat-accordion>
+                                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                                               (closed)="panelOpenState = false">
+                                                <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    #{{ data.id }} / {{data.oddeven_str  | translate}} / {{data.lowhigh_str}} / ({{data.dice1}},{{data.dice2}})
+                                                </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_hash' | translate}} : </span>
+                                                        <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_salt' | translate}} : </span>
+                                                        <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                    </div>
+                                                    <div class="game-info data">
+                                                        <span>
+                                                            {{ 'games.list.title_date' | translate}} :
+                                                        </span>
+                                                        {{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                                    </div>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td class="mobile-block">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="more-btn">
+                            <button (click)="openHistoryModal('dice', 0)">{{ 'button.more' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="{{ 'games.list.my' | translate}}">
+                <div class="history-box">
+                    <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="5%" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="mobile-none">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                    <th scope="col" class="mobile-block">{{ 'games.list.my_info' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td class="mobile-none">
+                                            {{ data.game_id }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{ data.gametype + data.choice }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.bet_amount | number}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{'games.result.' + data.result  | translate}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.win_amount | number}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                        </td>
+                                        <td class="mobile-block">
+                                            <mat-accordion>
+                                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                                               (closed)="panelOpenState = false">
+                                                <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    #{{ data.game_id }} / {{'games.result.' + data.result  | translate}}
+                                                </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_choice' | translate}} : </span>
+                                                        {{ data.gametype + data.choice }}
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_bet_amount' | translate}} : </span>
+                                                        {{data.bet_amount | number}}
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_win_amount' | translate}} : </span>
+                                                        {{data.win_amount | number}}
+                                                    </div>
+                                                    <div class="game-info data">
+                                                        <span>
+                                                            {{ 'games.list.title_date' | translate}} :
+                                                        </span>
+                                                        {{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                                    </div>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td class="mobile-block">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="more-btn">
+                            <button (click)="openHistoryModal('dice', 1)">{{ 'button.more' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

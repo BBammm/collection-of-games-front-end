@@ -1,0 +1,267 @@
+/* You can add global styles to this file, and also import other style files */
+@import './custom-theme.scss';
+@import "~bootstrap/dist/css/bootstrap.css";
+@import "~font-awesome/css/font-awesome.css";
+@import '@angular/material/prebuilt-themes/pink-bluegrey.css';
+
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import url("https://fonts.googleapis.com/css2?family=Russo+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap");
+
+// custom style scss
+@import "./custom_style/_input.scss";
+@import "./custom_style/loading";
+
+
+*{
+    font-family: 'Open Sans', 'Noto Sans KR', sans-serif;
+}
+
+body{
+    background: #212e3a;
+}
+
+.full-content{
+    background: #212e3a;
+}
+
+.split-pane-visible > ion-menu { // full 화면에서 넓이
+  max-width: 370px!important;
+  height: 100%;
+}
+
+.split-pane-md.split-pane-visible>.split-pane-side[side=end] .chat-menu-footer {
+    display: none;
+}
+
+.mat-tab-link{
+    font-family: "Open Sans", "Noto Sans KR", sans-serif;
+}
+
+app-chat {height: 100%;}
+
+app-snackbar{
+    z-index: 99999 !important;
+    position: relative;
+    font-size: 13px;
+}
+
+.snack-bar-bg {
+    background-color: #f04141;
+    color: #fff;
+    z-index: 99999 !important;
+}
+
+.mat-drawer-inner-container{
+    background: #131d25;
+}
+
+// div.scroll-wrap{
+//     border:1px solid green;
+//     position: fixed;
+//     top: 0;
+// }
+
+div.lnb-close{
+    height: 75px;
+    padding: 25px 40px 0;
+    text-align: right;
+    button{
+        border-style: none;
+        background: none;
+        outline: none;
+    }
+}
+
+div.recently-wrap{
+    display:flex;
+    margin-bottom: 5px;
+    align-items: center;
+    p.title{
+        font-size: 14px;
+        color:#95a6b5;
+        margin-bottom: 0;
+    }
+    ul{
+        list-style: none;
+        padding: 0;
+        margin-left: 10px;
+        margin-bottom: 0;
+        li{
+            display:inline-block;
+            margin-left: 5px;
+            cursor: pointer;
+            span{
+                color:#95a6b5;
+                font-size: 14px;
+                &.on{
+                    color:#14dbcf;
+                }
+            }
+        }
+    }
+}
+
+.mat-slide-toggle-thumb{
+    width: 12px !important;
+    height: 12px !important;
+    position: inherit;
+    // top: 50%;
+    // transform:translateY(-50%);
+    background-color:#697b8c !important;
+    top: 30%;
+    left: 3px;
+}
+
+.mat-slide-toggle-bar{
+    border:1px solid #697b8c;
+    height: 20px !important;
+    border-radius: 10px !important;
+    order: 2;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar{
+    background-color:transparent;
+    border:1px solid #14dbcf;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb{
+    background-color: #14dbcf !important;
+}
+
+.mat-slide-toggle-content{
+    margin-right: 5px;
+    font-size: 14px;
+    color:#95a6b5;
+    font-family: 'Open Sans', 'Noto Sans KR', sans-serif;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-content{
+    color: #14dbcf;
+}
+
+div.bet-container-wrapper {
+    position: relative;
+    div.progress-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(21, 33, 44, 0.6);
+        padding: 20px;
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        cursor: no-drop;
+        div.wrap{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 25px;
+            border-radius: 5px;
+            background-color: #04111d;
+            display:none;
+            div.img-box{
+                margin-right: 15px;
+            }
+            div.text-box{
+                color:#708496;
+                font-size:13px;
+                font-weight: 400;
+            }
+        }
+    }
+}
+
+div.lnb{
+    width: 355px;
+    ul{
+        list-style: none;
+        padding: 0;
+        p.category{
+            font-size: 12px;
+            color:#546370;
+            // font-weight: bold;
+            margin-bottom: 0;
+        }
+        hr{
+            border-color: #212f3a;
+            width: 80%;
+            max-width: 280px;
+            margin:20px auto 15px;
+        }
+        li{
+            list-style: none;
+            text-align: left;
+            padding-left: 75px;
+            margin-bottom: 15px;
+            &.user-display{
+                margin-top: 35px;
+            }
+            a{
+                color:#95a6b5;
+                text-decoration: none;
+                font-size: 14px;
+                cursor: pointer;
+                &:not([href]):not([class]){
+                    color:#95a6b5;
+                }
+                span.icon{
+                    display:inline-block;
+                    margin-right: 5px;
+                    vertical-align: middle;
+                    width: 20px;
+                    height: 20px;
+                    margin-bottom: 4px;
+                    svg{
+                        width: 100%;
+                        height: 100%;
+                        fill:#95a6b5;
+                        vertical-align: top;
+                    }
+                    &.home{
+                        background: url('/assets/images/common/home-icon.png');
+                        background-repeat: no-repeat;
+                        background-size:100%;
+                        background-position-y: top;
+                    }
+                }
+                &:hover{
+                    color:#fff;
+                    span.icon{
+                        svg{
+                            fill: #fff;
+                        }
+                    }
+                    &:not([href]):not([class]){
+                        color:#fff;
+                    }
+                }
+                &.on{
+                    color:#00fff1;
+                    span.icon{
+                        svg{
+                            fill: #00fff1;
+                        }
+                    }
+                    &:not([href]):not([class]){
+                        color:#00fff1;
+                    }
+                }
+            }
+        }
+        &.two-section{
+            margin-top: 35px;
+            li{
+                margin-bottom: 0;
+                a:first-child{
+                    margin-right: 30px;
+                }
+            }
+        }
+    }
+}

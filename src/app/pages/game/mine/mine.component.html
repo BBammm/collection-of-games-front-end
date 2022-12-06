@@ -1,0 +1,268 @@
+<div class="game-container container mine">
+    <div class="game-wrap">
+        <div class="game-left btn-section">
+            <div class="user-balance">
+                <p class="title">
+                    <img src="/assets/games/common/images/point.png" alt="">
+                    <!-- {{ 'games.holdAmount' | translate }}-->
+                    <span class="point">
+                        <span appCountUp [endVal]="userInfo.point" [duration]='0.1'></span> TGM
+                    </span>
+                </p>
+                <button type="button" name="button" class="guide-btn">
+                    <i class="fa fa-question-circle"></i>
+                </button>
+            </div>
+            <div class="bet-container-wrapper">
+                <div class="game-controll-pannel">
+                    <ul class="game-level">
+                        <li (click)="setLevel(1)" [ngClass]="{'selected': cGameInfo.level === 1}">
+                            <p class="level">
+                                01
+                            </p>
+                        </li>
+                        <li (click)="setLevel(3)" [ngClass]="{'selected': cGameInfo.level === 3}">
+                            <p class="level">
+                                03
+                            </p>
+                        </li>
+                        <li (click)="setLevel(5)" [ngClass]="{'selected': cGameInfo.level === 5}">
+                            <p class="level">
+                                05
+                            </p>
+                        </li>
+                        <li (click)="setLevel(24)" [ngClass]="{'selected': cGameInfo.level === 24}">
+                            <p class="level">
+                                24
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bet-calculator">
+                    <p class="title">{{ 'games.betAmount' | translate }}</p>
+                    <mat-slide-toggle [checked]="fixAmountFlag" (change)="autoMode($event)">Fix</mat-slide-toggle>
+                    <ng-container *ngIf="!isBetInit">
+                        <app-bet-container [point]="userInfo.point" [betted]="betAmount" [direction]="'down'"
+                            (setPoint)="setBetAmount($event)">
+                        </app-bet-container>
+                    </ng-container>
+                    <ng-container *ngIf="isBetInit">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </ng-container>
+                </div> <!-- .bet-calculator -->
+                <div class="betting-btn">
+                    <button type="button" name="button" (click)="createGame()">
+                        {{ 'games.bet' | translate }}
+                    </button>
+                </div>
+                <!-- <div class="betting-btn" *ngIf="isBet">
+                    <button type="button" name="button" (click)="createGame()" class="restart">
+                        ReStart
+                    </button>
+                </div> -->
+                <ng-container *ngIf="isProgressing">
+                    <app-block-screen></app-block-screen>
+                </ng-container>
+            </div>
+            <ng-container *ngIf="isBet">
+                <div class="control standings">
+                    <div class="label-box next">
+                        <p class="standing-label">NEXT</p>
+                        <p class="stand-next value">
+                            {{ cGameInfo.next | number }}
+                        </p>
+                    </div>
+                    <div class="label-box stake">
+                        <p class="standing-label">STAKE</p>
+                        <p class="stand-stake value">
+                            {{ cGameInfo.stake | number }}
+                        </p>
+                    </div>
+                    <div class="label-box cash-btn-box">
+                        <button class="cashout" (click)="cashOut()">{{ 'games.mine.cashOut' | translate }}</button>
+                    </div>
+                </div>
+                <div class="code-wrap">
+                    <div class="code-box">
+                        <p class="title">
+                            {{ 'games.mine.secretCode' | translate }}
+                        </p>
+                        <div class="field">
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Secret Code" name="SecretCode" maxlength="200" [ngModel]="recentGame.hash" readonly>
+                            </mat-form-field>
+                            <button type="button" name="copy" (click)="copyToClipboard(recentGame.hash)">
+                                <img src="/assets/games/common/images/copy-icon.png" alt="">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="isDone">
+                <div class="code-wrap mt-0">
+                    <div class="code-box">
+                        <p class="title">
+                            {{ 'games.mine.answerCode' | translate }}
+                        </p>
+                        <div class="field">
+                            <mat-form-field appearance="outline">
+                                <input matInput placeholder="Answer Code" name="AnswerCode" maxlength="200" [(ngModel)]="answerCode" readonly>
+                            </mat-form-field>
+                            <button type="button" name="copy" (click)="copyToClipboard(answerCode)">
+                                <img src="/assets/games/common/images/copy-icon.png" alt="">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="game-right">
+            <div class="game-round-text">
+                <p class="title">
+                    #
+                    <ng-container *ngIf="nextGameId !== null">
+                        <span appCountUp [endVal]="nextGameId" [duration]='0.1' [useGrouping]="false"></span>
+                    </ng-container>
+                    <ng-container *ngIf="nextGameId === null">
+                        Next
+                    </ng-container>
+                </p>
+                <app-sound (soundFlag)="soundOnOff($event)"></app-sound>
+            </div>
+            <div class="mine-container">
+                <ng-container *ngIf="!isDone">
+                    <div class="feed">
+                        <div class="explain-div-outer" *ngIf="!cGameInfo.gameId && !myGames.length">
+                            <div class="explain-div">
+                                Mine game is a game that avoids hidden mines. Choose the amount you want to bet and then select
+                                the number of mines to be buried. Mines are randomly buried in 25 (5x5) tiles and the more
+                                mines, the more tiles opened, You'll earn more money.
+                            </div> <!-- .explain-div -->
+                        </div>
+                        <div class="board-wrap game">
+                            <ul class="board">
+                                <li class="tile" *ngFor="let tile of cGameInfo.gameTiles;let i = index" (click)="digging(i)"
+                                    [ngClass]="{'pressed': tile.pressed, 'bomb': tile.bomb, 'reveal': tile.reveal}">
+                                    <span class="tile-val" *ngIf="tile.won">
+                                        +{{ tile.won | shortNumber:1 }}
+                                        <!-- +{{ tile.won }} -->
+                                    </span>
+                                    <mat-icon class="icon-alert" svgIcon="bomb-b" *ngIf="tile.reveal"></mat-icon>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="isDone">
+                    <div class="feed">
+                        <app-mine-card [cGameInfo]="recentGame"></app-mine-card>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <div class="history-wrap">
+        <!-- 검증 Modal창 -->
+        <div class="verification-btn">
+            <button (click)="proveModal('mine')">
+                <i class="fa fa-check-circle"></i>
+                {{ 'games.verify' | translate}}
+            </button>
+        </div>
+        <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+            <mat-tab label="{{ 'games.list.my' | translate}}">
+                <div class="history-box">
+                    <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="5%" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <!-- <th scope="col" class="mobile-block">game</th> -->
+                                    <th scope="col" class="mobile-none">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                    <th scope="col" class="mobile-block">{{ 'games.list.my_info' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td class="mobile-none">
+                                            {{ data.id }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{ data.bet_hist }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.bet_amount | number}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{'games.result.' + data.result  | translate}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.win_amount | number}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                        </td>
+                                        <td class="mobile-block">
+                                            <mat-accordion>
+                                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                                               (closed)="panelOpenState = false">
+                                                <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    #{{ data.game_id }} / {{'games.result.' + data.result  | translate}}
+                                                </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_choice' | translate}} : </span>
+                                                        {{ data.bet_hist }}
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_bet_amount' | translate}} : </span>
+                                                        {{data.bet_amount | number}}
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_win_amount' | translate}} : </span>
+                                                        {{data.win_amount | number}}
+                                                    </div>
+                                                    <div class="game-info data">
+                                                        <span>
+                                                            {{ 'games.list.title_date' | translate}} :
+                                                        </span>
+                                                        {{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                                    </div>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td class="mobile-block">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="more-btn">
+                            <button (click)="openHistoryModal('mine', 1)">{{ 'button.more' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+div.sound-btn{
+    position: absolute;
+    right: 0;
+    top: -3px;
+    button{
+        border-style: none;
+        outline: none;
+        color:#95a6b5;
+        background-color: #101d28;
+        border-radius: 50%;
+        padding: 0;
+        width: 40px;
+        height: 40px;
+        svg{
+            fill:#586d7f;
+            width: 20px;
+            height: 100%;
+        }
+        &:hover{
+            svg{
+                fill:#14dbcf;
+            }
+        }
+    }
+}

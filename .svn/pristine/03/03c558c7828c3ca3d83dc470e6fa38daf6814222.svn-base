@@ -1,0 +1,3 @@
+<ng-conatiner *ngIf="data.title === 'mining'">
+    <h1>mining</h1>
+</ng-conatiner>

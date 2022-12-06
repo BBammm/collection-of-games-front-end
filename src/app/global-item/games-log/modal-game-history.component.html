@@ -1,0 +1,1520 @@
+<div class="game-history container">
+    <div class="modal-header">
+        <h1 class="title">
+            <span>{{data.title}}</span> Histroy
+        </h1>
+
+        <button type="button" name="button" (click)="close()" class="close-btn">
+            <img src="/assets/images/common/close-btn.png" alt="">
+        </button>
+    </div>
+<ng-template [ngIf]="data.title === 'fifty'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" [selectedIndex]="data.type" (selectedIndexChange)="selectedIndexChanged($event)">
+        <mat-tab label="{{ 'games.list.recent' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col">Game</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none">
+                                            {{ 'games.fifty.result.' + data.result_code  | translate }}
+                                            ({{ data.result_number }})
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{ 'games.fifty.result.' + data.result_code  | translate }} ({{ data.result_number }})</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_hash' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_salt' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.gameHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-cell">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-cell">Game</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.game_id }}</td>
+                                        <td class="mobile-none">{{ 'games.fifty.result.' + data.choice  | translate }}</td>
+                                        <td class="mobile-cell">
+                                            <ul class="my-game">
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_choice' | translate}} :</span>
+                                                    <p>{{ 'games.fifty.result.' + data.choice  | translate }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                    <p>{{data.bet_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                    <p>{{data.win_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{'games.result.' + data.result  | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                        <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                        <td class="mobile-none">{{data.win_amount | number}}</td>
+                                        <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss' }}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+<ng-template [ngIf]="data.title === 'fourteen'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" [selectedIndex]="data.type" (selectedIndexChange)="selectedIndexChanged($event)">
+        <mat-tab label="{{ 'games.list.recent' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col">Game</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none">
+                                            {{ 'games.fourteen.result.' + data.result_code  | translate }}
+                                            ({{ data.result_number }})
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{ 'games.fourteen.result.' + data.result_code  | translate }} ({{ data.result_number }})</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_hash' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_salt' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.gameHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-cell">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-cell">Game</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.game_id }}</td>
+                                        <td class="mobile-none">{{ 'games.fourteen.result.' + data.choice  | translate }}</td>
+                                        <td class="mobile-cell">
+                                            <ul class="my-game">
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_choice' | translate}} :</span>
+                                                    <p>{{ 'games.fourteen.result.' + data.choice  | translate }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                    <p>{{data.bet_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                    <p>{{data.win_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{'games.result.' + data.result  | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                        <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                        <td class="mobile-none">{{data.win_amount | number}}</td>
+                                        <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+<ng-template [ngIf]="data.title === 'half'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" [selectedIndex]="data.type" (selectedIndexChange)="selectedIndexChanged($event)">
+        <mat-tab label="{{ 'games.list.recent' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col">Game</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none">{{data.cardNum}}</td>
+                                        <td>
+                                            <ul>
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{data.cardNum}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_hash' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_salt' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.gameHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-cell">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-cell">Game</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.game_id }}</td>
+                                        <td class="mobile-none">{{ data.choice }}</td>
+                                        <td class="mobile-cell">
+                                            <ul class="my-game">
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_choice' | translate}} :</span>
+                                                    <p>{{ data.choice }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                    <p>{{data.bet_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                    <p>{{data.win_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{'games.result.' + data.result  | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                        <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                        <td class="mobile-none">{{data.win_amount | number}}</td>
+                                        <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+<ng-template [ngIf]="data.title === 'joker'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" [selectedIndex]="data.type" (selectedIndexChange)="selectedIndexChanged($event)">
+        <mat-tab label="{{ 'games.list.recent' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col">Game</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none">{{  data.result_code }}</td>
+                                        <td>
+                                            <ul>
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{ data.result_code }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_hash' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_salt' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.datetime}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.gameHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-cell">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-cell">Game</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.game_id }}</td>
+                                        <td class="mobile-none">{{ data.choice }}</td>
+                                        <td class="mobile-cell">
+                                            <ul class="my-game">
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_choice' | translate}} :</span>
+                                                    <p>{{ data.choice }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                    <p>{{data.bet_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                    <p>{{data.win_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{'games.result.' + data.result  | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                        <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                        <td class="mobile-none">{{data.win_amount | number}}</td>
+                                        <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+<ng-template [ngIf]="data.title === 'ladder'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" [selectedIndex]="data.type" (selectedIndexChange)="selectedIndexChanged($event)">
+        <mat-tab label="{{ 'games.list.recent' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col">Game</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none">{{ 'games.ladder.result.' + data.result_code | translate }}</td>
+                                        <td>
+                                            <ul>
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{ 'games.ladder.result.' + data.result_code | translate }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_hash' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_salt' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.datetime}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.gameHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-cell">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-cell">Game</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.game_id }}</td>
+                                        <td class="mobile-none">{{ data.choice }}</td>
+                                        <td class="mobile-cell">
+                                            <ul class="my-game">
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_choice' | translate}} :</span>
+                                                    <p>{{ data.choice }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                    <p>{{data.bet_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                    <p>{{data.win_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{'games.result.' + data.result  | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                        <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                        <td class="mobile-none">{{data.win_amount | number}}</td>
+                                        <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+<ng-template [ngIf]="data.title === 'mine'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-cell">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-cell">Game</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none">{{ data.bet_hist }}</td>
+                                        <td class="mobile-cell">
+                                            <ul class="my-game">
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_choice' | translate}} :</span>
+                                                    <p>{{ data.bet_hist }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                    <p>{{data.bet_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                    <p>{{data.win_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{'games.result.' + data.result  | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                        <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                        <td class="mobile-none">{{data.win_amount | number}}</td>
+                                        <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+<ng-template [ngIf]="data.title === 'mining'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" [selectedIndex]="data.type" (selectedIndexChange)="selectedIndexChanged($event)">
+        <mat-tab label="{{ 'games.list.recent' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">Level</th>
+                                    <th scope="col">Game</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none">{{ 'games.mining.level.' + data.level | translate}}</td>
+                                        <td>
+                                            <ul>
+                                                <li class="mobile-flex">
+                                                    <span class="point">Level :</span>
+                                                    <p>{{ 'games.mining.level.' + data.level | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_hash' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_salt' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.gameHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-cell">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">Level</th>
+                                    <th scope="col" class="mobile-cell">Game</th>
+                                    <th scope="col" class="mobile-none">Step</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none">{{ 'games.mining.level.' + data.level | translate}}</td>
+                                        <td class="mobile-cell">
+                                            <ul class="my-game">
+                                                <li class="mobile-flex">
+                                                    <span class="point">Level :</span>
+                                                    <p>{{ 'games.mining.level.' + data.level | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">Step :</span>
+                                                    <p>{{data.step + 1}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                    <p>{{data.bet_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                    <p>{{data.win_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{'games.result.' + data.result  | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td class="mobile-none">{{data.step + 1}}</td>
+                                        <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                        <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                        <td class="mobile-none">{{data.win_amount | number}}</td>
+                                        <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="7" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+<ng-template [ngIf]="data.title === 'graph'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" [selectedIndex]="data.type" (selectedIndexChange)="selectedIndexChanged($event)">
+        <mat-tab label="{{ 'games.list.recent' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">@</th>
+                                    <th scope="col">Game</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none">{{ data.game_crash / 100 }} x</td>
+                                        <td>
+                                            <ul>
+                                                <li class="mobile-flex">
+                                                    <span class="point">@ :</span>
+                                                    <p>{{ data.game_crash / 100 }} x</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_hash' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_salt' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.gameHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-cell">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-cell">Game</th>
+                                    <th scope="col" class="mobile-none">@</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.game_id }}</td>
+                                        <td class="mobile-cell">
+                                            <ul class="my-game">
+                                                <li>
+                                                    <span class="point">@ :</span>
+                                                    <!-- <p>{{data.auto_cash_out === 1000000000 ? 'Auto' : data.auto_cash_out}}</p> -->
+                                                    <p>{{ data.win_amount ? data.win_amount / data.bet_amount : '-' }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                    <p>{{data.bet_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                    <p>{{data.win_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{'games.result.' + data.result | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <!-- <td class="mobile-none">{{data.auto_cash_out === 1000000000 ? 'Auto' : data.auto_cash_out}}</td> -->
+                                        <td class="mobile-none">{{ data.win_amount ? data.win_amount / data.bet_amount : '-' }}</td>
+                                        <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                        <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                        <td class="mobile-none">{{data.win_amount | number}}</td>
+                                        <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+
+<ng-template [ngIf]="data.title === 'dice'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" [selectedIndex]="data.type" (selectedIndexChange)="selectedIndexChanged($event)">
+        <mat-tab label="{{ 'games.list.recent' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col">Game</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none"> {{data.oddeven_str  | translate}}/{{data.lowhigh_str}}/({{data.dice1}},{{data.dice2}})</td>
+                                        <td>
+                                            <ul>
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p> {{data.oddeven_str  | translate}}/{{data.lowhigh_str}}/({{data.dice1}},{{data.dice2}})</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_hash' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_salt' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.gameHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-cell">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-cell">Game</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.game_id }}</td>
+                                        <td class="mobile-cell">
+                                            <ul class="my-game">
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_choice' | translate}} :</span>
+                                                    <!-- <p>{{data.auto_cash_out === 1000000000 ? 'Auto' : data.auto_cash_out}}</p> -->
+                                                    <p>{{ data.gametype + data.choice }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                    <p>{{data.bet_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                    <p>{{data.win_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{'games.result.' + data.result | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <!-- <td class="mobile-none">{{data.auto_cash_out === 1000000000 ? 'Auto' : data.auto_cash_out}}</td> -->
+                                        <td class="mobile-none">{{ data.gametype + data.choice }}</td>
+                                        <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                        <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                        <td class="mobile-none">{{data.win_amount | number}}</td>
+                                        <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+<ng-template [ngIf]="data.title === 'baccarat'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms" [selectedIndex]="data.type" (selectedIndexChange)="selectedIndexChanged($event)">
+        <mat-tab label="{{ 'games.list.recent' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col">Game</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of recentGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.id }}</td>
+                                        <td class="mobile-none">{{data.result_codes}}</td>
+                                        <td>
+                                            <ul>
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{data.result_codes}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_hash' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.hash)">{{ data.hash }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_salt' | translate}} :</span>
+                                                    <p (click)="copyToClipboard(data.salt)">{{data.salt}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.datetime | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+
+                                <tr class="no-display" *ngIf="recentGamesHistory?.length === 0">
+                                    <td colspan="5" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.gameHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="10%">
+                                <col width="10%" class="mobile-none">
+                                <col width="*" class="mobile-cell">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-cell">Game</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td>{{ data.game_id }}</td>
+                                        <td class="mobile-none">{{ data.choice }}</td>
+                                        <td class="mobile-cell">
+                                            <ul class="my-game">
+                                                <li class="mobile-flex">
+                                                    <span class="point">{{ 'games.list.title_choice' | translate}} :</span>
+                                                    <p>{{ data.choice }}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                    <p>{{data.bet_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                    <p>{{data.win_amount | number}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                    <p>{{'games.result.' + data.result  | translate}}</p>
+                                                </li>
+                                                <li>
+                                                    <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                    <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                        <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                        <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                        <td class="mobile-none">{{data.win_amount | number}}</td>
+                                        <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td colspan="2" class="mobile-cell">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+<ng-template [ngIf]="data.title === 'keno'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                    <table class="table table-striped table-borderless">
+                        <colgroup>
+                            <col width="10%">
+                            <col width="30%" class="mobile-none">
+                            <col width="*" class="mobile-cell">
+                            <col width="*" class="mobile-none">
+                            <col width="*" class="mobile-none">
+                            <col width="*" class="mobile-none">
+                            <col width="*" class="mobile-none">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                <th scope="col" class="mobile-cell">Game</th>
+                                <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                <tr>
+                                    <td>{{ data.id }}</td>
+                                    <td class="mobile-none">
+                                        <ng-container *ngFor="let select of data.sel_items_arr; let isLast = last">
+                                            <span [ngStyle]="{'color': select.selected ? '#fff' : null }">
+                                                {{ select.num }}{{isLast ? '' : ', '}}
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                    <td class="mobile-cell">
+                                        <ul class="my-game">
+                                            <li class="mobile-flex">
+                                                <span class="point">{{ 'games.list.title_choice' | translate}} :</span>
+                                                <p>
+                                                    <ng-container *ngFor="let select of data.sel_items_arr; let isLast = last">
+                                                        <span [ngStyle]="{'color': select.selected ? '#fff' : null }">
+                                                            {{ select.num }}{{isLast ? '' : ', '}}
+                                                        </span>
+                                                    </ng-container>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                <p>{{data.bet_amount | number}}</p>
+                                            </li>
+                                            <li>
+                                                <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                <p>{{data.win_amount | number}}</p>
+                                            </li>
+                                            <li>
+                                                <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                <p>{{'games.result.' + data.result  | translate}}</p>
+                                            </li>
+                                            <li>
+                                                <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                    <td class="mobile-none">{{'games.result.' + data.result  | translate}}</td>
+                                    <td class="mobile-none">{{data.win_amount | number}}</td>
+                                    <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                </tr>
+                            </ng-container>
+                            <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                <td colspan="6" class="mobile-none">
+                                    {{ 'games.list.no_list' | translate}}
+                                </td>
+                                <td colspan="2" class="mobile-cell">
+                                    {{ 'games.list.no_list' | translate}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+<ng-template [ngIf]="data.title === 'slot'">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+        <mat-tab label="{{ 'games.list.my' | translate}}">
+            <div class="history-box">
+                <div class="table-home">
+                    <table class="table table-striped table-borderless">
+                        <colgroup>
+                            <col width="10%">
+                            <col width="25%" class="mobile-none">
+                            <col width="*" class="mobile-cell">
+                            <col width="*" class="mobile-none">
+                            <col width="20%" class="mobile-none">
+                            <col width="*" class="mobile-none">
+                            <col width="*" class="mobile-none">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                <th scope="col" class="mobile-cell">Game</th>
+                                <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                <tr>
+                                    <td>{{ data.id }}</td>
+                                    <td class="mobile-none">
+                                        <ng-container *ngFor="let a of data?.cardResult; let j = index;">
+                                            <span *ngFor="let card of a.cardArr; let isFirst = first; let isLast = last;">
+                                                <ng-container *ngIf="a.ingame">
+                                                    {{isFirst ? j+1 +': ' : ''}} {{card | uppercase}}<ng-container *ngIf="isLast"><br/></ng-container>
+                                                </ng-container>
+                                            </span>
+                                        </ng-container>
+                                        <!-- <ng-container *ngFor="let select of data.cardResult; let isLast = last">
+                                            <span [ngStyle]="{'color': select.selected ? '#fff' : null }">
+                                                {{ select.num }}{{isLast ? '' : ', '}}
+                                            </span>
+                                        </ng-container> -->
+                                    </td>
+                                    <td class="mobile-cell">
+                                        <ul class="my-game">
+                                            <li class="mobile-flex">
+                                                <span class="point">{{ 'games.list.title_choice' | translate}} :</span>
+                                                <p>
+                                                    <ng-container *ngFor="let select of data.sel_items_arr; let isLast = last">
+                                                        <span [ngStyle]="{'color': select.selected ? '#fff' : null }">
+                                                            {{ select.num }}{{isLast ? '' : ', '}}
+                                                        </span>
+                                                    </ng-container>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <span class="point">{{ 'games.list.title_bet_amount' | translate}} :</span>
+                                                <p>{{data.bet_amount | number}}</p>
+                                            </li>
+                                            <li>
+                                                <span class="point">{{ 'games.list.title_win_amount' | translate}} :</span>
+                                                <p>{{data.win_amount | number}}</p>
+                                            </li>
+                                            <li>
+                                                <span class="point">{{ 'games.list.title_result' | translate}} :</span>
+                                                <p>
+                                                    <ng-container *ngFor="let result of data?.cardResult; let j = index; let isFirst = first; let isLast = last;">
+                                                        <ng-container *ngIf="result.ingame">
+                                                            {{j+1}} : {{result.result === '' ? 'Fail' : result.result}}
+                                                            <ng-container *ngIf="!isLast"><br/></ng-container>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <span class="point">{{ 'games.list.title_date' | translate}} :</span>
+                                                <p class="create">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</p>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td class="mobile-none">{{data.bet_amount | number}}</td>
+                                    <td class="mobile-none">
+                                        <ng-container *ngFor="let result of data?.cardResult; let j = index; let isFirst = first; let isLast = last;">
+                                            <ng-container *ngIf="result.ingame">
+                                                {{j+1}} : {{result.result === '' ? 'Fail' : result.result}}
+                                                <ng-container *ngIf="!isLast"><br/></ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                    </td>
+                                    <td class="mobile-none">{{data.win_amount | number}}</td>
+                                    <td class="mobile-none">{{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}</td>
+                                </tr>
+                            </ng-container>
+                            <tr class="no-display" *ngIf="myGamesHistory?.length === 0">
+                                <td colspan="6" class="mobile-none">
+                                    {{ 'games.list.no_list' | translate}}
+                                </td>
+                                <td colspan="2" class="mobile-cell">
+                                    {{ 'games.list.no_list' | translate}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button (click)="more()" class="more" *ngIf="this.moreBtn.myHis">{{ 'button.more' | translate}}</button>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-template>
+</div>

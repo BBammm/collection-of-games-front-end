@@ -1,0 +1,233 @@
+<div class="game-container container keno">
+    <div class="game-wrap">
+        <div class="game-left btn-section">
+            <div class="user-balance">
+                <p class="title">
+                    <img src="/assets/games/common/images/point.png" alt="">
+                    <!-- {{ 'games.holdAmount' | translate }}-->
+                    <span class="point">
+                        <span appCountUp [endVal]="userInfo.point" [duration]='0.1'></span> TGM
+                    </span>
+                </p>
+                <button type="button" name="button" class="guide-btn">
+                    <i class="fa fa-question-circle"></i>
+                </button>
+            </div>
+            <div class="bet-container-wrapper">
+                <div class="bet-calculator">
+                    <p class="title">{{ 'games.betAmount' | translate }}</p>
+                    <ng-container *ngIf="!isBetInit">
+                        <app-bet-container [point]="userInfo.point" [betted]="betAmount" [direction]="'down'"
+                            (setPoint)="setBetAmount($event)">
+                        </app-bet-container>
+                    </ng-container>
+                    <ng-container *ngIf="isBetInit">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </ng-container>
+                    <ng-container *ngIf="isProgressing">
+                        <app-block-screen></app-block-screen>
+                    </ng-container>
+                </div> <!-- .bet-calculator -->
+            </div>
+            <div class="auto-check">
+                <mat-slide-toggle [checked]="isAutoMode" (change)="autoMode($event)">Auto</mat-slide-toggle>
+                <mat-slide-toggle (change)="speedMode($event)">Speed</mat-slide-toggle>
+            </div>
+            <div class="betting-btn">
+                <ng-container *ngIf="!isAutoProgressing">
+                    <button type="button" name="button" class="bet-btn" (click)="doBet()"> <!--(click)="createGame()"-->
+                        {{ 'games.bet' | translate }}
+                    </button>
+                </ng-container>
+                <ng-container *ngIf="isAutoProgressing">
+                    <!-- <button type="button" name="button" class="quick-btn" (click)="speedMode()">
+                        <i class="fa fa-forward"></i>
+                    </button> -->
+                    <button type="button" name="button" class="stop-btn" (click)="stopBet()">
+                        <!-- <i class="fa fa-stop"></i> -->
+                        Stop
+                    </button>
+                </ng-container>
+                <button type="button" name="button" class="reset-btn" (click)="resetGame()">
+                    <img src="/assets/games/common/images/reset-icon.png" alt="">
+                </button>
+            </div>
+            <div class="code-wrap">
+                <div class="code-box">
+                    <p class="title">
+                        {{ 'games.mine.secretCode' | translate }}
+                    </p>
+                    <div class="field">
+                        <mat-form-field appearance="outline">
+                            <input matInput placeholder="Secret Code" name="SecretCode" maxlength="200" [ngModel]="recentGame.hash" readonly>
+                        </mat-form-field>
+                        <button type="button" name="copy" (click)="copyToClipboard(recentGame.hash)">
+                            <img src="/assets/games/common/images/copy-icon.png" alt="">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="code-wrap mt-0">
+                <div class="code-box">
+                    <p class="title">
+                        {{ 'games.mine.answerCode' | translate }}
+                    </p>
+                    <div class="field">
+                        <mat-form-field appearance="outline">
+                            <input matInput placeholder="Answer Code" name="AnswerCode" maxlength="200" [(ngModel)]="answerCode" readonly> <!-- [(ngModel)]="answerCode" -->
+                        </mat-form-field>
+                        <button type="button" name="copy" (click)="copyToClipboard(answerCode)"> <!-- (click)="copyToClipboard(answerCode)" -->
+                            <img src="/assets/games/common/images/copy-icon.png" alt="">
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="game-right">
+            <div class="game-round-text">
+                <p class="title">
+                    #
+                    <ng-container *ngIf="nextGameId !== null">
+                        <span appCountUp [endVal]="nextGameId" [duration]='0.1' [useGrouping]="false"></span>
+                    </ng-container>
+                    <ng-container *ngIf="nextGameId === null">
+                        Next
+                    </ng-container>
+                </p>
+                <app-sound (soundFlag)="soundOnOff($event)"></app-sound>
+            </div>
+            <div class="pay-out">
+                <div class="img-box">
+                    <img src="/assets/games/keno/images/payout-img.png" alt="">
+                </div>
+                <ul>
+                    <li *ngFor="let amount of calcAmount; let i = index">
+                        <span class="list-number" [ngStyle]="{'color': i+1 === winAmountStep ? '#53e996' : null }">{{i + 1}}.</span>
+                        <span class="list-data" [ngStyle]="{'color': i+1 === winAmountStep ? '#53e996' : null }">{{amount | number}}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="tile-wrap">
+                <div *ngFor="let tile of gameTiles; let i = index" class="tile">
+                    <p [ngClass]="{'pressed': tile.pressed, 'bomb': tile.bomb, 'bingo': tile.pressed && tile.bomb}"
+                    (click)="setSelectTileNum(tile, i+1)">
+                        <span>{{i + 1}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="history-wrap">
+        <!-- 검증 Modal창 -->
+        <div class="verification-btn">
+            <button (click)="proveModal('keno')">
+                <i class="fa fa-check-circle"></i>
+                {{ 'games.verify' | translate}}
+            </button>
+        </div>
+        <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+            <mat-tab label="{{ 'games.list.my' | translate}}">
+                <div class="history-box">
+                    <div class="table-home">
+                        <table class="table table-striped table-borderless">
+                            <colgroup>
+                                <col width="5%" class="mobile-none">
+                                <col width="30%" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*" class="mobile-none">
+                                <col width="*">
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <!-- <th scope="col" class="mobile-block">game</th> -->
+                                    <th scope="col" class="mobile-none">#</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_choice' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_bet_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_result' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_win_amount' | translate}}</th>
+                                    <th scope="col" class="mobile-none">{{ 'games.list.title_date' | translate}}</th>
+                                    <th scope="col" class="mobile-block">{{ 'games.list.my_info' | translate}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let data of myGamesHistory; let i = index;">
+                                    <tr>
+                                        <td class="mobile-none">
+                                            {{ data.id }}
+                                        </td>
+                                        <td class="mobile-none">
+                                            <ng-container *ngFor="let select of data.sel_items_arr; let isLast = last">
+                                                <span [ngStyle]="{'color': select.selected ? '#53e996' : null }">
+                                                    {{ select.num }}{{isLast ? '' : ', '}}
+                                                </span>
+                                            </ng-container>
+                                            <!-- {{ data.sel_items }} -->
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.bet_amount | number}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{'games.result.' + data.result  | translate}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.win_amount | number}}
+                                        </td>
+                                        <td class="mobile-none">
+                                            {{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                        </td>
+                                        <td class="mobile-block">
+                                            <mat-accordion>
+                                                <mat-expansion-panel (opened)="panelOpenState = true"
+                                                               (closed)="panelOpenState = false">
+                                                <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    #{{ data.game_id }} / {{'games.result.' + data.result  | translate}}
+                                                </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_choice' | translate}} : </span>
+                                                        <ng-container *ngFor="let select of data.sel_items_arr; let isLast = last">
+                                                            <span [ngStyle]="{'color': select.selected ? '#53e996' : null }">
+                                                                {{ select.num }}{{isLast ? '' : ', '}}
+                                                            </span>
+                                                        </ng-container>
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_bet_amount' | translate}} : </span>
+                                                        {{data.bet_amount | number}}
+                                                    </div>
+                                                    <div class="game-info">
+                                                        <span>{{ 'games.list.title_win_amount' | translate}} : </span>
+                                                        {{data.win_amount | number}}
+                                                    </div>
+                                                    <div class="game-info data">
+                                                        <span>
+                                                            {{ 'games.list.title_date' | translate}} :
+                                                        </span>
+                                                        {{data.created_at | momentLocal : 'YYYY-MM-DD HH:mm:ss'}}
+                                                    </div>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <tr class="no-display" *ngIf="myGamesHistory.length === 0">
+                                    <td colspan="6" class="mobile-none">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                    <td class="mobile-block">
+                                        {{ 'games.list.no_list' | translate}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="more-btn">
+                            <button (click)="openHistoryModal('keno', 1)">{{ 'button.more' | translate}}</button>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
